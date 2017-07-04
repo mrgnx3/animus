@@ -1,0 +1,104 @@
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <div id="race_bio" style="width:150px;margin-right: 20px;float: left">
+            <div id="player_pic">
+                <img src="/img/leader_profiles/{{ raceName }}_deploy.jpg" style="max-width: 150px;height: 182px;">
+            </div>
+        </div>
+        <div id="deployment-panel-id" class="deployment-panel-open">
+            <div id="panel-group" class="sub-panels">
+                <div id="sub-panel-1" class="show-panel">
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-circle fa-stack-2x" style="color: #a1a205"></i>
+                         <span class="fa fa-stack-1x" style="color: white">x1</span>
+                    </span>
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: green"></i>
+                         <i class="fa fa fa-male fa-stack-1x" style="color: white"></i>
+                    </span>
+                    <span class="fa-stack fa-lg" id="dec-infantry">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <i class="fa fa-minus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <span class="fa fa-stack-1x" id="infantry-value" style="color: white">0</span>
+                    </span>
+                    <span class="fa-stack fa-lg" id="inc-infantry">
+                      <i class="fa fa-square fa-stack-2x"></i>
+                      <i class="fa fa-plus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                        </div>
+                <div id="sub-panel-2" class="show-panel">
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-circle fa-stack-2x" style="color: #a1a205"></i>
+                         <span class="fa fa-stack-1x" style="color: white">x1</span>
+                    </span>
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color:#262cb8 "></i>
+                         <i class="fa fa fa-rocket fa-stack-1x" style="color: white"></i>
+                    </span>
+                     <span class="fa-stack fa-lg" id="dec-ranged">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <i class="fa fa-minus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <span class="fa fa-stack-1x" id="ranged-value" style="color: white">0</span>
+                    </span>
+                    <span class="fa-stack fa-lg" id="inc-ranged">
+                      <i class="fa fa-square fa-stack-2x"></i>
+                      <i class="fa fa-plus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                        </div>
+                <div id="sub-panel-3" class="show-panel">
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-circle fa-stack-2x" style="color: #a1a205"></i>
+                         <span class="fa fa-stack-1x" style="color: white">x2</span>
+                    </span>
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #8e1da2"></i>
+                         <i class="fa fa fa-truck fa-stack-1x" style="color: white"></i>
+                    </span>
+                     <span class="fa-stack fa-lg" id="dec-tank">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <i class="fa fa-minus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <span class="fa fa-stack-1x" id="tank-value" style="color: white">0</span>
+                    </span>
+                    <span class="fa-stack fa-lg" id="inc-tank">
+                        <i class="fa fa-square fa-stack-2x"></i>
+                        <i class="fa fa-plus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                </div>
+                <div id="deployment-panel-button-group">
+                    <div id="reset-deploy-button">RESET</div>
+                    <div id="commit-deploy-button">COMMIT</div>
+                </div>
+            </div>
+            <div id="deployment-panel-info">
+                <div id="deployment-panel-harvest-info">
+                    <p style="text-align: center;">Deployment Resources</p>
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #FF9800"></i>
+                         <i class="fa fa fa-diamond fa-stack-1x" style="color: white"></i>
+                    </span>
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #333333"></i>
+                        <span class="fa fa-stack-1x" id="harvest-value">0</span>
+                    </span>
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #FF9800"></i>
+                         <i class="fa fa fa-male fa-stack-1x" style="color: white"></i>
+                    </span>
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-square fa-stack-2x" style="color: #333333"></i>
+                        <span class="fa fa-stack-1x" id="default-deployment-value">0</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

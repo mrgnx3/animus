@@ -1,0 +1,78 @@
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <div id="race_bio" style="width:150px;margin-right: 20px;float: left">
+            <div id="player_pic">
+                <img src="/img/leader_profiles/{{ raceName }}.jpg" style="max-width: 150px;height: 182px;">
+            </div>
+        </div>
+        <div>
+            <a href="#" onclick="displayModal('{{ raceName }}', 'history')" class="btn btn-primary">Race Bio</a>
+            <a href="#" onclick="displayModal('{{ raceName }}', 'leaderBio')" class="btn btn-primary">Leader Info</a>
+        </div>
+        <div id="game_stats_scroll" style="overflow: scroll;padding-top: 10px;">
+            <table style="width: auto;" class="table table-condensed table-bordered" data-sort-name="count"
+                   data-sort-order="desc">
+                <thead>
+                <tr>
+                    <th>Race</th>
+                    <th data-field="count" data-sortable="true"><i class="fa fa-diamond"></i></th>
+                    <th><i class="fa fa-times"></i><i class="fa fa-diamond"></i></th>
+                    <th><i class="fa fa-truck"></i></th>
+                    <th><i class="fa fa-male"></i></th>
+                    <th><i class="fa fa-angle-double-right"></i></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="geoEngineers-harvest">
+                    <td>Geo-Engineers</td>
+                    <td id="geoEngineers-harvest-count"></td>
+                    <td id="geoEngineers-harvest-rate"></td>
+                    <td> 0</td>
+                    <td> 0</td>
+                    <td> 0</td>
+                </tr>
+                <tr id="settlers-harvest">
+                    <td>Settlers</td>
+                    <td id="settlers-harvest-count"></td>
+                    <td id="settlers-harvest-rate"></td>
+                    <td> 0</td>
+                    <td> 0</td>
+                    <td> 0</td>
+                </tr>
+                <tr id="kingdomWatchers-harvest">
+                    <td>Kingdom Watchers</td>
+                    <td id="kingdomWatchers-harvest-count"></td>
+                    <td id="kingdomWatchers-harvest-rate"></td>
+                    <td> 0</td>
+                    <td> 0</td>
+                    <td> 0</td>
+                </tr>
+                <tr id="periplaneta-harvest">
+                    <td>Periplaneta</td>
+                    <td id="periplaneta-harvest-count"></td>
+                    <td id="periplaneta-harvest-rate"></td>
+                    <td> 0</td>
+                    <td> 0</td>
+                    <td> 0</td>
+                </tr>
+                <tr id="reduviidae-harvest">
+                    <td>reduviidae</td>
+                    <td id="reduviidae-harvest-count"></td>
+                    <td id="reduviidae-harvest-rate"></td>
+                    <td> 0</td>
+                    <td> 0</td>
+                    <td> 0</td>
+                </tr>
+                <tr id="guardians-harvest">
+                    <td>guardians</td>
+                    <td id="guardians-harvest-count"></td>
+                    <td id="guardians-harvest-rate"></td>
+                    <td> 0</td>
+                    <td> 0</td>
+                    <td> 0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

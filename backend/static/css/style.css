@@ -1,0 +1,417 @@
+/* Game board. */
+#map {
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    overflow: auto;
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 40px;
+    bottom: 10px;
+}
+
+/* Hud Display*/
+.activeHud {
+    display: block;
+    width: 100%;
+    height: 200px;
+    padding: 0;
+    background-color: #C0C0C0;
+}
+
+.panel-body {
+    background-color: #C0C0C0;
+    border: transparent;
+}
+
+.navbar.navbar-default.navbar-fixed-bottom {
+    background-color: transparent;
+    border: transparent;
+}
+
+.nav.nav-tabs {
+    background-color: transparent;
+}
+
+.hudContainer {
+    display: none;
+    height: 170px;
+}
+
+/* Board hexes. */
+.hex {
+    float: left;
+    margin-right: -29px;
+    margin-bottom: -52px;
+    height: 104px;
+    width: 120px;
+}
+
+.settlers {
+    fill: #00FFCC;
+    stroke: black;
+}
+
+.geoEngineers {
+    fill: #00CCFF;
+    stroke: black;
+}
+
+.kingdomWatchers {
+    fill: #CCCC00;
+    stroke: black;
+}
+
+.periplaneta {
+    fill: #FF9933;
+    stroke: black;
+}
+
+.reduviidae {
+    fill: #FF5050;
+    stroke: black;
+}
+
+.guardians {
+    fill: #6666FF;
+    stroke: black;
+}
+
+.selected {
+    fill: #33CCFF;
+    stroke: white;
+}
+
+/* Map rows. */
+#mapHolder > div {
+    clear: left;
+}
+
+#mapHolder > div > div:nth-child(even) {
+    margin-top: 53px;
+}
+
+/* Terrain textures. */
+.forest {
+    background: url("../img/forest_tile.png");
+}
+
+.grass {
+    background: url("../img/grass_tile.png");
+}
+
+.water {
+    background: url("../img/water_tile.png");
+}
+
+.desert {
+    background: url("../img/desert_tile.png");
+}
+
+a {
+    color: inherit;
+}
+
+.menu {
+    background: #8bc34a;
+    color: white;
+    text-align: center;
+}
+
+.menu-item, .menu-open-button {
+    background: #e91e63;
+    border-radius: 100%;
+    width: 25px;
+    height: 25px;
+    margin-left: -40px;
+    position: absolute;
+    color: white;
+    text-align: center;
+    line-height: 25px;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-transition: -webkit-transform ease-out 200ms;
+    transition: transform ease-out 200ms;
+}
+
+.menu-open {
+    display: none;
+}
+
+.menu-item:hover {
+    background: white;
+    color: #e91e63;
+}
+
+.menu-open-button {
+    z-index: 2;
+    -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    -webkit-transition-duration: 400ms;
+    transition-duration: 400ms;
+    -webkit-transform: scale(1.1, 1.1) translate3d(0, 0, 0);
+    transform: scale(1.1, 1.1) translate3d(0, 0, 0);
+    cursor: pointer;
+}
+
+.menu-open-button:hover {
+    -webkit-transform: scale(1.7, 1.7) translate3d(0, 0, 0);
+    transform: scale(1.7, 1.7) translate3d(0, 0, 0);
+}
+
+.menu-open:checked + .menu-open-button {
+    -webkit-transition-timing-function: linear;
+    transition-timing-function: linear;
+    -webkit-transition-duration: 200ms;
+    transition-duration: 200ms;
+    -webkit-transform: scale(0.8, 0.8) translate3d(0, 0, 0);
+    transform: scale(0.8, 0.8) translate3d(0, 0, 0);
+}
+
+.menu-open:checked ~ .menu-item {
+    -webkit-transition-timing-function: cubic-bezier(0.935, 0, 0.34, 1.33);
+    transition-timing-function: cubic-bezier(0.935, 0, 0.34, 1.33);
+}
+
+.menu-open:checked ~ .menu-item:nth-child(3) {
+    -webkit-transition-duration: 180ms;
+    transition-duration: 180ms;
+    -webkit-transform: translate3d(-40px, -25px, 0);
+    transform: translate3d(-40px, -25px, 0);
+}
+
+.menu-open:checked ~ .menu-item:nth-child(4) {
+    -webkit-transition-duration: 280ms;
+    transition-duration: 280ms;
+    -webkit-transform: translate3d(40px, -25px, 0);
+    transform: translate3d(40px, -25px, 0);
+}
+
+.menu-open:checked ~ .menu-item:nth-child(5) {
+    -webkit-transition-duration: 380ms;
+    transition-duration: 380ms;
+    -webkit-transform: translate3d(40px, 25px, 0);
+    transform: translate3d(40px, 25px, 0);
+}
+
+.menu-open:checked ~ .menu-item:nth-child(6) {
+    -webkit-transition-duration: 480ms;
+    transition-duration: 480ms;
+    -webkit-transform: translate3d(-40px, 25px, 0);
+    transform: translate3d(-40px, 25px, 0);
+}
+
+.disabled-menu {
+    background: #8bc34a;
+    color: white;
+    text-align: center;
+}
+
+.disabled-menu-item, .disabled-menu-open-button {
+    background: #949494;
+    border-radius: 100%;
+    width: 25px;
+    height: 25px;
+    margin-left: -40px;
+    position: absolute;
+    color: white;
+    text-align: center;
+    line-height: 25px;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-transition: -webkit-transform ease-out 200ms;
+    transition: transform ease-out 200ms;
+}
+
+.rotate {
+    -webkit-transition: all 0.2s linear;
+    transition: all 0.5s linear;
+}
+
+.rotate.down {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.highlight {
+    -webkit-filter: saturate(1.1) brightness(125%);
+    /*other options for highlighting*/
+    /*-webkit-filter: brightness(125%);*/
+    /*-webkit-filter: sepia(70%);*/
+    /*-webkit-filter: hue-rotate(320deg);*/
+    /*-webkit-filter: opacity(.5);*/
+}
+
+.modalDialog {
+    position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(78, 78, 78, 0.8);
+    z-index: 99999;
+    opacity: 0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+}
+
+.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modalDialog > div {
+    width: 400px;
+    position: relative;
+    margin: 10% auto;
+    padding: 5px 20px 13px 20px;
+    border-radius: 10px;
+    background: -webkit-linear-gradient(#fff, #999);
+}
+
+.hidden-panel {
+    opacity: 0;
+}
+
+.show-panel {
+    animation: fadein 0.8s;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.deployment-panel-closed {
+    /*position: absolute;*/
+    z-index: 3000;
+    bottom: 10px;
+    background: #6c2636;
+    overflow: hidden;
+    transition: all 1s ease-in-out;
+    height: 5%;
+    width: 2%;
+}
+
+.deployment-panel-open {
+    /*position: absolute;*/
+    z-index: 3000;
+    bottom: 10px;
+    background: #1c456c;
+    overflow: hidden;
+    transition: all 1s ease-in-out;
+    width: 345px;
+    height: 175px;
+}
+
+.deployment-deploy-panel-open {
+    /* position: absolute; */
+    z-index: 3000;
+    bottom: 10px;
+    background: #1c456c;
+    overflow: hidden;
+    transition: all 1s ease-in-out;
+    width: 230px;
+    height: 177px;
+}
+
+.rotate {
+    transition-duration: 1.5s;
+    transform: rotate(360deg);
+}
+
+.un_rotate {
+    transition-duration: 1.5s;
+    transform: rotate(-360deg);
+}
+
+.sub-panels {
+    float: right;
+    padding: 10px;
+}
+
+#reset-deploy-button {
+    padding: 10px 16px;
+    font-size: 14px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+    color: #ffffff;
+    background-color: #d9534f;
+    margin-bottom: 0;
+    vertical-align: middle;
+    float: left;
+}
+
+#commit-deploy-button, #deploy-deploy-button {
+    padding: 10px 16px;
+    font-size: 14px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+    color: #ffffff;
+    background-color: #1d9d74;
+    margin-bottom: 0;
+    vertical-align: middle;
+    float: right;
+}
+
+#deployment-panel-button-group {
+    padding: 10px;
+}
+
+#deployment-panel-harvest-info {
+    padding: 27px 17px;
+    font-size: 14px;
+    line-height: 1.3333333;
+    color: #ffffff;
+    background-color: rgb(97, 118, 118);
+    margin-bottom: 0;
+    vertical-align: middle;
+    width: 120px;
+}
+
+#deployment-panel-default-deployment-info {
+    padding: 10px 16px;
+    font-size: 14px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+    color: #ffffff;
+    background-color: #607D8B;
+    margin-bottom: 0;
+    vertical-align: middle;
+    width: 120px;
+}
+
+#junto-home-nav {
+    font-size: 19px;
+    color: #EF7373 !important;
+}
+
+#game-state-display {
+    width: 20%;
+    background-color: #f8f8f8;
+    border-color: #e7e7e7;
+    top: 0;
+    border-width: 0 0 1px;
+    position: fixed;
+    right: 0;
+    z-index: 1031;
+    padding-right: 15px;
+    max-height: 50px;
+    min-width: 250px;
+    font-size: medium;
+}
+
+.game-state-display-text {
+    font-size: large;
+    text-align: left;
+}
+
+#round-label , #phase-label, #waiting-on-label{
+    color: #EF7373 !important;
+}

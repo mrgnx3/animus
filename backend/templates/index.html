@@ -2,19 +2,18 @@
 <html>
 <head>
     <title>Flask-SocketIO Test</title>
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
     <script type="text/javascript" charset="utf-8">
-        $(document).ready(function () {
-            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port );
+        document.addEventListener("DOMContentLoaded", function(event) {
+           var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port );
 
             socket.on('connect', function () {
-                socket.emit('my_event', {data: 'I\'m connected!'});
+                socket.emit('games_to_join');
                 document.getElementById('log').innerHTML = "im connected baby"
             });
 
-            socket.on('my_response', function () {
-                document.getElementById('more').innerHTML = "server is talking back too"
+            socket.on('my_response', function (data) {
+                document.getElementById('more').innerHTML = data.gameName;
             });
         });
     </script>

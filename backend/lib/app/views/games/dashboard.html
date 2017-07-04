@@ -1,0 +1,80 @@
+{% extends '../layouts/default.html' %}
+
+{% block main %}
+    <h1>Lets play a game</h1>
+{% endblock %}
+
+{% block content %}
+    <form id="createGame" action="{{ '/games/user/' + req.user.id }}" method="post" role="form" class="form-horizontal">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+
+        <p class="col-sm-offset-2 error">
+            {{ error }}
+        </p>
+
+        <div class="form-group">
+            <div class="col-xs-5">
+                <input id="gameTitle" class="form-control" type="text" placeholder="Name your WAR!" name="gameTitle"
+                       value="" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-0 col-sm-10">
+                <button id="createNewGameButton" class="btn btn-primary" type="submit">Battle!</button>
+            </div>
+        </div>
+    </form>
+    {% if Object.keys(gameList).length != 0 %}
+        <div>
+            <h1 style=" border-bottom: 1px solid #eee;
+                        margin-top: 40px;">
+                Your active games
+            </h1>
+        </div>
+        <div class="panel-group" id="accordion">
+         {% for game in gameList %}
+            <div class="panel panel-info">
+                <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#{{ game }}">
+                    <h4 class="panel-title accordion-toggle" id="expand-{{ game }}">
+                        {{ game }}
+                    </h4>
+                </div>
+                <div id="{{ game }}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <p>Info about {{ game }}</p>
+                        <a class="btn btn-large btn-info" href="../../games/lobby/{{ game }}" id="goto-{{ game }}">Go to
+                            Game Lobby</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% if Object.keys(gamesToJoin).length != 0 %}
+        <div>
+            <h1 style=" border-bottom: 1px solid #eee;
+                        margin-top: 40px;">
+                Games to join
+            </h1>
+        </div>
+        <div class="panel-group" id="accordion">
+            {% for gameToJoin in gamesToJoin %}
+                <div class="panel panel-info">
+                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#{{ gameToJoin }}">
+                        <h4 class="panel-title accordion-toggle" id="expand-{{ gameToJoin }}">
+                            {{ gameToJoin }}
+                        </h4>
+                    </div>
+                    <div id="{{ gameToJoin }}" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <p>Info about {{ gameToJoin }}</p>
+                            <a class="btn btn-large btn-info" href="../../games/lobby/{{ gameToJoin }}"
+                               id="goto-{{ gameToJoin }}">Go to Game Lobby</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
