@@ -1,0 +1,38 @@
+Base Site Flow flow
+
+  ->  Opening Screen
+
+      Create Game
+         -> Name
+         -> Number of Players
+         -> Join as <PlayerName>
+
+      Join Game
+         -> List games
+              -> Join as <PlayerName>
+
+  -> Lobby
+
+      -> Chat
+      -> Random Race/ Hero selector
+      -> Ready status
+      -> Start game button
+
+
+  -> In Game:
+      -> Display
+          -> Board
+          -> Units
+          -> HUD
+          -> Game state info
+          -> In game chat
+
+      Game Phases:
+
+          -> Orders
+          -> Movements/Attacks
+          -> Harvest/Interact
+          -> Recruiting / Deployment
+          -> Event cards
+
+  -> End game Screen
