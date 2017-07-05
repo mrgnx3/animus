@@ -1,0 +1,142 @@
+/*.colours {*/
+/*background-color: #52c426; */
+/*background-color:#069927;*/
+/*background-color:#057c80;*/
+/*background-color:#324f78;*/
+/*background-color:#222222;*/
+/*}*/
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.75em;
+    font-size: 16px;
+    background-color: #222;
+    color: #aaa;
+}
+
+.tg {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-color: #999;
+    min-width: 140px;
+    margin: 10px;
+}
+
+.tg td {
+    font-size: 14px;
+    padding: 4px 20px;
+    border-width: 1px;
+    overflow: hidden;
+    word-break: normal;
+    border-color: #999;
+    color: #444;
+    background-color: #F7FDFA;
+}
+
+.tg .ta {
+    padding: 3px 6px;
+    min-width: 200px;
+}
+
+.tg th {
+    font-size: 24px;
+    font-weight: normal;
+    padding-top: 20px;
+    padding-right: 0px;
+    padding-bottom: 20px;
+    padding-left: 5px;
+    overflow: hidden;
+    word-break: normal;
+    border-color: #fff;
+    color: #fff;
+    background-color: #057c80;
+}
+
+.joinGameButton {
+    box-shadow: inset 0px 1px 3px 0px #91b8b3;
+    background: #069927;
+    border-radius: 5px;
+    border: 1px solid #566963;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 11px 23px;
+    text-decoration: none;
+    text-shadow: 0px -1px 0px #2b665e;
+}
+
+.joinGameButton:hover {
+    background: #52c426;
+}
+
+.joinGameButton:active {
+    position: relative;
+    top: 1px;
+}
+
+.txtInput {
+    width: 100%;
+    resize: none;
+    text-align-last: center;
+    font-size: medium;
+}
+
+#userReg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 50%;
+    height: 50%;
+}
+
+.large {
+    height: 100%;
+    width: 100%
+}
+
+#newUserButton, #clearCookieButton {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(10%);
+    box-shadow: inset 0px 1px 3px 0px #91b8b3;
+    background: #069927;
+    border-radius: 5px;
+    border: 1px solid #566963;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 11px 23px;
+    text-decoration: none;
+    text-shadow: 0px -1px 0px #2b665e;
+}
+
+#playerCountSelector {
+    width: 100%;
+    font-size: 25px;
+}
+
+#createGameButton {
+    box-shadow: inset 0px 1px 3px 0px #91b8b3;
+    background: #456e99;
+    border-radius: 5px;
+    border: 1px solid #566963;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 11px 23px;
+    text-decoration: none;
+    text-shadow: 0px -1px 0px #2b665e;
+    width: 75%;
+    text-align: center;
+}
+
+.gbtg {
+    padding: 0;
+}

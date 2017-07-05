@@ -1,0 +1,53 @@
+{% extends './layouts/default.html' %}
+
+{% block main %}
+    <h1 id="welcomeText" style="text-align:center">Welcome to Animus</h1>
+    <h4 style="text-align:center;color: rgb(192, 65, 65);">A board game for the bored and pitiful</h4>
+{% endblock %}
+
+{% block content %}
+    <table class="tg">
+        <tr>
+            <th colspan="2" class="tg">Games Ready To Join</th>
+        </tr>
+        <tr>
+            <td class="tg">Game One</td>
+            <td class="tg"><a href="#" class="joinGameButton">Join Game</a></td>
+        </tr>
+        <tr>
+            <td class="tg">Game Two</td>
+            <td class="tg"><a href="#" class="joinGameButton">Join Game</a></td>
+        </tr>
+        <tr>
+            <td class="tg">Game Two</td>
+            <td class="tg"><a href="#" class="joinGameButton">Join Game</a></td>
+        </tr>
+    </table>
+    <table class="tg">
+        <tr>
+            <th colspan="2" class="tg">Create New Game</th>
+        </tr>
+        <tr>
+            <td class="tg">Game Name</td>
+            <td class="ta"><textarea placeholder="Your Game name..." class="txtInput"></textarea></td>
+        </tr>
+        <tr>
+            <td class="tg">Number of Players</td>
+            <td class="ta">
+                <label>
+                    <select name="players" id="playerCountSelector">
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td class="tg"></td>
+            <td class="gbtg" ><a href="#" id="createGameButton">Create Game</a></td>
+        </tr>
+    </table>
+{% endblock %}

@@ -1,0 +1,32 @@
+<html>
+<head>
+    <link href="/static/css/site.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+{% block main %}{% endblock %}
+<div id="content" style="display: none">
+    {% block content %}{% endblock %}
+</div>
+<div id="userReg" style="display: none">
+    <table class="tg large">
+        <tr>
+            <th colspan="2" class="tg">New User Detected!</th>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="usrname"
+                       id="newUserTxtInput" maxlength="10"
+                       placeholder="Enter Your Name Here"
+                       class="txtInput"><br>
+                <a id="newUserButton" href="#">THEN HIT ME</a>
+            </td>
+
+        </tr>
+    </table>
+</div>
+<div id="clearCookieButton" style="display: none">Change User</div>
+</body>
+<footer>
+    <script type="text/javascript" src="/static/js/cookiemanager.js"></script>
+</footer>
+</html>
