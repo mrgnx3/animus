@@ -23,19 +23,6 @@ function eraseCookie(name) {
     createCookie(name, "", -1);
 }
 
-function createUser(userName) {
-    var request = new XMLHttpRequest();
-    var createUserUrl = location.origin + '/createUser/' + userName;
-    request.open('GET', createUserUrl, true);
-    request.onload = function () {
-        if (request.status >= 200 && request.status < 400) {
-            return JSON.parse(request.responseText);
-        }
-    };
-    request.send();
-}
-
-
 document.getElementById('clearCookieButton').onclick = function () {
     eraseCookie('animusUser');
     location.reload();
@@ -58,8 +45,8 @@ if (readCookie('animusUser')) {
 
     document.getElementById('newUserButton').onclick = function () {
 
-        userName = document.getElementById('newUserTxtInput').value.replace(/^\s*|\s*$/g, "");
-        if (createUser(userName)) {
+        var userName = document.getElementById('newUserTxtInput').value.replace(/^\s*|\s*$/g, "");
+        if (userName !== '') {
             alert("Please Enter a User Name");
         } else {
             createCookie('animusUser', userName, 10);

@@ -19,6 +19,7 @@ body {
     border-spacing: 0;
     border-color: #999;
     min-width: 140px;
+    width: 100%;
     margin: 10px;
 }
 
@@ -50,6 +51,12 @@ body {
     border-color: #fff;
     color: #fff;
     background-color: #057c80;
+}
+
+tbody {
+    display: block;
+    max-height: 379px;
+    overflow-y: scroll;
 }
 
 .joinGameButton {
@@ -102,7 +109,7 @@ body {
     left: 50%;
     transform: translateX(-50%) translateY(10%);
     box-shadow: inset 0px 1px 3px 0px #91b8b3;
-    background: #069927;
+    background: #00bcd4;
     border-radius: 5px;
     border: 1px solid #566963;
     display: inline-block;
@@ -113,6 +120,7 @@ body {
     padding: 11px 23px;
     text-decoration: none;
     text-shadow: 0px -1px 0px #2b665e;
+    bottom: 10%;
 }
 
 #playerCountSelector {
@@ -139,4 +147,11 @@ body {
 
 .gbtg {
     padding: 0;
+}
+
+#content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }

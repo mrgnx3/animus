@@ -92,19 +92,19 @@
 
 /* Terrain textures. */
 .forest {
-    background: url("../img/forest_tile.png");
+    background: url("../server/static/img/forest_tile.png");
 }
 
 .grass {
-    background: url("../img/grass_tile.png");
+    background: url("../server/static/img/grass_tile.png");
 }
 
 .water {
-    background: url("../img/water_tile.png");
+    background: url("../server/static/img/water_tile.png");
 }
 
 .desert {
-    background: url("../img/desert_tile.png");
+    background: url("../server/static/img/desert_tile.png");
 }
 
 a {
