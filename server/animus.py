@@ -36,7 +36,8 @@ def create_game(game_name, player_count):
 @socketio.on('join_lobby')
 def on_join_lobby(data):
     join_room(data['game_name'])
-    send(data['username'] + ' has entered the room.', room=data['game_name'])
+    message = "{0} has joined the lobby".format(data['username'])
+    emit('new_message', {"username": '#', "message": message}, room=data['game_name'])
 
 
 @socketio.on('send_message')
