@@ -1,5 +1,5 @@
 from flask import Flask, render_template, json
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, leave_room, send
 
 from server.lib.game_model import GameModel
 
@@ -18,7 +18,9 @@ def index():
 
 @app.route('/lobby/<game_name>', methods=['GET'])
 def view_lobby(game_name):
-    return render_template('./site/lobby.html')
+    # todo add 404 game not found clause
+    active_races = [race.title() for race in games.get_game_by_name(game_name)[0].active_races]
+    return render_template('./site/lobby.html', active_races=active_races, game_name=game_name.title())
 
 
 @app.route('/gamecheck/<game_name>', methods=['GET'])
@@ -28,7 +30,18 @@ def game_name_is_available(game_name):
 
 @app.route('/createGame/<game_name>/playerCount/<player_count>', methods=['GET'])
 def create_game(game_name, player_count):
-    return json.dumps({"gameCreated": bool(games.create_game(game_name, player_count))})
+    return json.dumps({"gameCreated": bool(games.create_game(game_name, int(player_count)))})
+
+
+@socketio.on('join_lobby')
+def on_join_lobby(data):
+    join_room(data['game_name'])
+    send(data['username'] + ' has entered the room.', room=data['game_name'])
+
+
+@socketio.on('send_message')
+def send_message(data):
+    emit('new_message', {"username": data['username'], "message": data['message']}, room=data['game_name'])
 
 
 if __name__ == '__main__':

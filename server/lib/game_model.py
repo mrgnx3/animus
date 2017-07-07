@@ -25,6 +25,9 @@ class RaceInfo(EmbeddedDocument):
 
 class Game(Document):
     name = StringField(max_length=60, required=True, unique=True)
+    player_count = IntField(required=True)
+    active_races = ListField(required=True)
+
     round = IntField(default=1)
     phase = StringField(default='orders')
     phase_waiting_on = ListField()
@@ -33,7 +36,6 @@ class Game(Document):
     rounds_max_number = IntField(default=3)
 
     uuids = ListField()
-
     geoEngineers = EmbeddedDocumentField(RaceInfo)
     settlers = EmbeddedDocumentField(RaceInfo)
     kingdomWatchers = EmbeddedDocumentField(RaceInfo)
@@ -67,22 +69,30 @@ class GameModel:
         guardians = RaceInfo(race='guardians')
 
         if player_count == 2:
+            active_races = ['geoEngineers', 'settlers']
             kingdomWatchers = None
             periplaneta = None
             reduviidae = None
             guardians = None
         elif player_count == 3:
+            active_races = ['geoEngineers', 'settlers', 'kingdomWatchers']
             periplaneta = None
             reduviidae = None
             guardians = None
         elif player_count == 4:
+            active_races = ['geoEngineers', 'settlers', 'kingdomWatchers', 'periplaneta']
             reduviidae = None
             guardians = None
         elif player_count == 5:
+            active_races = ['geoEngineers', 'settlers', 'kingdomWatchers', 'periplaneta', 'reduviidae']
             guardians = None
+        else:
+            active_races = ['geoEngineers', 'settlers', 'kingdomWatchers', 'periplaneta', 'reduviidae', 'guardians']
 
         return Game(
             name=game_name,
+            player_count=player_count,
+            active_races=active_races,
             geoEngineers=geoEngineers,
             settlers=settlers,
             kingdomWatchers=kingdomWatchers,

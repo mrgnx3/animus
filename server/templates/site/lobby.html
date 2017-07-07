@@ -1,39 +1,40 @@
-{% extends './layouts/lobbyStub.html' %}
-
-{% block main %}
-    <h1>Pre Game Lobby</h1>
-{% endblock %}
-
-{% block content %}
-    <div id="lobby">
-        <div id="chat" style="float: left">
-            <div id="users"></div>
-            <div id="content"
-                 style="width: 400px; height: 250px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll;"></div>
+<!doctype html>
+<html>
+<head>
+    <link href="/static/css/site.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div>
+    <h1>{{ game_name }}, pre-game lobby</h1>
+    <div id="lobby" namespace="{{ game_name }}">
+        <div id="lobbyChat">
+            <div id="chatContent"></div>
             <div id="controls">
-                <input type="hidden" id="name" value="{{ userName }}">
-                <input style="width:350px;" id="field">
-                <input type="button" value="send" id="send">
+                <input id="chatInputField">
+                <input type="button" value="send" id="sendMessage">
             </div>
         </div>
-        <table class="table table-striped table-bordered" style="width: 300px" id="playerStatusTable">
-            <thead>
+        <table id="playerStatusTable">
+            <tbody id="lobbyPlayerTable">
             <tr>
-                <th>Ready?</th>
+                <th>Race</th>
                 <th>Player Name</th>
             </tr>
-            </thead>
-            <tbody>
-            {% for i in [1,2] -%}
+            {% for race in active_races -%}
                 <tr>
-                    <th scope="row" id="player{{ i }}row">
-                        player {{ i }}
-                    </th>
-                    <td> <p id="player{{ i }}">Empty</p> </td>
+                    <td scope="row" id="race{{ race }}row">{{ race }}</td>
+                    <td><a href="#" race="{{ race }}" id="claimRaceButton">Claim Race</a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
     <div id="startGameButton"></div>
-{% endblock %}
+</div>
+</body>
+<footer>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+    <script type="text/javascript" src="/static/js/cookieManager.js"></script>
+    <script type="text/javascript" src="/static/js/lobby.js"></script>
+</footer>
+</html>
