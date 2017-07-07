@@ -81,7 +81,7 @@ class GameModel:
         elif player_count == 5:
             guardians = None
 
-        Game(
+        return Game(
             name=game_name,
             geoEngineers=geoEngineers,
             settlers=settlers,
@@ -93,7 +93,7 @@ class GameModel:
 
     @staticmethod
     def get_game_by_name(game_name):
-        return Game.objects.get(name=game_name)
+        return Game.objects.filter(name=game_name)
 
     @staticmethod
     def get_games_available_to_join():
