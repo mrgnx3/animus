@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
 
     sendMessageButton.onclick = submitMessage;
-    messageInput.onkeypress = function () {
+    messageInput.onkeypress = function (event) {
         if (event.keyCode === 13) {
             submitMessage();
         }
