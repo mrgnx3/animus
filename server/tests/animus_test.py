@@ -16,9 +16,10 @@ class LoginTest(LiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         cls.mongo_client = MongoClient()
-
+        cls.game_name = "testGame"
         try:
             cls.mongo_client.admin.command('ismaster')
+            cls.mongo_client.animus.game.remove({"name": "{0}".format(cls.game_name)})
         except ConnectionFailure:
             print("Mongodb server not available")
             exit(1)
@@ -32,21 +33,16 @@ class LoginTest(LiveServerTestCase):
         cls.player_two.driver.quit()
 
     def test_create_game_with_new_users(self):
-        self.player_one.open_page(self.get_server_url())
-        self.player_two.open_page(self.get_server_url())
+        self.player_one.login_new_user()
+        self.player_two.login_new_user()
 
-        self.player_one.driver.find_element_by_id('newUserTxtInput').send_keys('player_one')
-        self.player_one.driver.find_element_by_id('newUserButton').click()
-        self.player_one.wait_for_page_complete()
-        player_one_welcome = self.player_one.driver.find_element_by_id('welcomeText').text
+        self.assertIn(self.player_one.player_name, self.player_one.login_get_welcome_text(), msg="player login works")
+        self.assertIn(self.player_two.player_name, self.player_two.login_get_welcome_text(), msg="player login works")
 
-        self.player_two.driver.find_element_by_id('newUserTxtInput').send_keys('player_two')
-        self.player_two.driver.find_element_by_id('newUserButton').click()
-        self.player_two.wait_for_page_complete()
-        player_two_welcome = self.player_two.driver.find_element_by_id('welcomeText').text
-
-        self.assertIn(self.player_one.player_name, player_one_welcome, msg="Player should be welcomed by name")
-        self.assertIn(self.player_two.player_name, player_two_welcome, msg="Player should be welcomed by name")
+        self.player_one.create_game(self.game_name)
+        self.assertIn('lobby', self.player_one.driver.current_url, msg="game created, play in lobby")
+        game_joined = self.player_two.join_game(self.game_name)
+        self.assertEquals(game_joined, 0, msg="game joined")
 
 
 if __name__ == "__main__":
