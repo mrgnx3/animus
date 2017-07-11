@@ -1,3 +1,6 @@
 flask-socketio
 Flask-PyMongo
+Flask-Testing
 ipython
+nose
+selenium

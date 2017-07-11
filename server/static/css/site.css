@@ -178,7 +178,7 @@ tbody {
 }
 
 #chatInputField {
-    width:350px;
+    width: 350px;
 }
 
 #playerStatusTable {
@@ -189,4 +189,9 @@ tbody {
 #lobbyChat {
     width: 50%;
     float: left;
+}
+
+#subWelcomeText {
+    text-align: center;
+    color: rgb(192, 65, 65);
 }

@@ -18,17 +18,25 @@
     
     python animus.py
     
+##Testing
+    export PATH=$PATH:<PATH_TO_SeleniumDrivers>
+    export PYTHONPATH=$(pwd)
+    
+    source venv/bin/activate
+    
+    nosetests server/tests/animus_test.py
+    
     
 ## What I'm looking to build
 
     Base Site Flow flow
     
-      ->  Opening Screen
+      ->  Opening Screen (done)
     
-          Create Game
-             -> Name
-             -> Number of Players
-             -> Join as <PlayerName>
+          Create Game (done)
+             -> Name  (done)
+             -> Number of Players (done)
+             -> Join as <PlayerName> (done)
     
           Join Game
              -> List games
@@ -36,7 +44,7 @@
     
       -> Lobby
     
-          -> Chat
+          -> Chat (done)
           -> Random Race/ Hero selector
           -> Ready status
           -> Start game button

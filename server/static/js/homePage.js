@@ -11,8 +11,9 @@ if (readCookie('animusUser')) {
 
     document.getElementById('newUserButton').onclick = function () {
 
-        var userName = document.getElementById('newUserTxtInput').value.replace(/^\s*|\s*$/g, "");
-        if (userName !== '') {
+        var userName = document.getElementById('newUserTxtInput').value.replace(/^\s+|\s+$/g, "");
+        debugger;
+        if (userName === '') {
             alert("Please Enter a User Name");
         } else {
             createCookie('animusUser', userName, 10);
