@@ -28,6 +28,11 @@ def game_name_is_available(game_name):
     return json.dumps({"gameNameIsAvailable": bool(len(games.get_game_by_name(game_name)) == 0)})
 
 
+@app.route('/gamesToJoin/', methods=['GET'])
+def games_to_join():
+    return json.dumps({"gameList": games.get_games_available_to_join()})
+
+
 @app.route('/createGame/<game_name>/playerCount/<player_count>', methods=['GET'])
 def create_game(game_name, player_count):
     return json.dumps({"gameCreated": bool(games.create_game(game_name, int(player_count)))})

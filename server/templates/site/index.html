@@ -1,20 +1,20 @@
-{% extends './layouts/default.html' %}
-
-{% block main %}
-    <h1 id="welcomeText" style="text-align:center">Welcome to Animus</h1>
-    <h4 id="subWelcomeText">A board game for the bored and pitiful</h4>
-{% endblock %}
-
-{% block content %}
-    {% if games is defined and games|length > 0  %}
-        <table class="tg">
+<html>
+<head>
+    <link href="/static/css/site.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<h1 id="welcomeText" style="text-align:center">Welcome to Animus</h1>
+<h4 id="subWelcomeText">A board game for the bored and pitiful</h4>
+<div id="content" style="display: none">
+    {% if games is defined and games|length > 0 %}
+        <table id="gamesToJoinTable" class="tg">
             <tr>
                 <th colspan="2" class="tg">Games Ready To Join</th>
             </tr>
             {% for gamename in games %}
                 <tr>
                     <td class="tg">{{ gamename }}</td>
-                    <td class="tg"><a value={{ gamename }} href="#" class="joinGameButton">Join Game</a></td>
+                    <td class="tg"><a id={{ gamename }} href="#" class="joinGameButton">Join Game</a></td>
                 </tr>
             {% endfor %}
         </table>
@@ -46,4 +46,29 @@
             <td class="gbtg"><a href="#" id="createGameButton">Create Game</a></td>
         </tr>
     </table>
-{% endblock %}
+</div>
+<div id="userReg" style="display: none">
+    <table class="tg large">
+        <tr>
+            <th colspan="2" class="tg">New User Detected!</th>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="usrname"
+                       id="newUserTxtInput" maxlength="10"
+                       placeholder="Enter Your Name Here"
+                       class="txtInput"><br>
+                <a id="newUserButton" href="#">THEN HIT ME</a>
+            </td>
+
+        </tr>
+    </table>
+</div>
+<div id="clearCookieButton" style="display: none">Change User</div>
+</body>
+<footer>
+    <script type="text/javascript" src="/static/js/cookieManager.js"></script>
+    <script type="text/javascript" src="/static/js/homePage.js"></script>
+    <script type="text/javascript" src="/static/js/gameManager.js"></script>
+</footer>
+</html>
