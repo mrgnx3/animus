@@ -23,7 +23,7 @@
             {% for race in active_races -%}
                 <tr>
                     <td scope="row" id="race{{ race }}row">{{ race }}</td>
-                    <td><a href="#" race="{{ race }}" id="claimRaceButton">Claim Race</a></td>
+                    <td><a race="{{ race }}" id="claimRaceButton">Claim Race</a></td>
                 </tr>
             {% endfor %}
             </tbody>

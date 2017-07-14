@@ -35,6 +35,7 @@ def games_to_join():
 
 @app.route('/createGame/<game_name>/playerCount/<player_count>', methods=['GET'])
 def create_game(game_name, player_count):
+    socketio.emit('update_game_list', room='home_page')
     return json.dumps({"gameCreated": bool(games.create_game(game_name, int(player_count)))})
 
 
@@ -50,5 +51,10 @@ def send_message(data):
     emit('new_message', {"username": data['username'], "message": data['message']}, room=data['game_name'])
 
 
+@socketio.on('enter_home_page')
+def enter_home_page():
+    join_room('home_page')
+
+
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, threaded=True)

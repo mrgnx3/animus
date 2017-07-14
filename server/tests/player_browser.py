@@ -1,3 +1,4 @@
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
@@ -60,6 +61,6 @@ class Player:
         self.wait_for_redirect('login')
 
     def join_game(self, game_name):
-        self.find_dynamic_element((By.ID, game_name), timeout=100).click()
+        self.find_dynamic_element((By.ID, game_name), timeout=30).click()
         self.wait_for_redirect('login')
         return bool('login/' + game_name in self.driver.current_url)
