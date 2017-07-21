@@ -34,3 +34,23 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     socket.emit('join_lobby', {game_name: gameName, username: playerName});
 });
+
+var modal = document.getElementById('heroRaceSelector');
+var raceClaimButtons = document.getElementsByClassName("claimRaceButton");
+var span = document.getElementsByClassName("close")[0];
+
+for (var i = 0, l = raceClaimButtons.length; i < l; i++) {
+    raceClaimButtons[i].onclick = function() {
+        modal.style.display = "block";
+    };
+}
+
+span.onclick = function() {
+    modal.style.display = "none";
+};
+
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+};
