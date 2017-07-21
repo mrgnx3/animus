@@ -51,7 +51,7 @@
       -> Lobby
     
           -> Chat (done)
-          -> Random Race/ Hero selector
+          -> Random Race/ Hero selector (in progess)
           -> Ready status
           -> Start game button
     
