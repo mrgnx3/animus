@@ -57,4 +57,4 @@ def enter_home_page():
 
 
 if __name__ == '__main__':
-    socketio.run(app, threaded=True)
+    socketio.run(app)

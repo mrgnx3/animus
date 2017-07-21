@@ -44,9 +44,9 @@
              -> Number of Players (done)
              -> Join as <PlayerName> (done)
     
-          Join Game
-             -> List games
-                  -> Join as <PlayerName>
+          Join Game (done)
+             -> List games (done)
+                  -> Join as <PlayerName> (done)
     
       -> Lobby
     
