@@ -1,4 +1,5 @@
 import nose
+import time
 from flask_testing import LiveServerTestCase
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
@@ -35,17 +36,29 @@ class AnimusTest(LiveServerTestCase):
         cls.player_one.driver.quit()
         cls.player_two.driver.quit()
 
-    def test_create_game_with_new_users(self):
+    def test_two_player_game_start_to_end(self):
+        # Register / Login
         self.player_one.login_new_user()
         self.player_two.login_new_user()
 
         self.assertIn(self.player_one.player_name, self.player_one.login_get_welcome_text(), msg="player 1 login works")
         self.assertIn(self.player_two.player_name, self.player_two.login_get_welcome_text(), msg="player 2 login works")
 
+        # Create Game
         self.player_one.create_game(self.game_name)
         self.assertIn('lobby', self.player_one.driver.current_url, msg="game created, player 1 in lobby")
-        game_joined = self.player_two.join_game(self.game_name)
-        self.assertTrue(game_joined, msg="game joined")
+        self.assertTrue(self.player_two.join_game(self.game_name), msg="player 2 game joined game lobby")
+
+        # PreGame Lobby
+        self.player_one.sends_lobby_message('Hi are you ready to play?')
+        self.player_one.sends_lobby_message('Sure are you ready to get your ass handed to you?')
+        self.assertIn('Sure are you ready to get your ass handed to you?', self.player_one.get_lobby_messages())
+        self.assertIn('Hi are you ready to play?', self.player_two.get_lobby_messages())
+
+        # Game
+
+        # Post Game Screen
+        time.sleep(5)
 
 
 if __name__ == "__main__":

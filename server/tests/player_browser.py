@@ -24,9 +24,13 @@ class Player:
 
         WebDriverWait(self.driver, self.timeout).until(document_complete, message='Wait for page load complete')
 
-    def wait_for_redirect(self, url_context):
-        WebDriverWait(self.driver, 10).until(lambda driver: url_context not in self.driver.current_url)
-        self.wait_for_page_complete()
+    def wait_for_redirect(self, url_context, timeout=10):
+        for i in range(timeout):
+            if url_context in self.driver.current_url:
+                self.wait_for_page_complete()
+                return True
+            time.sleep(1)
+        return False
 
     def WebElement(self, elements):
         if isinstance(elements, list):
@@ -35,9 +39,13 @@ class Player:
             elements = WebElement(elements._parent, elements._id)
         return elements
 
-    def find_dynamic_element(self, locator, timeout=10):
-        element = WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
-        return self.WebElement(element)
+    def find_dynamic_element_by_id(self, id_string, timeout=10):
+        for i in range(timeout):
+            element = self.driver.find_element_by_id(id_string)
+            if element:
+                return self.WebElement(element)
+            time.sleep(1)
+        return None
 
     def find_dynamic_elements(self, locator, timeout=10):
         condition = EC.presence_of_all_elements_located(locator)
@@ -54,13 +62,19 @@ class Player:
         return self.driver.find_element_by_id('welcomeText').text
 
     def create_game(self, game_name, player_count='2'):
-        self.find_dynamic_element((By.ID, 'gameNameInput')).send_keys(game_name)
-        select = Select(self.find_dynamic_element((By.ID, 'playerCountSelector')))
+        self.find_dynamic_element_by_id('gameNameInput').send_keys(game_name)
+        select = Select(self.find_dynamic_element_by_id('playerCountSelector'))
         select.select_by_value(player_count)
-        self.find_dynamic_element((By.ID, 'createGameButton')).click()
-        self.wait_for_redirect('login')
+        self.find_dynamic_element_by_id('createGameButton').click()
+        self.wait_for_redirect('lobby')
 
     def join_game(self, game_name):
-        self.find_dynamic_element((By.ID, game_name), timeout=30).click()
-        self.wait_for_redirect('login')
-        return bool('login/' + game_name in self.driver.current_url)
+        self.find_dynamic_element_by_id(game_name, timeout=30).click()
+        return self.wait_for_redirect('lobby')
+
+    def sends_lobby_message(self, message):
+        self.find_dynamic_element_by_id('chatInputField').send_keys(message)
+        self.find_dynamic_element_by_id('sendMessage').click()
+
+    def get_lobby_messages(self):
+        return self.find_dynamic_element_by_id('chatContent').text

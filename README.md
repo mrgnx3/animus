@@ -19,6 +19,11 @@
     python animus.py
     
 ##Testing
+    Note:
+    We test with muiltple browsers, so we need to modify flask_testing app run paramerters 
+    edit site-packages/flask_testing/utils.py
+    line: 473 app.run(port=port, use_reloader=False, *threaded=True*)
+    
     export PATH=$PATH:<PATH_TO_SeleniumDrivers>
     export PYTHONPATH=$(pwd)
     
@@ -26,6 +31,7 @@
     
     nosetests server/tests/animus_test.py
     
+
     
 ## What I'm looking to build
 
