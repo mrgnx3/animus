@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
         document.getElementById('newUserButton').onclick = function () {
 
-            var userName = document.getElementById('newUserTxtInput').value.replace(/^\s+|\s+$/g, "");
+            let userName = document.getElementById('newUserTxtInput').value.replace(/^\s+|\s+$/g, "");
             debugger;
             if (userName === '') {
                 alert("Please Enter a User Name");
@@ -25,12 +25,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
 
     document.getElementById('createGameButton').onclick = function () {
-        var gameName = document.getElementById('gameNameInput').value;
+        let gameName = document.getElementById('gameNameInput').value;
         createGameIfNameIsFree(gameName);
     };
 
 
-    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+    let socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
     socket.on('update_game_list', function () {
         getGamesToJoin();

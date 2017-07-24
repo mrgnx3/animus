@@ -3,13 +3,13 @@
  */
 
 function createGameIfNameIsFree(gameName) {
-    var request = new XMLHttpRequest();
-    var gameNameCheckUrl = location.origin + '/gamecheck/' + gameName;
+    let request = new XMLHttpRequest();
+    let gameNameCheckUrl = location.origin + '/gamecheck/' + gameName;
     request.open('GET', gameNameCheckUrl, true);
     request.onload = function () {
         if (request.status === 200) {
             if (JSON.parse(request.responseText).gameNameIsAvailable) {
-                var playerCount = document.getElementById('playerCountSelector').value;
+                let playerCount = document.getElementById('playerCountSelector').value;
                 createGame(gameName, playerCount);
             } else {
                 alert('Game name is already in use, try another');
@@ -22,8 +22,8 @@ function createGameIfNameIsFree(gameName) {
 }
 
 function createGame(gameName, playerCount) {
-    var request = new XMLHttpRequest();
-    var createGameUrl = location.origin + '/createGame/' + gameName + '/playerCount/' + playerCount;
+    let request = new XMLHttpRequest();
+    let createGameUrl = location.origin + '/createGame/' + gameName + '/playerCount/' + playerCount;
     request.open('GET', createGameUrl, true);
     request.onload = function () {
         if (request.status === 200) {
@@ -41,9 +41,9 @@ function joinLobby(gameName){
 
 function refreshGamesToJoinTable(gameList) {
 
-    var tableHtml = '<tr><th colspan="2" class="tg">Games Ready To Join</th></tr>';
+    let tableHtml = '<tr><th colspan="2" class="tg">Games Ready To Join</th></tr>';
 
-    for (var i = 0, l = gameList.length; i < l; i++) {
+    for (let i = 0, l = gameList.length; i < l; i++) {
         tableHtml += '<tr><td class="tg">' + gameList[i] + '</td><td class="tg"><a id="' + gameList[i] + '" onclick="joinLobby(\'' + gameList[i] + '\')" class="joinGameButton">Join Game</a></td></tr>';
     }
 
@@ -52,8 +52,8 @@ function refreshGamesToJoinTable(gameList) {
 
 function getGamesToJoin() {
     console.log("refreshing games to join list");
-    var request = new XMLHttpRequest();
-    var gameNameCheckUrl = location.origin.replace("#", "") + '/gamesToJoin/';
+    let request = new XMLHttpRequest();
+    let gameNameCheckUrl = location.origin.replace("#", "") + '/gamesToJoin/';
     request.open('GET', gameNameCheckUrl, true);
     request.onload = function () {
         refreshGamesToJoinTable(JSON.parse(request.responseText).gameList)

@@ -197,7 +197,7 @@ tbody {
 }
 
 /* The Modal (background) */
-.modal {
+.heroSelectModal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -211,9 +211,9 @@ tbody {
 }
 
 /* Modal Content/Box */
-.modal-content {
+.heroSelectModal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 8% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
@@ -322,24 +322,34 @@ sc-card .back {
   transform: rotateY(180deg);
 }
 
-sc-card .kingdom-watchers {
-    background: url(/static/img/kingdomWatchers.jpg) center center no-repeat;
+sc-card .Geoengineers-attack {
+    background: url(/static/img/heroes/GeoengineersAttack.jpg) center center no-repeat;
     background-size: 100% 100%;
 }
 
-sc-card .kingdom-watchers-bussiness {
-    background: url(/static/img/kingdomWatchersBussiness.jpg) center center no-repeat;
+sc-card .Geoengineers-business {
+    background: url(/static/img/heroes/geoEngineersbusiness.jpg) center center no-repeat;
     background-size: 100% 100%;
 }
 
-sc-card .kingdom-watchers-defence {
-    background: url(/static/img/kingdomWatchersDefence.jpg) center center no-repeat;
+sc-card .Geoengineers-defence {
+    background: url(/static/img/heroes/geoEngineersDefence.jpg) center center no-repeat;
     background-size: 100% 100%;
 }
 
 
-sc-card .periplaneta {
-    background: url(/static/img/periplaneta.jpg) center center no-repeat;
+sc-card .Settlers-attack {
+    background: url(/static/img/heroes/SettlersAttack.jpg) center center no-repeat;
+    background-size: 100% 100%;
+}
+
+sc-card .Settlers-business {
+    background: url(/static/img/heroes/Settlersbusiness.jpg) center center no-repeat;
+    background-size: 100% 100%;
+}
+
+sc-card .Settlers-defence {
+    background: url(/static/img/heroes/SettlersDefence.jpg) center center no-repeat;
     background-size: 100% 100%;
 }
 

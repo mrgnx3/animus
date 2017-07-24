@@ -30,61 +30,64 @@
         </table>
     </div>
     <div id="startGameButton"></div>
-    <div id="heroRaceSelector" class="modal">
 
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="hero-select-title">
-                <h1>HERO SELECT</h1>
+    {% for race in active_races -%}
+        <div id="heroRaceSelector-{{ race }}" class="heroSelectModal">
+
+            <!-- Modal content -->
+            <div class="heroSelectModal-content">
+                <div class="hero-select-title">
+                    <h1>Select your hero</h1>
+                </div>
+                <div class="card-holder">
+                    <sc-card axis="Y" duration="1200">
+                        <div class="umbra"></div>
+                        <div class="penumbra"></div>
+                        <div class="back" tabindex="-1">
+                            <h1>OFFENSE</h1><br/>
+                            <h3>+1 to all attacks</h3>
+                            <button>Flip card</button>
+                        </div>
+                        <div class="front {{ race }}-attack" tabindex="-1">
+                            <button>Flip card</button>
+                        </div>
+                    </sc-card>
+                    <sc-card axis="Y" duration="1200">
+                        <div class="umbra"></div>
+                        <div class="penumbra"></div>
+                        <div class="back" tabindex="-1">
+                            <h1>DEFENCE</h1><br/>
+                            <h3>+3 to all Defences</h3>
+                            <h3>-1 to all Attacks</h3>
+                            <button>Flip card</button>
+                        </div>
+                        <div class="front {{ race }}-defence" tabindex="-1">
+                            <button>Flip card</button>
+                        </div>
+                    </sc-card>
+                    <sc-card axis="Y" duration="1200">
+                        <div class="umbra"></div>
+                        <div class="penumbra"></div>
+                        <div class="back" tabindex="-1">
+                            <h1>ECONOMY</h1><br/>
+                            <h3>+2 to all Harvests</h3>
+                            <button>Flip card</button>
+                        </div>
+                        <div class="front {{ race }}-business" tabindex="-1">
+                            <button>Flip card</button>
+                        </div>
+                    </sc-card>
+                </div>
+                <div class='hero-button-select'>
+                    <button class='hero-button' id="hero-button-{{ race }}-attack"></button>
+                    <button class='hero-button' id="hero-button-{{ race }}-defence"></button>
+                    <button class='hero-button' id="hero-button-{{ race }}-business"></button>
+                </div>
             </div>
-            <div class="card-holder">
-                <sc-card axis="Y" duration="1200">
-                    <div class="umbra"></div>
-                    <div class="penumbra"></div>
-                    <div class="back" tabindex="-1">
-                        <h1>OFFENSE</h1><br/>
-                        <h3>+1 to all attacks</h3>
-                        <button>Flip card</button>
-                    </div>
-                    <div class="front kingdom-watchers" tabindex="-1">
-                        <button>Flip card</button>
-                    </div>
-                </sc-card>
-                <sc-card axis="Y" duration="1200">
-                    <div class="umbra"></div>
-                    <div class="penumbra"></div>
-                    <div class="back" tabindex="-1">
-                        <h1>DEFENCE</h1><br/>
-                        <h3>+3 to all Defences</h3>
-                        <h3>-1 to all Attacks</h3>
-                        <button>Flip card</button>
-                    </div>
-                    <div class="front kingdom-watchers-defence" tabindex="-1">
-                        <button>Flip card</button>
-                    </div>
-                </sc-card>
-                <sc-card axis="Y" duration="1200">
-                    <div class="umbra"></div>
-                    <div class="penumbra"></div>
-                    <div class="back" tabindex="-1">
-                        <h1>ECONOMY</h1><br/>
-                        <h3>+2 to all Harvests</h3>
-                        <button>Flip card</button>
-                    </div>
-                    <div class="front kingdom-watchers-bussiness" tabindex="-1">
-                        <button>Flip card</button>
-                    </div>
-                </sc-card>
-            </div>
-            <div class='hero-button-select'>
-                <button class='hero-button'>Arnold Diesdorfer</button>
-                <button class='hero-button'>Raphael Leonardus</button>
-                <button class='hero-button'>Heinmann Zeisholzer</button>
-            </div>
+
+
         </div>
-
-    </div>
+    {% endfor %}
 </div>
 </body>
 <footer>

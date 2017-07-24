@@ -20,7 +20,7 @@ def index():
 def view_lobby(game_name):
     # todo add 404 game not found clause
     active_races = [race.title() for race in games.get_game_by_name(game_name)[0].active_races]
-    return render_template('./site/lobby.html', active_races=active_races, game_name=game_name.title())
+    return render_template('./site/lobby.html', active_races=active_races, game_name=game_name)
 
 
 @app.route('/gamecheck/<game_name>', methods=['GET'])
@@ -39,6 +39,15 @@ def create_game(game_name, player_count):
     return json.dumps({"gameCreated": bool(games.create_game(game_name, int(player_count)))})
 
 
+@app.route('/racecheck/<game_name>/race/<race>/player/<player>', methods=['GET'])
+def race_check(game_name, race, player):
+    if games.lock_in_race_if_available(game_name, race, player):
+        socketio.emit('lobby_race_lock', {"race": race, "player": player}, room=game_name)
+        return json.dumps({"raceIsAvailable": True})
+    else:
+        return json.dumps({"raceIsAvailable": False})
+
+
 @socketio.on('join_lobby')
 def on_join_lobby(data):
     join_room(data['game_name'])
@@ -54,6 +63,11 @@ def send_message(data):
 @socketio.on('enter_home_page')
 def enter_home_page():
     join_room('home_page')
+
+
+@socketio.on('heroSelected')
+def hero_selected(data):
+    games.hero_selected(data.race, data.heroType, data.gameName, data.playerName)
 
 
 if __name__ == '__main__':
