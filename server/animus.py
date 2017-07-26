@@ -1,4 +1,4 @@
-from flask import Flask, render_template, json
+from flask import Flask, render_template, json, request
 from flask_socketio import SocketIO, emit, join_room, leave_room, send
 
 from server.lib.game_model import GameModel
@@ -14,6 +14,21 @@ app.debug = True
 @app.route('/')
 def index():
     return render_template('./site/index.html', games=games.get_games_available_to_join())
+
+
+@app.route('/game/<game_name>', methods=['GET'])
+def view_game(game_name):
+    user_name = request.cookies['animusUser']
+    game_doc = games.get_game_by_name(game_name)[0]
+    for race in game_doc['active_races']:
+        if game_doc[race]['username'] == user_name:
+            return render_template('./game/gameView.html', game_name=game_name, user_name=user_name, race_name=race)
+    return render_template('./404.html')
+
+
+@app.route('/getBaseBoard', methods=['GET'])
+def get_base_board():
+    return json.dumps(games.get_base_map())
 
 
 @app.route('/lobby/<game_name>', methods=['GET'])

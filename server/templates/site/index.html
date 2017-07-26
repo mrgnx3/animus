@@ -6,19 +6,20 @@
 <h1 id="welcomeText" style="text-align:center">Welcome to Animus</h1>
 <h4 id="subWelcomeText">A board game for the bored and pitiful</h4>
 <div id="content" style="display: none">
-    {% if games is defined and games|length > 0 %}
-        <table id="gamesToJoinTable" class="tg">
+    <table id="gamesToJoinTable" class="tg">
+        {% if games is defined and games|length > 0 %}
             <tr>
                 <th colspan="2" class="tg">Games Ready To Join</th>
             </tr>
             {% for gamename in games %}
                 <tr>
                     <td class="tg">{{ gamename }}</td>
-                    <td class="tg"><a id={{ gamename }} class="joinGameButton" onclick="joinLobby('{{ gamename }}')">Join Game</a></td>
+                    <td class="tg"><a id={{ gamename }} class="joinGameButton" onclick="joinLobby('{{ gamename }}')">Join
+                        Game</a></td>
                 </tr>
             {% endfor %}
-        </table>
-    {% endif %}
+        {% endif %}
+    </table>
     <table class="tg">
         <tr>
             <th colspan="2" class="tg">Create New Game</th>

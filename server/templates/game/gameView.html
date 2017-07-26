@@ -1,0 +1,316 @@
+<!doctype html>
+<html>
+<head>
+    <title>{{ game_name }}</title>
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/game_app.css">
+    <link rel="stylesheet" href="/static/css/game_style.css">
+    <script src='/static/js/ingame/app.js'></script>
+    <script src="/static/js/ingame/map.js"></script>
+    <script src="/static/js/ingame/game-hud.js"></script>
+    <script src="/static/js/ingame/index.js"></script>
+</head>
+<body>
+<nav role="navigation" class="navbar navbar-default navbar-fixed-bottom">
+    <ul class="nav nav-tabs">
+        <li class="">
+            <a id="game_hud_tab" href="#" data-toggle="tab" aria-expanded="false" style="color: #f6f6f6;
+            background-color: #345498;">Game information</a>
+        </li>
+        <li class="">
+            <a id="game_hud_deployment_commit_tab" href="#" data-toggle="tab" aria-expanded="false" style="color: #f6f6f6;
+            background-color: #98273b; display: none">Deployment</a>
+        </li>
+        <li class="">
+            <a id="game_hud_deployment_deploy_tab" href="#" data-toggle="tab" aria-expanded="false" style="color: #f6f6f6;
+            background-color: #3e9851; display: none">Deployment</a>
+        </li>
+    </ul>
+    <div class="container hudContainer" id="game_hud">
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <div id="race_bio" style="width:150px;margin-right: 20px;float: left">
+                    <div id="player_pic">
+                        <img src="/img/leader_profiles/{{ race_name }}.jpg" style="max-width: 150px;height: 182px;">
+                    </div>
+                </div>
+                <div>
+                    <a href="#" onclick="displayModal('{{ race_name }}', 'history')" class="btn btn-primary">Race Bio</a>
+                    <a href="#" onclick="displayModal('{{ race_name }}', 'leaderBio')" class="btn btn-primary">Leader
+                        Info</a>
+                </div>
+                <div id="game_stats_scroll" style="overflow: scroll;padding-top: 10px;">
+                    <table style="width: auto;" class="table table-condensed table-bordered" data-sort-name="count"
+                           data-sort-order="desc">
+                        <thead>
+                        <tr>
+                            <th>Race</th>
+                            <th data-field="count" data-sortable="true"><i class="fa fa-diamond"></i></th>
+                            <th><i class="fa fa-times"></i><i class="fa fa-diamond"></i></th>
+                            <th><i class="fa fa-truck"></i></th>
+                            <th><i class="fa fa-male"></i></th>
+                            <th><i class="fa fa-angle-double-right"></i></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="geoEngineers-harvest">
+                            <td>Geo-Engineers</td>
+                            <td id="geoEngineers-harvest-count"></td>
+                            <td id="geoEngineers-harvest-rate"></td>
+                            <td> 0</td>
+                            <td> 0</td>
+                            <td> 0</td>
+                        </tr>
+                        <tr id="settlers-harvest">
+                            <td>Settlers</td>
+                            <td id="settlers-harvest-count"></td>
+                            <td id="settlers-harvest-rate"></td>
+                            <td> 0</td>
+                            <td> 0</td>
+                            <td> 0</td>
+                        </tr>
+                        <tr id="kingdomWatchers-harvest">
+                            <td>Kingdom Watchers</td>
+                            <td id="kingdomWatchers-harvest-count"></td>
+                            <td id="kingdomWatchers-harvest-rate"></td>
+                            <td> 0</td>
+                            <td> 0</td>
+                            <td> 0</td>
+                        </tr>
+                        <tr id="periplaneta-harvest">
+                            <td>Periplaneta</td>
+                            <td id="periplaneta-harvest-count"></td>
+                            <td id="periplaneta-harvest-rate"></td>
+                            <td> 0</td>
+                            <td> 0</td>
+                            <td> 0</td>
+                        </tr>
+                        <tr id="reduviidae-harvest">
+                            <td>reduviidae</td>
+                            <td id="reduviidae-harvest-count"></td>
+                            <td id="reduviidae-harvest-rate"></td>
+                            <td> 0</td>
+                            <td> 0</td>
+                            <td> 0</td>
+                        </tr>
+                        <tr id="guardians-harvest">
+                            <td>guardians</td>
+                            <td id="guardians-harvest-count"></td>
+                            <td id="guardians-harvest-rate"></td>
+                            <td> 0</td>
+                            <td> 0</td>
+                            <td> 0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container hudContainer" id="game_hud_deploy_commit">
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <div id="race_bio" style="width:150px;margin-right: 20px;float: left">
+                    <div id="player_pic">
+                        <img src="/static/img/leader_profiles/{{ race_name }}_deploy.jpg"
+                             style="max-width: 150px;height: 182px;">
+                    </div>
+                </div>
+                <div id="deployment-panel-id" class="deployment-panel-open">
+                    <div id="panel-group" class="sub-panels">
+                        <div id="sub-panel-1" class="show-panel">
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-circle fa-stack-2x" style="color: #a1a205"></i>
+                         <span class="fa fa-stack-1x" style="color: white">x1</span>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: green"></i>
+                         <i class="fa fa fa-male fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg" id="dec-infantry">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <i class="fa fa-minus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <span class="fa fa-stack-1x" id="infantry-value" style="color: white">0</span>
+                    </span>
+                            <span class="fa-stack fa-lg" id="inc-infantry">
+                      <i class="fa fa-square fa-stack-2x"></i>
+                      <i class="fa fa-plus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                        </div>
+                        <div id="sub-panel-2" class="show-panel">
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-circle fa-stack-2x" style="color: #a1a205"></i>
+                         <span class="fa fa-stack-1x" style="color: white">x1</span>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color:#262cb8 "></i>
+                         <i class="fa fa fa-rocket fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg" id="dec-ranged">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <i class="fa fa-minus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <span class="fa fa-stack-1x" id="ranged-value" style="color: white">0</span>
+                    </span>
+                            <span class="fa-stack fa-lg" id="inc-ranged">
+                      <i class="fa fa-square fa-stack-2x"></i>
+                      <i class="fa fa-plus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                        </div>
+                        <div id="sub-panel-3" class="show-panel">
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-circle fa-stack-2x" style="color: #a1a205"></i>
+                         <span class="fa fa-stack-1x" style="color: white">x2</span>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #8e1da2"></i>
+                         <i class="fa fa fa-truck fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg" id="dec-tank">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <i class="fa fa-minus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <span class="fa fa-stack-1x" id="tank-value" style="color: white">0</span>
+                    </span>
+                            <span class="fa-stack fa-lg" id="inc-tank">
+                        <i class="fa fa-square fa-stack-2x"></i>
+                        <i class="fa fa-plus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                        </div>
+                        <div id="deployment-panel-button-group">
+                            <div id="reset-deploy-button">RESET</div>
+                            <div id="commit-deploy-button">COMMIT</div>
+                        </div>
+                    </div>
+                    <div id="deployment-panel-info">
+                        <div id="deployment-panel-harvest-info">
+                            <p style="text-align: center;">Deployment Resources</p>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #FF9800"></i>
+                         <i class="fa fa fa-diamond fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #333333"></i>
+                        <span class="fa fa-stack-1x" id="harvest-value">0</span>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #FF9800"></i>
+                         <i class="fa fa fa-male fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                        <i class="fa fa-square fa-stack-2x" style="color: #333333"></i>
+                        <span class="fa fa-stack-1x" id="default-deployment-value">0</span>
+                    </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="container hudContainer" id="game_hud_deploy_deploy">
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <div id="race_bio" style="width:150px;margin-right: 20px;float: left">
+                    <div id="player_pic">
+                        <img src="/static/img/leader_profiles/{{ race_name }}_deploy.jpg"
+                             style="max-width: 150px;height: 182px;">
+                    </div>
+                </div>
+                <div id="deployment-deploy-panel-id" class="deployment-deploy-panel-open">
+                    <div id="panel-deploy-group" class="sub-panels">
+                        <div id="sub-deploy-panel-1" class="show-panel">
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #FF9800"></i>
+                         <span class="fa fa-stack-1x" id="committed-infantry-value" style="color: white">0</span>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: green"></i>
+                         <i class="fa fa fa-male fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg" id="dec-deploy-infantry">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <i class="fa fa-minus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <span class="fa fa-stack-1x" id="infantry-deploy-value" style="color: white">0</span>
+                    </span>
+                            <span class="fa-stack fa-lg" id="inc-deploy-infantry">
+                      <i class="fa fa-square fa-stack-2x"></i>
+                      <i class="fa fa-plus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                        </div>
+                        <div id="sub-deploy-panel-2" class="show-panel">
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #FF9800"></i>
+                         <span class="fa fa-stack-1x" id="committed-ranged-value" style="color: white">0</span>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color:#262cb8 "></i>
+                         <i class="fa fa fa-rocket fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg" id="dec-deploy-ranged">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <i class="fa fa-minus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <span class="fa fa-stack-1x" id="ranged-deploy-value" style="color: white">0</span>
+                    </span>
+                            <span class="fa-stack fa-lg" id="inc-deploy-ranged">
+                      <i class="fa fa-square fa-stack-2x"></i>
+                      <i class="fa fa-plus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                        </div>
+                        <div id="sub-panel-deploy-3" class="show-panel">
+                    <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #FF9800"></i>
+                         <span class="fa fa-stack-1x" id="committed-tank-value" style="color: white">0</span>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x" style="color: #8e1da2"></i>
+                         <i class="fa fa fa-truck fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg" id="dec-deploy-tank">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <i class="fa fa-minus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                            <span class="fa-stack fa-lg">
+                         <i class="fa fa-square fa-stack-2x"></i>
+                         <span class="fa fa-stack-1x" id="tank-deploy-value" style="color: white">0</span>
+                    </span>
+                            <span class="fa-stack fa-lg" id="inc-deploy-tank">
+                        <i class="fa fa-square fa-stack-2x"></i>
+                        <i class="fa fa-plus-circle fa-stack-1x" style="color: white"></i>
+                    </span>
+                        </div>
+                        <div id="deployment-deploy-panel-button-group">
+                            <div id="deploy-deploy-button">Deploy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</nav>
+<div id="gameModal" class="modalDialog">
+    <div>
+        <span id="gameModalBody"></span>
+    </div>
+</div>
+<div id="playerName" playerName="{{ user_name }}"></div>
+<div id="playerRace" playerRace="{{ race_name }}"></div>
+</body>
+</html>

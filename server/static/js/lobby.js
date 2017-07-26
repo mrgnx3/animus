@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         }
         document.getElementById("chatContent").innerHTML += '<b>#</b>Starting game in . . .<br />';
-        startGame(6);
+        startGame(3);
     });
 
     socket.on('lobby_race_lock', function (data) {
