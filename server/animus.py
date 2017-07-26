@@ -35,8 +35,10 @@ def games_to_join():
 
 @app.route('/createGame/<game_name>/playerCount/<player_count>', methods=['GET'])
 def create_game(game_name, player_count):
-    socketio.emit('update_game_list', room='home_page')
-    return json.dumps({"gameCreated": bool(games.create_game(game_name, int(player_count)))})
+    if bool(games.create_game(game_name, int(player_count))):
+        socketio.emit('update_game_list', room='home_page')
+        return json.dumps({"gameCreated": True})
+    return json.dumps({"gameCreated": False})
 
 
 @app.route('/racecheck/<game_name>/race/<race>/player/<player>', methods=['GET'])
@@ -65,9 +67,12 @@ def enter_home_page():
     join_room('home_page')
 
 
-@socketio.on('heroSelected')
+@socketio.on('hero_selected')
 def hero_selected(data):
-    games.hero_selected(data.race, data.heroType, data.gameName, data.playerName)
+    games.hero_selected(data['race'], data['hero_type'], data['game_name'], data['player_name'])
+    if games.all_races_are_claimed(data['game_name']):
+        games.close_lobby(data['game_name'])
+        emit('start_game', room=data['game_name'])
 
 
 if __name__ == '__main__':

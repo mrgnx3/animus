@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as EC, ui
 
 
 class Player:
@@ -40,12 +40,9 @@ class Player:
         return elements
 
     def find_dynamic_element_by_id(self, id_string, timeout=10):
-        for i in range(timeout):
-            element = self.driver.find_element_by_id(id_string)
-            if element:
-                return self.WebElement(element)
-            time.sleep(1)
-        return None
+        wait = ui.WebDriverWait(self.driver, timeout)
+        wait.until(lambda driver: self.driver.find_element_by_id(id_string))
+        return self.WebElement(self.driver.find_element_by_id(id_string))
 
     def find_dynamic_elements(self, locator, timeout=10):
         condition = EC.presence_of_all_elements_located(locator)
@@ -78,3 +75,12 @@ class Player:
 
     def get_lobby_messages(self):
         return self.find_dynamic_element_by_id('chatContent').text
+
+    def claim_race(self, race, hero):
+        race_buttons = self.find_dynamic_elements((By.CLASS_NAME, 'claimRaceButton'))
+        for race_button in race_buttons:
+            if race_button.get_attribute('race') == race:
+                race_button.click()
+                self.wait_for_page_complete()
+                self.find_dynamic_element_by_id("hero-button-{0}-{1}".format(race, hero)).click()
+                self.wait_for_page_complete()

@@ -7,27 +7,23 @@ class LobbyUser(EmbeddedDocument):
     is_ready = BooleanField(default=False)
 
 
-class HeroInfo(EmbeddedDocument):
-    name = StringField()
-    defence_modifier = IntField(default=0)
-    attack_modifier = IntField(default=0)
-    harvest_modifier = IntField(default=0)
-
-
 class RaceInfo(EmbeddedDocument):
     race = StringField(required=True)
     username = StringField(default='')
 
-    hero = EmbeddedDocumentField(HeroInfo)
+    hero_name = StringField()
+    hero_defence_modifier = IntField(default=0)
+    hero_attack_modifier = IntField(default=0)
+    hero_harvest_modifier = IntField(default=0)
 
     harvest_count = IntField(default=0)
     harvest_collection_rate = IntField(default=1)
 
-    default_deployment = IntField(default=1)
-    total_to_deployment = IntField(default=0)
-    infantry_to_deployment = IntField(default=0)
-    ranged_to_deployment = IntField(default=0)
-    tanks_to_deployment = IntField(default=0)
+    deployment_default = IntField(default=1)
+    deployment_total = IntField(default=0)
+    deployment_infantry_count = IntField(default=0)
+    deployment_ranged_count = IntField(default=0)
+    deployment_tanks_count = IntField(default=0)
 
     units = ListField()
 
@@ -132,13 +128,28 @@ class GameModel:
     @staticmethod
     def hero_selected(race, hero_type, game_name, player_name):
         game = Game.objects.filter(name=game_name)[0]
+
+        lobby_lock_in = LobbyUser(username=player_name, is_ready=True)
+        game['lobby_status'].append(lobby_lock_in)
+
         race = race.lower()
-        game[race]['hero']['name'] = player_name + '_' + hero_type
+        game[race]['hero_name'] = player_name + '_' + hero_type
         if hero_type == 'attack':
-            game[race]['hero']['attack_modifier'] = 1
+            game[race]['hero_attack_modifier'] = 1
         elif hero_type == 'defence':
-            game[race]['hero']['attack_modifier'] = -1
-            game[race]['hero']['defence_modifier'] = 3
+            game[race]['hero_attack_modifier'] = -1
+            game[race]['hero_defence_modifier'] = 3
         else:
-            game[race]['hero']['harvest_modifier'] = 2
+            game[race]['hero_harvest_modifier'] = 2
+        game.save()
+
+    @staticmethod
+    def all_races_are_claimed(game_name):
+        game = Game.objects.filter(name=game_name)[0]
+        return len(game['lobby_status']) == game['player_count']
+
+    @staticmethod
+    def close_lobby(game_name):
+        game = Game.objects.filter(name=game_name)[0]
+        game['is_lobby_open'] = False
         game.save()

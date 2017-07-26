@@ -27,6 +27,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
         document.getElementById("chatContent").innerHTML += '<b>' + data.username + ': </b>' + data.message + '<br />';
     });
 
+    socket.on('start_game', function () {
+        function startGame(in_seconds){
+            if (in_seconds > 0) {
+                setTimeout(function () {
+                    document.getElementById("chatContent").innerHTML += '<b> ' + in_seconds + '</b><br />';
+                    in_seconds--;
+                    startGame(in_seconds);
+                }, 1000);
+            } else {
+                 window.location = location.origin + '/game/' + gameName;
+            }
+        }
+        document.getElementById("chatContent").innerHTML += '<b>#</b>Starting game in . . .<br />';
+        startGame(6);
+    });
+
     socket.on('lobby_race_lock', function (data) {
         let claimRaceButtons = document.getElementsByClassName('claimRaceButton');
         for (let i = 0, l = claimRaceButtons.length; i < l; i++) {
@@ -44,12 +60,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
     socket.emit('join_lobby', {game_name: gameName, username: playerName});
 
     function heroSelected(race, heroType) {
-        socket.emit('heroSelected', {
+        socket.emit('hero_selected', {
             race: race,
             hero_type: heroType,
             game_name: gameName,
             player_name: playerName
         });
+        document.getElementById('heroRaceSelector-' + race).style.display = "none";
     }
 
     let raceClaimButtons = document.getElementsByClassName("claimRaceButton");
@@ -63,17 +80,24 @@ document.addEventListener("DOMContentLoaded", function (event) {
             request.onload = function () {
                 if (request.status === 200) {
                     if (JSON.parse(request.responseText).raceIsAvailable) {
+
                         let attackHeroButton = document.getElementById("hero-button-" + race + "-attack");
                         attackHeroButton.innerHTML = 'attack hero';
-                        attackHeroButton.onclick = heroSelected(race, 'attack');
+                        attackHeroButton.addEventListener('click', function () {
+                            heroSelected(race, 'attack');
+                        }, false);
 
                         let defenceHeroButton = document.getElementById("hero-button-" + race + "-defence");
                         defenceHeroButton.innerHTML = 'defence hero';
-                        attackHeroButton.onclick = heroSelected(race, 'defence');
+                        defenceHeroButton.addEventListener('click', function () {
+                            heroSelected(race, 'defence');
+                        }, false);
 
                         let businessHeroButton = document.getElementById("hero-button-" + race + "-business");
-                        businessHeroButton.innerHTML = 'attack hero';
-                        attackHeroButton.onclick = heroSelected(race, 'business');
+                        businessHeroButton.innerHTML = 'business hero';
+                        businessHeroButton.addEventListener('click', function () {
+                            heroSelected(race, 'business');
+                        }, false);
 
                         document.getElementById('heroRaceSelector-' + race).style.display = "block";
                     } else {

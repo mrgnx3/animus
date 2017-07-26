@@ -30,6 +30,7 @@ class AnimusTest(LiveServerTestCase):
 
         cls.player_one = Player('player_one')
         cls.player_two = Player('player_two')
+        time.sleep(2)
 
     @classmethod
     def tearDownClass(cls):
@@ -52,8 +53,11 @@ class AnimusTest(LiveServerTestCase):
         # PreGame Lobby
         self.player_one.sends_lobby_message('Hi are you ready to play?')
         self.player_one.sends_lobby_message('Sure are you ready to get your ass handed to you?')
-        self.assertIn('Sure are you ready to get your ass handed to you?', self.player_one.get_lobby_messages())
         self.assertIn('Hi are you ready to play?', self.player_two.get_lobby_messages())
+        self.assertIn('Sure are you ready to get your ass handed to you?', self.player_one.get_lobby_messages())
+
+        self.player_one.claim_race(race='Settlers', hero='attack')
+        self.player_two.claim_race(race='Geoengineers', hero='defence')
 
         # Game
 
