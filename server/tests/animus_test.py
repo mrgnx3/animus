@@ -62,7 +62,6 @@ class AnimusTest(LiveServerTestCase):
         # Game
 
         # Post Game Screen
-        time.sleep(50)
 
 
 if __name__ == "__main__":

@@ -5,9 +5,6 @@
     - An instance of mongod needs to be running
     
        $ mongod  --dbpath /var/animus
-    
-    - After which the setup/db_init.js script can be run to create the mongo schema
-       $ mongo -h localhost animus < db.init.js
 
 
 ##Setup Steps
@@ -51,9 +48,9 @@
       -> Lobby
     
           -> Chat (done)
-          -> Random Race/ Hero selector (in progess)
-          -> Ready status
-          -> Start game button
+          -> Random Race/ Hero selector (done)
+          -> Ready status (done)
+          -> Start game (done)
     
     
       -> In Game:

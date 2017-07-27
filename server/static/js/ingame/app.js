@@ -501,7 +501,7 @@ function updateHarvestInformation(data) {
 
 function updateRoundPhaseInfo(data) {
     document.getElementById('round-value').textContent = "#" + data.round;
-    document.getElementById('phase-value').textContent = data.phase.name;
+    document.getElementById('phase-value').textContent = data.phase;
     if(data.activePlayer.length < 1){
         document.getElementById('waiting-on-value').textContent = "All Players  ";
     } else {
