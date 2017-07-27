@@ -483,16 +483,44 @@ function battleResolved(user) {
 }
 
 function updateHarvestInformation(data) {
-    //todo make this dynamic
-    document.getElementById('kingdomWatchers-harvest-count').innerHTML = String(data.kingdomWatchers.currentAmount);
-    document.getElementById('kingdomWatchers-harvest-rate').innerHTML = 'x' + String(data.kingdomWatchers.collectionRate);
-    document.getElementById('periplaneta-harvest-count').innerHTML = String(data.periplaneta.currentAmount);
-    document.getElementById('periplaneta-harvest-rate').innerHTML = 'x' + String(data.periplaneta.collectionRate);
+    if ('kingdomWatchers' in data) {
+        document.getElementById('kingdomWatchers-harvest-count').innerHTML = String(data.kingdomWatchers.currentAmount);
+        document.getElementById('kingdomWatchers-harvest-rate').innerHTML = 'x' + String(data.kingdomWatchers.collectionRate);
+    } else {
+        document.getElementById("kingdomWatchers-harvest").style.display = "none";
+    }
 
-    document.getElementById("geoEngineers-harvest").style.display = "none";
-    document.getElementById("settlers-harvest").style.display = "none";
-    document.getElementById("reduviidae-harvest").style.display = "none";
-    document.getElementById("guardians-harvest").style.display = "none";
+    if ('periplaneta' in data) {
+        document.getElementById('periplaneta-harvest-count').innerHTML = String(data.periplaneta.currentAmount);
+        document.getElementById('periplaneta-harvest-rate').innerHTML = 'x' + String(data.periplaneta.collectionRate);
+    } else {
+        document.getElementById("periplaneta-harvest").style.display = "none";
+    }
+    if ('geoengineers' in data) {
+        document.getElementById('geoengineers-harvest-count').innerHTML = String(data.geoengineers.currentAmount);
+        document.getElementById('geoengineers-harvest-rate').innerHTML = 'x' + String(data.geoengineers.collectionRate);
+    } else {
+        document.getElementById("geoengineers-harvest").style.display = "none";
+    }
+
+    if ('settlers' in data) {
+        document.getElementById('settlers-harvest-count').innerHTML = String(data.settlers.currentAmount);
+        document.getElementById('settlers-harvest-rate').innerHTML = 'x' + String(data.settlers.collectionRate);
+    } else {
+        document.getElementById("settlers-harvest").style.display = "none";
+    }
+    if ('reduviidae' in data) {
+        document.getElementById('reduviidae-harvest-count').innerHTML = String(data.reduviidae.currentAmount);
+        document.getElementById('reduviidae-harvest-rate').innerHTML = 'x' + String(data.reduviidae.collectionRate);
+    } else {
+        document.getElementById("reduviidae-harvest").style.display = "none";
+    }
+    if ('guardians' in data) {
+        document.getElementById('guardians-harvest-count').innerHTML = String(data.guardians.currentAmount);
+        document.getElementById('guardians-harvest-rate').innerHTML = 'x' + String(data.guardians.collectionRate);
+    } else {
+        document.getElementById("guardians-harvest").style.display = "none";
+    }
 
     //update deployment hub view at the same time
     let playersRace = getPlayersRace();
@@ -502,31 +530,31 @@ function updateHarvestInformation(data) {
 function updateRoundPhaseInfo(data) {
     document.getElementById('round-value').textContent = "#" + data.round;
     document.getElementById('phase-value').textContent = data.phase;
-    if(data.activePlayer.length < 1){
+    if (data.activePlayer.length < 1) {
         document.getElementById('waiting-on-value').textContent = "All Players  ";
     } else {
         document.getElementById('waiting-on-value').textContent = data.activePlayer;
     }
 }
 
-function displayModal(modalBody, requiredInfo) {
-    //todo: fix this
-    let races = ["kingdomWatchers", "periplaneta"];
+function populateModal(gameModalBody) {
+    document.getElementById('gameModalBody').innerHTML = gameModalBody;
+    document.getElementById('gameModal').classList.add('show');
+    document.getElementById('gameModal').onclick = function () {
+        document.getElementById('gameModal').classList.remove('show');
+    };
+}
 
-    if (races.indexOf(modalBody) > -1) {
-        getRequiredInfo(modalBody, requiredInfo, function (data) {
-            populateModal(data);
-        });
-    } else {
-        populateModal(modalBody);
-    }
-    function populateModal(gameModalBody) {
-        document.getElementById('gameModalBody').innerHTML = gameModalBody;
-        document.getElementById('gameModal').classList.add('show');
-        document.getElementById('gameModal').onclick = function () {
-            document.getElementById('gameModal').classList.remove('show');
-        };
-    }
+function displayModal(modalBody, requiredInfo) {
+    getActiveRaces(gameRoom, function (data) {
+        if (data.indexOf(modalBody) > -1) {
+            getRequiredInfo(modalBody, requiredInfo, function (data) {
+                populateModal(data);
+            });
+        } else {
+            populateModal(modalBody);
+        }
+    });
 }
 
 function hideModal() {
@@ -539,9 +567,9 @@ function hideModal() {
 function getRequiredInfo(modalBody, requiredInfo, cb) {
     function loadJSON(callback) {
         let url;
-        if (requiredInfo == "history") {
+        if (requiredInfo === "history") {
             url = '/getRaceHistory/' + modalBody;
-        } else if (requiredInfo == "leaderBio") {
+        } else if (requiredInfo === "leaderBio") {
             //leader hardcoded for now
             //TODO create controller for leader retrieval
             url = '/getLeaderBio/' + modalBody + '/leader_1';
@@ -551,7 +579,7 @@ function getRequiredInfo(modalBody, requiredInfo, cb) {
         http.overrideMimeType("application/json");
         http.open('GET', location.origin + url, true);
         http.onload = function () {
-            if (http.readyState == 4 && http.status == "200") {
+            if (http.readyState === 4 && http.status === "200") {
                 callback(http.responseText);
             }
         };

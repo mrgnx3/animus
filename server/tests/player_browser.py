@@ -28,7 +28,7 @@ class Player:
         for i in range(timeout):
             if url_context in self.driver.current_url:
                 self.wait_for_page_complete()
-                return True
+                return self.driver.current_url
             time.sleep(1)
         return False
 

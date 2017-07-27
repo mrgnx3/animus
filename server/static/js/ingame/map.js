@@ -24,6 +24,19 @@ function getGamePhase(room, callback) {
     request.send();
 }
 
+function getActiveRaces(game, callback) {
+    let request = new XMLHttpRequest();
+    let getPhaseUrl = location.origin + '/getActiveRaces/' + game;
+    request.open('GET', getPhaseUrl, true);
+
+    request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+            callback(JSON.parse(request.responseText).active_races);
+        }
+    };
+    request.send();
+}
+
 function getRaceByPlayerName(playerName, gameName, callback) {
     let request = new XMLHttpRequest();
     let getPlayersRaceUrl = location.origin + '/getPlayersRace/' + playerName + "/" + gameName;

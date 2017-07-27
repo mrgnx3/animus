@@ -59,9 +59,17 @@ class AnimusTest(LiveServerTestCase):
         self.player_one.claim_race(race='Settlers', hero='attack')
         self.player_two.claim_race(race='Geoengineers', hero='defence')
 
+        player_one_log = self.player_one.driver.get_log('browser')
+        for log_entry in player_one_log:
+            self.assertNotIn('err', log_entry)
+            self.assertNotIn('fail', log_entry)
+
         # Game
+        self.assertIn('game', self.player_one.wait_for_redirect('game'), msg="game started, player 1 in Game")
+        self.assertIn('game', self.player_two.wait_for_redirect('game'), msg="game started, player 2 in Game")
 
         # Post Game Screen
+        time.sleep(40)
 
 
 if __name__ == "__main__":

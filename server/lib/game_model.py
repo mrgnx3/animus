@@ -189,7 +189,11 @@ def get_base_units(player_count=2):
 
 
 def get_game_by_name(game_name):
-    return Game.objects.filter(name=game_name)[0]
+    game = Game.objects.filter(name=game_name)
+    if len(game) > 0:
+        return game[0]
+    else:
+        return []
 
 
 def get_games_available_to_join():

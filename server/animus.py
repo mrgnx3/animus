@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 
-gm.GameModel()
+Game = gm.GameModel()
 
 app.debug = True
 
@@ -42,6 +42,11 @@ def get_players_race(player_name, game_name):
     return json.dumps({'race': gm.get_players_race(game_name, player_name)})
 
 
+@app.route('/getActiveRaces/<game_name>', methods=['GET'])
+def get_active_races(game_name):
+    return json.dumps({'active_races': gm.get_game_by_name(game_name).active_races})
+
+
 @app.route('/getGamesRoundPhaseInfo/<game_name>', methods=['GET'])
 def get_games_round_phase_info(game_name):
     game = gm.get_game_by_name(game_name)
@@ -57,7 +62,7 @@ def view_lobby(game_name):
 
 @app.route('/gamecheck/<game_name>', methods=['GET'])
 def game_name_is_available(game_name):
-    return json.dumps({"gameNameIsAvailable": bool(len([gm.get_game_by_name(game_name)]) == 0)})
+    return json.dumps({"gameNameIsAvailable": bool(len(gm.get_game_by_name(game_name)) == 0)})
 
 
 @app.route('/gamesToJoin/', methods=['GET'])
@@ -67,7 +72,7 @@ def games_to_join():
 
 @app.route('/createGame/<game_name>/playerCount/<player_count>', methods=['GET'])
 def create_game(game_name, player_count):
-    if bool(create_game(game_name, int(player_count))):
+    if bool(Game.create_game(game_name, int(player_count))):
         socketio.emit('update_game_list', room='home_page')
         return json.dumps({"gameCreated": True})
     return json.dumps({"gameCreated": False})
@@ -101,7 +106,7 @@ def enter_home_page():
 
 @socketio.on('hero_selected')
 def hero_selected(data):
-    hero_selected(data['race'], data['hero_type'], data['game_name'], data['player_name'])
+    gm.hero_selected(data['race'], data['hero_type'], data['game_name'], data['player_name'])
     if gm.all_races_are_claimed(data['game_name']):
         gm.close_lobby(data['game_name'])
         emit('start_game', room=data['game_name'])
