@@ -30,7 +30,6 @@ class AnimusTest(LiveServerTestCase):
 
         cls.player_one = Player('player_one')
         cls.player_two = Player('player_two')
-        time.sleep(2)
 
     @classmethod
     def tearDownClass(cls):

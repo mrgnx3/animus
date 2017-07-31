@@ -47,6 +47,19 @@ def get_active_races(game_name):
     return json.dumps({'active_races': gm.get_game_by_name(game_name).active_races})
 
 
+@app.route('/getHudStatistics/<game_name>/<race>', methods=['GET'])
+def get_hud_statistics(game_name, race):
+    infantry = 0
+    ranged = 0
+    tank = 0
+    for army in gm.get_game_by_name(game_name).units:
+        if army['race'] == race:
+            infantry += int(army['infantry'])
+            ranged += int(army['ranged'])
+            tank += int(army['tanks'])
+    return json.dumps({'infantry': infantry, 'ranged': ranged, 'tank': tank, 'game': game_name})
+
+
 @app.route('/getGamesRoundPhaseInfo/<game_name>', methods=['GET'])
 def get_games_round_phase_info(game_name):
     game = gm.get_game_by_name(game_name)
