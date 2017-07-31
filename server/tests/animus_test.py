@@ -64,11 +64,11 @@ class AnimusTest(LiveServerTestCase):
             self.assertNotIn('fail', log_entry)
 
         # Game
-        self.assertIn('game', self.player_one.wait_for_redirect('game'), msg="game started, player 1 in Game")
-        self.assertIn('game', self.player_two.wait_for_redirect('game'), msg="game started, player 2 in Game")
+        self.assertTrue(self.player_one.wait_for_redirect('game'), msg="game started, player 1 in Game")
+        self.assertTrue(self.player_two.wait_for_redirect('game'), msg="game started, player 2 in Game")
 
         # Post Game Screen
-        time.sleep(40)
+        time.sleep(60)
 
 
 if __name__ == "__main__":

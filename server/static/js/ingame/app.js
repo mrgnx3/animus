@@ -483,44 +483,8 @@ function battleResolved(user) {
 }
 
 function updateHarvestInformation(data) {
-    if ('kingdomWatchers' in data) {
-        document.getElementById('kingdomWatchers-harvest-count').innerHTML = String(data.kingdomWatchers.currentAmount);
-        document.getElementById('kingdomWatchers-harvest-rate').innerHTML = 'x' + String(data.kingdomWatchers.collectionRate);
-    } else {
-        document.getElementById("kingdomWatchers-harvest").style.display = "none";
-    }
-
-    if ('periplaneta' in data) {
-        document.getElementById('periplaneta-harvest-count').innerHTML = String(data.periplaneta.currentAmount);
-        document.getElementById('periplaneta-harvest-rate').innerHTML = 'x' + String(data.periplaneta.collectionRate);
-    } else {
-        document.getElementById("periplaneta-harvest").style.display = "none";
-    }
-    if ('geoengineers' in data) {
-        document.getElementById('geoengineers-harvest-count').innerHTML = String(data.geoengineers.currentAmount);
-        document.getElementById('geoengineers-harvest-rate').innerHTML = 'x' + String(data.geoengineers.collectionRate);
-    } else {
-        document.getElementById("geoengineers-harvest").style.display = "none";
-    }
-
-    if ('settlers' in data) {
-        document.getElementById('settlers-harvest-count').innerHTML = String(data.settlers.currentAmount);
-        document.getElementById('settlers-harvest-rate').innerHTML = 'x' + String(data.settlers.collectionRate);
-    } else {
-        document.getElementById("settlers-harvest").style.display = "none";
-    }
-    if ('reduviidae' in data) {
-        document.getElementById('reduviidae-harvest-count').innerHTML = String(data.reduviidae.currentAmount);
-        document.getElementById('reduviidae-harvest-rate').innerHTML = 'x' + String(data.reduviidae.collectionRate);
-    } else {
-        document.getElementById("reduviidae-harvest").style.display = "none";
-    }
-    if ('guardians' in data) {
-        document.getElementById('guardians-harvest-count').innerHTML = String(data.guardians.currentAmount);
-        document.getElementById('guardians-harvest-rate').innerHTML = 'x' + String(data.guardians.collectionRate);
-    } else {
-        document.getElementById("guardians-harvest").style.display = "none";
-    }
+    document.getElementById('harvest-count').innerHTML = String(data.harvest_count);
+    document.getElementById('harvest-rate').innerHTML = 'x' + String(data.harvest_collection_rate);
 
     //update deployment hub view at the same time
     let playersRace = getPlayersRace();
@@ -530,10 +494,10 @@ function updateHarvestInformation(data) {
 function updateRoundPhaseInfo(data) {
     document.getElementById('round-value').textContent = "#" + data.round;
     document.getElementById('phase-value').textContent = data.phase;
-    if (data.activePlayer.length < 1) {
+    if (data.waitingOnPlayer.length < 1) {
         document.getElementById('waiting-on-value').textContent = "All Players  ";
     } else {
-        document.getElementById('waiting-on-value').textContent = data.activePlayer;
+        document.getElementById('waiting-on-value').textContent = data.waitingOnPlayer;
     }
 }
 
@@ -572,7 +536,7 @@ function getRequiredInfo(modalBody, requiredInfo, cb) {
         } else if (requiredInfo === "leaderBio") {
             //leader hardcoded for now
             //TODO create controller for leader retrieval
-            url = '/getLeaderBio/' + modalBody + '/leader_1';
+            url = '/getLeaderBio/' + modalBody + '/attack';
         }
 
         let http = new XMLHttpRequest();

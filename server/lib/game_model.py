@@ -227,6 +227,7 @@ def hero_selected(race, hero_type, game_name, player_name):
     else:
         game[race]['hero_harvest_modifier'] = 2
     game.save()
+    log(game_name, '{0} has selected a hero of type: \'{1}\' for race {2}'.format(player_name, hero_type, race))
 
 
 def all_races_are_claimed(game_name):
@@ -246,3 +247,53 @@ def get_players_race(game_name, player_name):
         if game_doc[race]['username'] == player_name:
             return race
     return None
+
+
+def get_players_race_info(game_name, player_name):
+    game_doc = get_game_by_name(game_name)
+    for race in game_doc['active_races']:
+        if game_doc[race]['username'] == player_name:
+            return game_doc[race]
+    return None
+
+
+def get_lore(race, lore_type='history'):
+    lore = {
+        "geoengineers": {
+            "history": "<h1>Fear The Many Faced God</h1><img src='http://orig02.deviantart.net/08ea/f/2011/312/2/0/experiments___janus_by_jeffsimpsonkh-d4fkwyl.jpg' style='width:80%; margin-left:9%;margin-right:9%'/><p>Kingdom watchers coming to fuck you up</p>",
+            "attack_leader_bio": "<h1>Tough as nails</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+            "defence_leader_bio": "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+            "business_leader_bio": "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>"
+        },
+        "settlers": {
+            "history": "<h1>We've been here longer than you</h1><img src='http://orig13.deviantart.net/a1f7/f/2012/094/e/c/ancient_battle_by_wraithdt-d4v1v25.jpg' style='width:80%; margin-left:9%;margin-right:9%'/><p>Periplaneta are old as shit</p>",
+            "attack_leader_bio": "<h1>Tough as nails</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+            "defence_leader_bio": "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+            "business_leader_bio": "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>"
+        }
+    }
+
+    return lore[race][lore_type]
+
+
+def set_waiting_on_to_all(game_name):
+    game_doc = get_game_by_name(game_name)
+    game_doc['phase_waiting_on'].extend([game_doc[race]['username'] for race in game_doc['active_races']])
+    game_doc.save()
+
+
+def display_opening_modal_check(game_name, user):
+    return user not in get_game_by_name(game_name)['display_open_modal']
+
+
+def add_user_to_modal_displayed_list(game_name, user):
+    game_doc = get_game_by_name(game_name)
+    game_doc['display_open_modal'].append(user)
+    game_doc.save()
+    log(game_name, "Adding {0} to opening modal display list".format(user))
+
+
+def log(game_name, msg, level='info', location='game_log'):
+    game_doc = get_game_by_name(game_name)
+    game_doc[location].append("{0}: {1}".format(level, msg))
+    game_doc.save()

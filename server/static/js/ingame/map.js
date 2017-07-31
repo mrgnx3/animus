@@ -78,7 +78,6 @@ function drawAllUnits(cols, units) {
         for (let i = 0; i < units.length; i++) {
             drawUnits(race, cols, units[i]);
         }
-        initSocketSession();
     });
 
 }

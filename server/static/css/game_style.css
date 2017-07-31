@@ -393,7 +393,7 @@ a {
 }
 
 #game-state-display {
-    width: 20%;
+    width: 50%;
     background-color: #f8f8f8;
     border-color: #e7e7e7;
     top: 0;
@@ -403,13 +403,13 @@ a {
     z-index: 1031;
     padding-right: 15px;
     max-height: 50px;
-    min-width: 250px;
+    min-width: 500px;
     font-size: medium;
 }
 
 .game-state-display-text {
     font-size: large;
-    text-align: left;
+    text-align: right;
 }
 
 #round-label, #phase-label, #waiting-on-label {

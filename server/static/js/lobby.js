@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
 
     socket.on('start_game', function () {
-        function startGame(in_seconds){
+        function startGame(in_seconds) {
             if (in_seconds > 0) {
                 setTimeout(function () {
                     document.getElementById("chatContent").innerHTML += '<b> ' + in_seconds + '</b><br />';
@@ -36,9 +36,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     startGame(in_seconds);
                 }, 1000);
             } else {
-                 window.location = location.origin + '/game/' + gameName;
+                window.location = location.origin + '/game/' + gameName;
             }
         }
+
+        socket.disconnect();
         document.getElementById("chatContent").innerHTML += '<b>#</b>Starting game in . . .<br />';
         startGame(3);
     });

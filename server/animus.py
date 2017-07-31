@@ -23,6 +23,7 @@ def view_game(game_name):
     game_doc = gm.get_game_by_name(game_name)
     for race in game_doc['active_races']:
         if game_doc[race]['username'] == user_name:
+            gm.log(game_name, '{0} has entered the game'.format(user_name))
             return render_template('./game/gameView.html', game_name=game_name, user_name=user_name, race_name=race)
     return render_template('./404.html')
 
@@ -60,10 +61,21 @@ def get_hud_statistics(game_name, race):
     return json.dumps({'infantry': infantry, 'ranged': ranged, 'tank': tank, 'game': game_name})
 
 
+@app.route('/getLeaderBio/<race>/<leader_type>', methods=['GET'])
+def get_leader_bio(race, leader_type):
+    return gm.get_lore(race, '{0}_leader_bio'.format(leader_type))
+
+
+@app.route('/getRaceHistory/<race>', methods=['GET'])
+def get_race_history(race):
+    return json.dumps(gm.get_lore(race))
+
+
 @app.route('/getGamesRoundPhaseInfo/<game_name>', methods=['GET'])
 def get_games_round_phase_info(game_name):
     game = gm.get_game_by_name(game_name)
-    return json.dumps({'round': game.round, 'phase': game.phase, 'activePlayer': [game.active_player]})
+    gm.log(game_name, "getGamesRoundPhaseInfo called", level='debug')
+    return json.dumps({'round': game.round, 'phase': game.phase, 'waitingOnPlayer': [game.phase_waiting_on]})
 
 
 @app.route('/lobby/<game_name>', methods=['GET'])
@@ -109,6 +121,7 @@ def on_join_lobby(data):
 
 @socketio.on('send_message')
 def send_message(data):
+    gm.log(data['game_name'], data['message'], location='chat_log')
     emit('new_message', {"username": data['username'], "message": data['message']}, room=data['game_name'])
 
 
@@ -122,7 +135,84 @@ def hero_selected(data):
     gm.hero_selected(data['race'], data['hero_type'], data['game_name'], data['player_name'])
     if gm.all_races_are_claimed(data['game_name']):
         gm.close_lobby(data['game_name'])
+        gm.set_waiting_on_to_all(data['game_name'])
+        gm.log(data['game_name'], 'All players have selected a race and the game will now begin')
         emit('start_game', room=data['game_name'])
+
+
+@socketio.on('joinGame')
+def join_game(data):
+    game_name = data['game_name']
+    user = data['user']
+    join_room(game_name, sid=user)
+
+    race_info = gm.get_players_race_info(game_name, user)
+
+    emit('updateHarvestInformation',
+         {"harvest_count": race_info["harvest_count"], "harvest_collection_rate": race_info["harvest_collection_rate"]},
+         room=game_name)
+
+    # if gm.display_opening_modal_check(game_name, user):
+    if True:
+        gm.add_user_to_modal_displayed_list(game_name, user)
+        emit('displayActionModal',
+             {"message": "<h1>Welcome to the Game</h1><p>Place your Orders Mother fuckers!</p>"},
+             room=game_name)
+
+
+@socketio.on('lockInOrder')
+def lock_in_order(action, playerName, gameRoom, index):
+    pass
+
+
+@socketio.on('allOrdersAreSet')
+def all_orders_are_set(room, user):
+    pass
+
+
+@socketio.on('resolveBattle')
+def resolve_battle(gameRoom, playerName, attackersIndex, defendersIndex, attackingWith):
+    pass
+
+
+@socketio.on('moveOrderComplete')
+def move_order_complete(room, user):
+    pass
+
+
+@socketio.on('peacefulMove')
+def peaceful_move(movementDetails, cb):
+    pass
+
+
+@socketio.on('peacefulMerge')
+def peaceful_merge(movementDetails, cb):
+    pass
+
+
+@socketio.on('removeAllUnitsInTile')
+def remove_all_units_in_tile(gameRoom, removeUnitsFromThisTile):
+    pass
+
+
+@socketio.on('minusOneFromUnitValue')
+def minus_one_from_units_in_tile(gameRoom, index, unitType):
+    pass
+
+
+@socketio.on('refreshUsersInGame')
+def refresh_users_in_game(room):
+    pass
+
+
+@socketio.on('commitDeploymentResources')
+def commit_deployment_resources(deploymentInfo):
+    pass
+
+
+@socketio.on('deploymentOfUnits')
+def deployment_of_units(room, index, race, infantry, ranged, tanks, deploymentValues):
+    pass
 
 
 if __name__ == '__main__':

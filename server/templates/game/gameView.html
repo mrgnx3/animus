@@ -1,17 +1,19 @@
 <!doctype html>
 <html>
 <head>
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
     <title>{{ game_name }}</title>
 
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/game_app.css">
     <link rel="stylesheet" href="/static/css/game_style.css">
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
     <script src='/static/js/ingame/app.js'></script>
     <script src="/static/js/ingame/map.js"></script>
     <script src="/static/js/ingame/game-hud.js"></script>
-    <script src="/static/js/ingame/index.js"></script>
 </head>
 <body>
 <nav role="navigation" class="navbar navbar-default navbar-fixed-bottom">
@@ -58,50 +60,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr id="geoEngineers-harvest">
-                            <td>Geo-Engineers</td>
-                            <td id="geoEngineers-harvest-count"></td>
-                            <td id="geoEngineers-harvest-rate"></td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                        </tr>
-                        <tr id="settlers-harvest">
-                            <td>Settlers</td>
-                            <td id="settlers-harvest-count"></td>
-                            <td id="settlers-harvest-rate"></td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                        </tr>
-                        <tr id="kingdomWatchers-harvest">
-                            <td>Kingdom Watchers</td>
-                            <td id="kingdomWatchers-harvest-count"></td>
-                            <td id="kingdomWatchers-harvest-rate"></td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                        </tr>
-                        <tr id="periplaneta-harvest">
-                            <td>Periplaneta</td>
-                            <td id="periplaneta-harvest-count"></td>
-                            <td id="periplaneta-harvest-rate"></td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                        </tr>
-                        <tr id="reduviidae-harvest">
-                            <td>reduviidae</td>
-                            <td id="reduviidae-harvest-count"></td>
-                            <td id="reduviidae-harvest-rate"></td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                        </tr>
-                        <tr id="guardians-harvest">
-                            <td>guardians</td>
-                            <td id="guardians-harvest-count"></td>
-                            <td id="guardians-harvest-rate"></td>
+                        <tr id="harvest">
+                            <td>{{ race_name }}</td>
+                            <td id="harvest-count"></td>
+                            <td id="harvest-rate"></td>
                             <td> 0</td>
                             <td> 0</td>
                             <td> 0</td>
@@ -322,9 +284,7 @@
             <td>
                 <div id="phase-value"></div>
             </td>
-        </tr>
-        <tr>
-            <td colspan="4">
+            <td >
                 <div>
                     <span id="waiting-on-label">Waiting on: </span><span id="waiting-on-value"></span>
                 </div>
@@ -341,4 +301,7 @@
 <div id="playerName" playerName="{{ user_name }}"></div>
 <div id="playerRace" playerRace="{{ race_name }}"></div>
 </body>
+<footer>
+    <script src="/static/js/ingame/index.js"></script>
+</footer>
 </html>
