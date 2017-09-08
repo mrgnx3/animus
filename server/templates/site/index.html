@@ -1,5 +1,7 @@
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="server/static/css/site.css"/>
+    <link rel="stylesheet" type="text/css" href="server/static/css/site.css"/>
     <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
     <link href="/static/css/site.css" rel="stylesheet" type="text/css"/>
@@ -22,50 +24,36 @@
             {% endfor %}
         {% endif %}
     </table>
-    <table class="tg">
-        <tr>
-            <th colspan="2" class="tg">Create New Game</th>
-        </tr>
-        <tr>
-            <td class="tg">Game Name</td>
-            <td class="ta"><input id='gameNameInput' placeholder="Your Game name..." class="txtInput"/></td>
-        </tr>
-        <tr>
-            <td class="tg">Number of Players</td>
-            <td class="ta">
+    <div id="createGameArea">
+        <div class="largeText">Create New Game</div>
+        <div>
+            <div id="gameNameArea">
+                <input id='gameNameInput' placeholder="Game name.." class="mediumtxtInput"/>
                 <label>
                     <select name="players" id="playerCountSelector">
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
+                        <option value="2">2 Players</option>
+                        <option value="3">3 Players</option>
+                        <option value="4">4 Players</option>
+                        <option value="5">5 Players</option>
+                        <option value="6">6 Players</option>
                     </select>
                 </label>
-            </td>
-        </tr>
-        <tr>
-            <td class="tg"></td>
-            <td class="gbtg"><a id="createGameButton">Create Game</a></td>
-        </tr>
-    </table>
+            </div>
+        </div>
+        <a id="createGameButton">Create Game</a>
+    </div>
 </div>
 <div id="userReg" style="display: none">
-    <table class="tg large">
-        <tr>
-            <th colspan="2" class="tg">New User Detected!</th>
-        </tr>
-        <tr>
-            <td>
-                <input type="text" name="usrname"
-                       id="newUserTxtInput" maxlength="10"
-                       placeholder="Enter Your Name Here"
-                       class="txtInput"><br>
-                <a id="newUserButton">THEN HIT ME</a>
-            </td>
-
-        </tr>
-    </table>
+    <div class="newUserDetected">
+        <div class="largeText">New User Detected!</div>
+        <div>
+            <input type="text" name="usrname"
+                   id="newUserTxtInput" maxlength="10"
+                   placeholder="Enter Your Name Here"
+                   class="txtInput"><br>
+            <a id="newUserButton">THEN HIT ME</a>
+        </div>
+    </div>
 </div>
 <div id="clearCookieButton" style="display: none">Change User</div>
 </body>

@@ -372,7 +372,6 @@ function moveToNonHostileTarget(target, unit, cb) {
 
 function removeActionMenu(menu) {
     let activeMenu = menu.getElementsByTagName('label')[0].classList.contains('ACTIVE');
-    debugger;
     let index = parseInt(menu.getElementsByTagName('input')[0].name.replace("menu-open", ""));
     menu.parentElement.removeChild(menu);
     game_socket.emit('lockInOrder', "done", playerName, gameRoom, index);

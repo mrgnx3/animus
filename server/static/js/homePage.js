@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         document.getElementById('newUserButton').onclick = function () {
 
             let userName = document.getElementById('newUserTxtInput').value.replace(/^\s+|\s+$/g, "");
-            debugger;
             if (userName === '') {
                 alert("Please Enter a User Name");
             } else {
