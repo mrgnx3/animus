@@ -9,10 +9,9 @@ function lockInAction(element, icon, action, index) {
 
     let menuOpenButton = element.parentElement.getElementsByClassName('menu-open-button')[0];
     menuOpenButton.style.background = "green";
+    game_socket.emit('lockInOrder', action, gameRoom, index);
 
-    game_socket.emit('lockInOrder', action, playerName, gameRoom, index);
-
-    if (document.getElementsByClassName('fa-plus').length == 0) game_socket.emit('allOrdersAreSet', gameRoom, playerName);
+    if (document.getElementsByClassName('fa-plus').length === 0) game_socket.emit('allOrdersAreSet', gameRoom, playerName);
 }
 
 function removeOnClickEvent(element) {

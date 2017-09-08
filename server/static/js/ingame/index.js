@@ -1,8 +1,4 @@
 document.addEventListener("DOMContentLoaded", function (event) {
-    let game_socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-    let gameRoom = window.location.pathname.replace(/.*\//, '');
-    let playerName;
-
     game_socket.on('displayActionModal', function (data) {
         console.log(`displayActionModal ${data}`);
         displayModal(data.message);
@@ -51,3 +47,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     game_socket.emit('joinGame', {game_name: gameRoom, user: playerName});
     getGamePhase(gameRoom, updateRoundPhaseInfo);
 });
+
+var game_socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+var gameRoom = window.location.pathname.replace(/.*\//, '');
+var playerName;

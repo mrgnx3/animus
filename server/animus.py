@@ -161,13 +161,18 @@ def join_game(data):
 
 
 @socketio.on('lockInOrder')
-def lock_in_order(action, playerName, gameRoom, index):
-    pass
+def lock_in_order(action, game_name, index):
+    gm.set_player_order(action, game_name, index)
 
 
 @socketio.on('allOrdersAreSet')
-def all_orders_are_set(room, user):
-    pass
+def all_orders_are_set(game, player):
+    waiting_on_list = gm.remove_player_from_waiting_on_list(game, player)
+    if len(waiting_on_list) == 0:
+        gm.log(game, "All player orders have been set for this round switching to movement phase".format(game))
+        gm.set_phase(game, "movement")
+        emit('refreshMapView', room=game)
+        emit('updatePhaseInfo', room=game)
 
 
 @socketio.on('resolveBattle')

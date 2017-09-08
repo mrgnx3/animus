@@ -35,7 +35,7 @@ class Game(Document):
 
     round = IntField(default=1)
     phase = StringField(default='orders')
-    phase_waiting_on = ListField()
+    phase_waiting_on = ListField(default=[])
     active_player = StringField(default='')
     units = ListField()
     rounds_max_number = IntField(default=3)
@@ -296,4 +296,27 @@ def add_user_to_modal_displayed_list(game_name, user):
 def log(game_name, msg, level='info', location='game_log'):
     game_doc = get_game_by_name(game_name)
     game_doc[location].append("{0}: {1}".format(level, msg))
+    game_doc.save()
+
+
+def set_player_order(action, game_name, index):
+    game_doc = get_game_by_name(game_name)
+    for idx, unit in enumerate(game_doc.units):
+        if index == unit['index']:
+            game_doc.units[idx]['order'] = action
+            game_doc.save()
+            return
+
+
+def remove_player_from_waiting_on_list(game_name, player):
+    game_doc = get_game_by_name(game_name)
+    index_to_remove = game_doc.phase_waiting_on.index(player)
+    game_doc.phase_waiting_on.pop(index_to_remove)
+    game_doc.save()
+    return game_doc.phase_waiting_on
+
+
+def set_phase(game, phase):
+    game_doc = get_game_by_name(game)
+    game_doc.phase = phase
     game_doc.save()
