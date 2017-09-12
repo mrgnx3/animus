@@ -149,14 +149,15 @@ def join_game(data):
     race_info = gm.get_players_race_info(game_name, user)
 
     emit('updateHarvestInformation',
-         {"harvest_count": race_info["harvest_count"], "harvest_collection_rate": race_info["harvest_collection_rate"]},
+         {
+             "harvest_count": race_info["harvest_count"],
+             "harvest_collection_rate": race_info["harvest_collection_rate"]
+         },
          room=game_name)
 
-    # if gm.display_opening_modal_check(game_name, user):
-    if True:
+    if gm.display_opening_modal_check(game_name, user):
         gm.add_user_to_modal_displayed_list(game_name, user)
-        emit('displayActionModal',
-             {"message": "<h1>Welcome to the Game</h1><p>Place your Orders Mother fuckers!</p>"},
+        emit('displayActionModal', {"message": "<h1>Welcome to the Game</h1><p>Place your Orders Mother fuckers!</p>"},
              room=game_name)
 
 
