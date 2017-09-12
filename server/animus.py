@@ -144,7 +144,7 @@ def hero_selected(data):
 def join_game(data):
     game_name = data['game_name']
     user = data['user']
-    join_room(game_name, sid=user)
+    join_room(room=game_name)
 
     race_info = gm.get_players_race_info(game_name, user)
 
@@ -168,11 +168,11 @@ def lock_in_order(action, game_name, index):
 @socketio.on('allOrdersAreSet')
 def all_orders_are_set(game, player):
     waiting_on_list = gm.remove_player_from_waiting_on_list(game, player)
+    emit('updatePhaseInfo', room=game)
     if len(waiting_on_list) == 0:
         gm.log(game, "All player orders have been set for this round switching to movement phase".format(game))
         gm.set_phase(game, "movement")
         emit('refreshMapView', room=game)
-        emit('updatePhaseInfo', room=game)
 
 
 @socketio.on('resolveBattle')

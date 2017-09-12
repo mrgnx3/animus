@@ -483,17 +483,13 @@ function battleResolved(user) {
 function updateHarvestInformation(data) {
     document.getElementById('harvest-count').innerHTML = String(data.harvest_count);
     document.getElementById('harvest-rate').innerHTML = 'x' + String(data.harvest_collection_rate);
-
-    //update deployment hub view at the same time
-    let playersRace = getPlayersRace();
-    document.getElementById('harvest-value').innerHTML = String(data[playersRace].currentAmount);
 }
 
 function updateRoundPhaseInfo(data) {
     document.getElementById('round-value').textContent = "#" + data.round;
     document.getElementById('phase-value').textContent = data.phase;
-    if (data.waitingOnPlayer.length < 1) {
-        document.getElementById('waiting-on-value').textContent = "All Players  ";
+    if (data.waitingOnPlayer[0].length < 1) {
+        document.getElementById('waiting-on-value').textContent = "All Players Ready ";
     } else {
         document.getElementById('waiting-on-value').textContent = data.waitingOnPlayer;
     }
