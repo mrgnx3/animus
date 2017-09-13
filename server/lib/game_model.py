@@ -36,7 +36,11 @@ class Game(Document):
     round = IntField(default=1)
     phase = StringField(default='orders')
     phase_waiting_on = ListField(default=[])
-    active_player = StringField(default='')
+    race_in_play = StringField(default='')
+
+    action_order = ListField(default=[])
+    move_order_list = ListField(default=[])
+
     units = ListField()
     rounds_max_number = IntField(default=3)
 
@@ -75,30 +79,35 @@ class GameModel:
         guardians = RaceInfo(race='guardians')
 
         if player_count == 2:
+            units = get_base_units(player_count=player_count)
             active_races = ['geoengineers', 'settlers']
+            action_order = ["geoengineers", "settlers"]
             kingdomwatchers = None
             periplaneta = None
             reduviidae = None
             guardians = None
-            units = get_base_units(player_count=player_count)
         elif player_count == 3:
+            units = get_base_units(player_count=player_count)
             active_races = ['geoengineers', 'settlers', 'kingdomwatchers']
+            action_order = ["geoengineers", "settlers", "kingdomwatchers"]
             periplaneta = None
             reduviidae = None
             guardians = None
-            units = get_base_units(player_count=player_count)
         elif player_count == 4:
+            units = get_base_units(player_count=player_count)
             active_races = ['geoengineers', 'settlers', 'kingdomwatchers', 'periplaneta']
+            action_order = ["geoengineers", "settlers", "kingdomwatchers", "periplaneta"]
             reduviidae = None
             guardians = None
-            units = get_base_units(player_count=player_count)
         elif player_count == 5:
+            units = get_base_units(player_count=player_count)
             active_races = ['geoengineers', 'settlers', 'kingdomwatchers', 'periplaneta', 'reduviidae']
+            action_order = ["geoengineers", "settlers", "kingdomwatchers", "periplaneta", "reduviidae"]
             guardians = None
-            units = get_base_units(player_count=player_count)
         else:
-            active_races = ['geoengineers', 'settlers', 'kingdomwatchers', 'periplaneta', 'reduviidae', 'guardians']
             units = get_base_units(player_count=player_count)
+            active_races = ['geoengineers', 'settlers', 'kingdomwatchers', 'periplaneta', 'reduviidae', 'guardians']
+            action_order = ["geoengineers", "settlers", "kingdomwatchers", "periplaneta", "reduviidae", "guardians"]
 
         return Game(
             name=game_name,
@@ -110,7 +119,8 @@ class GameModel:
             periplaneta=periplaneta,
             reduviidae=reduviidae,
             guardians=guardians,
-            units=units
+            units=units,
+            action_order=action_order
         ).save()
 
 
@@ -319,4 +329,28 @@ def remove_player_from_waiting_on_list(game_name, player):
 def set_phase(game, phase):
     game_doc = get_game_by_name(game)
     game_doc.phase = phase
+    game_doc.save()
+
+
+def set_races_with_moves_orders_list(game):
+    game_doc = get_game_by_name(game)
+    races_with_moves_left = list()
+
+    for idx, unit in enumerate(game_doc.units):
+        if "move" == unit['order']:
+            if game_doc.units[idx]['race'] not in races_with_moves_left:
+                races_with_moves_left.append(game_doc.units[idx]['race'])
+
+    game_doc.move_order_list = sorted(races_with_moves_left, key=game_doc.action_order.index)
+    game_doc.save()
+    return game_doc.move_order_list
+
+
+def get_active_race(game):
+    return get_game_by_name(game).race_in_play
+
+
+def set_active_race(game, race):
+    game_doc = get_game_by_name(game)
+    game_doc.race_in_play = race
     game_doc.save()

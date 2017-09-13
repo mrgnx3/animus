@@ -145,9 +145,9 @@ function handleMoveAction(index, movementAction, turnOn) {
     }
 }
 
-function enableMoveActions(userToEnableMovesFor, playerName) {
+function enableMoveActions(raceToEnableMovesFor, playersRace) {
 
-    if (userToEnableMovesFor == playerName) {
+    if (raceToEnableMovesFor === playersRace) {
         let listOfMoves = document.getElementsByClassName('action-display fa-arrow-right');
         for (let i = 0; i < listOfMoves.length; i++) {
             let movementAction = listOfMoves[i];
@@ -178,7 +178,7 @@ function enableMoveActions(userToEnableMovesFor, playerName) {
             };
         }
     } else {
-        displayModal("<h1>Hold onto your butts</h1><p>Its " + userToEnableMovesFor + " turn</p>");
+        displayModal("<h1>Hold onto your butts</h1><p>Its " + raceToEnableMovesFor + " turn</p>");
     }
 }
 

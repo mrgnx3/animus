@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
 
     game_socket.on('enableMoves', function (data) {
-        enableMoveActions(data, playerName);
+        enableMoveActions(data, getPlayersRace());
     });
 
     game_socket.on('updateHarvestInformation', function (data) {

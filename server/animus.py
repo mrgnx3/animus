@@ -166,6 +166,38 @@ def lock_in_order(action, game_name, index):
     gm.set_player_order(action, game_name, index)
 
 
+def game_has_entered_an_ending_condition(game):
+    return False
+
+
+def move_to_harvest_phase(game):
+    pass
+
+
+def process_move_order(game, race_turn_order):
+    active_players_race = gm.get_active_race(game)
+    if active_players_race is None or active_players_race == '':
+        gm.set_active_race(game, race_turn_order[0])
+        active_players_race = race_turn_order[0]
+
+    socketio.emit('enableMoves', active_players_race, room=game)
+    active_players_race = gm.get_players_race(game, active_players_race)
+    next_active_race_index = race_turn_order.index(active_players_race) + 1 % len(race_turn_order)
+    gm.set_active_race(game, race_turn_order[next_active_race_index])
+
+
+def next_movement_action(game):
+    if game_has_entered_an_ending_condition(game):
+        socketio.emit('displayActionModal',
+                      {"message": '<h1>Game Over</h1><p>Last Man Standing: {0}</p>'.format('todo')})
+    else:
+        races_with_movements_left = gm.set_races_with_moves_orders_list(game)
+        if len(races_with_movements_left) == 0:
+            move_to_harvest_phase(game)
+        else:
+            process_move_order(game, races_with_movements_left)
+
+
 @socketio.on('allOrdersAreSet')
 def all_orders_are_set(game, player):
     waiting_on_list = gm.remove_player_from_waiting_on_list(game, player)
@@ -173,6 +205,7 @@ def all_orders_are_set(game, player):
     if len(waiting_on_list) == 0:
         gm.log(game, "All player orders have been set for this round switching to movement phase".format(game))
         gm.set_phase(game, "movement")
+        next_movement_action(game)
         emit('refreshMapView', room=game)
 
 
