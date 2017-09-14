@@ -55,8 +55,8 @@ class AnimusTest(LiveServerTestCase):
         self.assertIn('Hi are you ready to play?', self.player_two.get_lobby_messages())
         self.assertIn('Sure are you ready to get your ass handed to you?', self.player_one.get_lobby_messages())
 
-        self.player_one.claim_race(race='Settlers', hero='attack')
-        self.player_two.claim_race(race='Geoengineers', hero='defence')
+        self.player_one.claim_race(race='Geoengineers', hero='attack')
+        self.player_two.claim_race(race='Settlers', hero='defence')
 
         player_one_log = self.player_one.driver.get_log('browser')
         for log_entry in player_one_log:
@@ -66,6 +66,14 @@ class AnimusTest(LiveServerTestCase):
         # Game
         self.assertTrue(self.player_one.wait_for_redirect('game'), msg="game started, player 1 in Game")
         self.assertTrue(self.player_two.wait_for_redirect('game'), msg="game started, player 2 in Game")
+
+        self.player_one.find_dynamic_element_by_id('gameModalBody').click()
+        self.player_two.find_dynamic_element_by_id('gameModalBody').click()
+
+        self.player_one.set_orders_to_movement()
+        self.player_two.set_orders_to_movement()
+
+        self.player_one.move_all_units(origin=76, target=75)
 
         # Post Game Screen
         time.sleep(60)

@@ -42,7 +42,7 @@ function highlightMoveOptions(index, turnOn) {
 
     for (let i = 0; i < neighbouringTiles.length; i++) {
         let hex = allTileElements[index + neighbouringTiles[i]];
-        if (hex.className != "hex water") {
+        if (hex.className !== "hex water") {
             turnOn ? hex.classList.add("highlight") : hex.classList.remove("highlight");
             if (turnOn) {
                 hex.onclick = moveSelectUnits;
@@ -79,7 +79,7 @@ function highlightDeploymentOptions(race, turnOn, infantry, ranged, tank) {
                 neutralTile = hex.childNodes[0].childNodes[0].childNodes[0].classList.contains(race);
             }
 
-            if (hex.className != "hex water" && neutralTile) {
+            if (hex.className !== "hex water" && neutralTile) {
                 if (turnOn) {
                     hex.classList.add("highlight");
                     hex.onclick = function () {
@@ -103,7 +103,7 @@ function deployUnitsToTile(hexes, index, infantry, ranged, tanks) {
         "tanks": tanks
     };
 
-    if (targetHex.childNodes[0].childElementCount != 0) {
+    if (targetHex.childNodes[0].childElementCount !== 0) {
         // targetHex has existing units which need updating
         for (let i = 0; i < targetHex.childNodes[0].childElementCount; i++) {
             let unitsClassList = targetHex.childNodes[0].childNodes[i].childNodes[0].classList;
@@ -142,6 +142,9 @@ function handleMoveAction(index, movementAction, turnOn) {
 
     function markAsSelected() {
         this.childNodes[0].classList.add("selected");
+        let classList = this.childNodes[0].classList;
+        let units_index = getIndexValue(this.childNodes[0].parentElement.parentElement);
+        game_socket.emit('markUnitAsSelected', gameRoom, classList, units_index);
     }
 }
 
@@ -183,22 +186,9 @@ function enableMoveActions(raceToEnableMovesFor, playersRace) {
 }
 
 function moveSelectUnits() {
-    let selectedUnitsShapesToMove = getSelectedUnitsShapesToMove();
-    let targetTile = this.childNodes;
-
-    if (isBattleMovement(targetTile, selectedUnitsShapesToMove)) {
-        resolveBattleMovement(targetTile, selectedUnitsShapesToMove);
-    } else {
-        resolvePeacefulMovement(targetTile, selectedUnitsShapesToMove);
-    }
-}
-
-function getSelectedUnitsShapesToMove() {
-    return document.getElementsByClassName('ACTIVE')[0]
-        .parentElement
-        .parentElement
-        .childNodes[1]
-        .getElementsByClassName('selected');
+    let originIndex = getIndexValue(document.getElementsByClassName('ACTIVE')[0].parentElement.parentElement.childNodes[1]);
+    let targetIndex = getIndexValue(this.childNodes[0]);
+    game_socket.emit('resolveMovement', gameRoom, originIndex, targetIndex);
 }
 
 function getParentsFor(elements) {
@@ -305,10 +295,10 @@ function killUnits(unitsToKill, parentTile, killAll, damageTaken) {
 }
 
 function isBattleMovement(targetTile, selectedUnitsShapesToMove) {
-    if (selectedUnitsShapesToMove.length == 0) {
+    if (selectedUnitsShapesToMove.length === 0) {
         return false;
     } else if (tileHasUnits(targetTile)) {
-        return (getRaceOfUnit(selectedUnitsShapesToMove) != getUnitsRaceInTargetTile(targetTile));
+        return (getRaceOfUnit(selectedUnitsShapesToMove) !== getUnitsRaceInTargetTile(targetTile));
     }
     return false;
 }

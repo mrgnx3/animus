@@ -1,11 +1,11 @@
-function GetMap(callback, flag) {
+function GetMap(callback, isFirstInitializationOfMap) {
     let request = new XMLHttpRequest();
     let getBaseBoardUrl = location.origin + '/getBaseBoard';
     request.open('GET', getBaseBoardUrl, true);
 
     request.onload = function () {
         if (request.status >= 200 && request.status < 400) {
-            callback(JSON.parse(request.responseText)['map'], flag);
+            callback(JSON.parse(request.responseText)['map'], isFirstInitializationOfMap);
         }
     };
     request.send();
@@ -89,7 +89,7 @@ function updateTilesAfterBattleMovement(cols, units, targetIndex, neighbouringTi
     for (let tileIndex = 0; tileIndex < units.length; tileIndex++) {
         drawUnits(race, cols, units[tileIndex]);
 
-        if( targetIndex == units[tileIndex]["index"]){
+        if( targetIndex === units[tileIndex]["index"]){
             unitsLeftInTargetIndex = true;
         }
     }
@@ -354,17 +354,17 @@ function RenderMap(boardBackgroundMap, isFirstInitializationOfMap) {
     let hexes = document.getElementsByClassName('hex');
     for (let i = 0; i < hexes.length; i++) {
         let x = i % cols;
-        if (rowCounter == cols) {
+        if (rowCounter === cols) {
             y = y + 1;
             rowCounter = 0;
         }
         rowCounter++;
 
-        if (boardBackgroundMap[y][x] == 0)
+        if (boardBackgroundMap[y][x] === 0)
             hexes[i].className += " water";
-        else if (boardBackgroundMap[y][x] == 1)
+        else if (boardBackgroundMap[y][x] === 1)
             hexes[i].className += " grass";
-        else if (boardBackgroundMap[y][x] == 2)
+        else if (boardBackgroundMap[y][x] === 2)
             hexes[i].className += " forest";
         else
             hexes[i].className += " desert";

@@ -166,6 +166,59 @@ def lock_in_order(action, game_name, index):
     gm.set_player_order(action, game_name, index)
 
 
+@socketio.on('markUnitAsSelected')
+def mark_unit_as_selected(game, class_list, unit_index):
+    collapsed_class_list = [class_list[x] for x in class_list.keys()]
+    if 'infantry' in collapsed_class_list:
+        unit_type = 'infantry'
+    elif 'ranged' in collapsed_class_list:
+        unit_type = 'ranged'
+    else:
+        unit_type = 'tanks'
+
+    gm.mark_unit_as_selected(game, unit_type, unit_index)
+    # emit('unitSelected', {"unitIndex": unit_index, "unitType": unit_type}, room=game)
+
+
+@socketio.on('allOrdersAreSet')
+def all_orders_are_set(game, player):
+    waiting_on_list = gm.remove_player_from_waiting_on_list(game, player)
+    emit('updatePhaseInfo', room=game)
+    if len(waiting_on_list) == 0:
+        gm.log(game, "All player orders have been set for this round switching to movement phase".format(game))
+        gm.set_phase(game, "movement")
+        next_movement_action(game)
+        emit('refreshMapView', room=game)
+
+
+@socketio.on('resolveMovement')
+def resolve_movement(game, origin_index, target_index):
+    if gm.index_has_units(game, target_index):
+        if gm.units_are_friendly(game, origin_index, target_index):
+            gm.log(game, 'resolving merge movement')
+            resolve_merging_forces(game, origin_index, target_index)
+        else:
+            gm.log(game, 'resolving combat movement')
+            resolve_combat(game, origin_index, target_index)
+    else:
+        gm.log(game, 'resolving peaceful movement')
+        resolve_peaceful_movement(game, origin_index, target_index)
+
+
+def resolve_merging_forces(game, origin_index, target_index):
+    pass
+
+
+def resolve_combat(game, origin_index, target_index):
+    pass
+
+
+def resolve_peaceful_movement(game, origin_index, target_index):
+    gm.move_selected_units_into_new_index(game, origin_index, target_index)
+    gm.log(game, 'Units moved from {0} to {1}'.format(origin_index, target_index))
+    socketio.emit('movementStepComplete', room=game)
+
+
 def game_has_entered_an_ending_condition(game):
     return False
 
@@ -196,62 +249,6 @@ def next_movement_action(game):
             move_to_harvest_phase(game)
         else:
             process_move_order(game, races_with_movements_left)
-
-
-@socketio.on('allOrdersAreSet')
-def all_orders_are_set(game, player):
-    waiting_on_list = gm.remove_player_from_waiting_on_list(game, player)
-    emit('updatePhaseInfo', room=game)
-    if len(waiting_on_list) == 0:
-        gm.log(game, "All player orders have been set for this round switching to movement phase".format(game))
-        gm.set_phase(game, "movement")
-        next_movement_action(game)
-        emit('refreshMapView', room=game)
-
-
-@socketio.on('resolveBattle')
-def resolve_battle(gameRoom, playerName, attackersIndex, defendersIndex, attackingWith):
-    pass
-
-
-@socketio.on('moveOrderComplete')
-def move_order_complete(room, user):
-    pass
-
-
-@socketio.on('peacefulMove')
-def peaceful_move(movementDetails, cb):
-    pass
-
-
-@socketio.on('peacefulMerge')
-def peaceful_merge(movementDetails, cb):
-    pass
-
-
-@socketio.on('removeAllUnitsInTile')
-def remove_all_units_in_tile(gameRoom, removeUnitsFromThisTile):
-    pass
-
-
-@socketio.on('minusOneFromUnitValue')
-def minus_one_from_units_in_tile(gameRoom, index, unitType):
-    pass
-
-
-@socketio.on('refreshUsersInGame')
-def refresh_users_in_game(room):
-    pass
-
-
-@socketio.on('commitDeploymentResources')
-def commit_deployment_resources(deploymentInfo):
-    pass
-
-
-@socketio.on('deploymentOfUnits')
-def deployment_of_units(room, index, race, infantry, ranged, tanks, deploymentValues):
-    pass
 
 
 if __name__ == '__main__':

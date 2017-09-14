@@ -40,6 +40,8 @@ class Player:
         return elements
 
     def find_dynamic_element_by_id(self, id_string, timeout=10):
+        time.sleep(0.5)
+        self.wait_for_page_complete()
         wait = ui.WebDriverWait(self.driver, timeout)
         wait.until(lambda driver: self.driver.find_element_by_id(id_string))
         return self.WebElement(self.driver.find_element_by_id(id_string))
@@ -78,9 +80,27 @@ class Player:
 
     def claim_race(self, race, hero):
         race_buttons = self.find_dynamic_elements((By.CLASS_NAME, 'claimRaceButton'))
-        for race_button in race_buttons:
+        for race_button in list(race_buttons):
             if race_button.get_attribute('race') == race:
                 race_button.click()
                 self.wait_for_page_complete()
                 self.find_dynamic_element_by_id("hero-button-{0}-{1}".format(race, hero)).click()
                 self.wait_for_page_complete()
+
+    def set_orders_to_movement(self):
+        orders = list(self.find_dynamic_elements(
+            (By.XPATH, "//i[contains(@class, 'fa fa-plus rotate action-display')]")))
+
+        for idx, order in enumerate(orders):
+            order.click()
+            time.sleep(1)
+            self.find_dynamic_elements(
+                (By.XPATH, "//i[contains(@class, 'fa fa-arrow-right move-action')]"))[idx].click()
+            time.sleep(1)
+
+    def move_all_units(self, origin, target):
+        self.find_dynamic_elements(
+            (By.XPATH, "//i[contains(@class, 'fa rotate action-display fa-arrow-right')]"))[1].click()
+        time.sleep(0.3)
+        self.find_dynamic_elements((By.XPATH, '//*[@id="y_3"]//div[@id="x_4"]/*[2]/*[1]/*[2]'))[0].click()
+        self.find_dynamic_elements((By.XPATH, '//*[@id="y_4"]//div[@id="x_4"]'))[0].click()

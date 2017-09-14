@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
         enableMoveActions(data, getPlayersRace());
     });
 
+    game_socket.on('movementStepComplete', function () {
+        GetMap(RenderMap, false);
+    });
+
     game_socket.on('updateHarvestInformation', function (data) {
         updateHarvestInformation(data);
     });

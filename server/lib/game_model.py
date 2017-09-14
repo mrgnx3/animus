@@ -161,6 +161,9 @@ def get_base_units(player_count=2):
                 "infantry": 1,
                 "ranged": 1,
                 "tanks": 1,
+                "infantry_selected": False,
+                "ranged_selected": False,
+                "tanks_selected": False,
                 "order": "notSet"
             },
             {
@@ -171,6 +174,9 @@ def get_base_units(player_count=2):
                 "infantry": 2,
                 "ranged": 2,
                 "tanks": 4,
+                "infantry_selected": False,
+                "ranged_selected": False,
+                "tanks_selected": False,
                 "order": "notSet"
             },
             {
@@ -181,6 +187,9 @@ def get_base_units(player_count=2):
                 "infantry": 1,
                 "ranged": 2,
                 "tanks": 1,
+                "infantry_selected": False,
+                "ranged_selected": False,
+                "tanks_selected": False,
                 "order": "notSet"
             },
             {
@@ -191,6 +200,9 @@ def get_base_units(player_count=2):
                 "infantry": 0,
                 "ranged": 0,
                 "tanks": 1,
+                "infantry_selected": False,
+                "ranged_selected": False,
+                "tanks_selected": False,
                 "order": "notSet"
             }
         ]
@@ -354,3 +366,100 @@ def set_active_race(game, race):
     game_doc = get_game_by_name(game)
     game_doc.race_in_play = race
     game_doc.save()
+
+
+def mark_unit_as_selected(game, unit_type, index):
+    game_doc = get_game_by_name(game)
+    for idx, unit in enumerate(game_doc.units):
+        if index == unit['index']:
+            unit_selected = '{0}_selected'.format(unit_type)
+            game_doc.units[idx][unit_selected] = True
+            game_doc.save()
+            return
+
+
+def index_has_units(game, target_index):
+    game_doc = get_game_by_name(game)
+    for idx, unit in enumerate(game_doc.units):
+        if target_index == unit['index']:
+            return (game_doc.units[idx]["infantry"] + game_doc.units[idx]["ranged"] + game_doc.units[idx]["tanks"]) > 0
+    return False
+
+
+def units_are_friendly(game, origin_index, target_index):
+    origin_race = None
+    target_race = None
+    game_doc = get_game_by_name(game)
+    for idx, unit in enumerate(game_doc.units):
+        if origin_index == unit['index']:
+            origin_race = unit['race']
+        elif target_index == unit['index']:
+            target_race = unit['race']
+
+    return origin_race == target_race
+
+
+def create_unit_entry(game, index, race):
+    game_doc = get_game_by_name(game)
+    game_doc.units.append({
+        "posX": index % 24,
+        "posY": int(index / 24),
+        "index": index,
+        "race": race,
+        "infantry": 0,
+        "ranged": 0,
+        "tanks": 0,
+        "infantry_selected": False,
+        "ranged_selected": False,
+        "tanks_selected": False,
+        "order": "done"
+    })
+    game_doc.save()
+
+
+def clean_up_index_if_empty(game, index):
+    game_doc = get_game_by_name(game)
+    for idx, unit in enumerate(game_doc.units):
+        if index == unit['index']:
+            if game_doc.units[idx]['infantry'] + game_doc.units[idx]['ranged'] + game_doc.units[idx]['tanks'] == 0:
+                game_doc.units.pop(idx)
+                game_doc.save()
+                return
+
+
+def move_selected_units_into_new_index(game, origin_index, target_index):
+    target_index_needs_instance_created = True
+    origin_unit = None
+
+    # Check if target exists
+    game_doc = get_game_by_name(game)
+    for unit in game_doc.units:
+        if target_index == unit['index']:
+            target_index_needs_instance_created = False
+        elif origin_index == unit['index']:
+            origin_unit = unit
+
+    if target_index_needs_instance_created:
+        create_unit_entry(game, index=target_index, race=origin_unit['race'])
+
+    # Store units to move and clear from origin
+    game_doc = get_game_by_name(game)
+    to_move = []
+    for unit_type in ["infantry", "ranged", "tanks"]:
+        if origin_unit["{0}_selected".format(unit_type)]:
+            for idx, unit in enumerate(game_doc.units):
+                if origin_index == unit['index']:
+                    to_move.append((unit_type, game_doc.units[idx][unit_type]))
+                    game_doc.units[idx][unit_type] = 0
+                    game_doc.units[idx]["{0}_selected"] = False
+    game_doc.save()
+
+    # Move units into target index
+    game_doc = get_game_by_name(game)
+    for idx, unit in enumerate(game_doc.units):
+        if target_index == unit['index']:
+            for unit in to_move:
+                game_doc.units[idx][unit[0]] = unit[1]
+    game_doc.save()
+
+    clean_up_index_if_empty(game, origin_index)
