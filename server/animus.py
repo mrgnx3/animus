@@ -1,3 +1,4 @@
+import time
 from flask import Flask, render_template, json, request
 from flask_socketio import SocketIO, emit, join_room, leave_room, send
 
@@ -177,7 +178,6 @@ def mark_unit_as_selected(game, class_list, unit_index):
         unit_type = 'tanks'
 
     gm.mark_unit_as_selected(game, unit_type, unit_index)
-    # emit('unitSelected', {"unitIndex": unit_index, "unitType": unit_type}, room=game)
 
 
 @socketio.on('allOrdersAreSet')
@@ -187,8 +187,9 @@ def all_orders_are_set(game, player):
     if len(waiting_on_list) == 0:
         gm.log(game, "All player orders have been set for this round switching to movement phase".format(game))
         gm.set_phase(game, "movement")
-        next_movement_action(game)
         emit('refreshMapView', room=game)
+        time.sleep(1)
+        next_movement_action(game)
 
 
 @socketio.on('resolveMovement')
@@ -205,6 +206,12 @@ def resolve_movement(game, origin_index, target_index):
         resolve_peaceful_movement(game, origin_index, target_index)
 
 
+@socketio.on('movementCompleteForTile')
+def movement_complete_for_tile(game, origin_index):
+    gm.set_order_for_tile_to(game, origin_index, 'done')
+    next_movement_action(game)
+
+
 def resolve_merging_forces(game, origin_index, target_index):
     pass
 
@@ -214,9 +221,9 @@ def resolve_combat(game, origin_index, target_index):
 
 
 def resolve_peaceful_movement(game, origin_index, target_index):
-    gm.move_selected_units_into_new_index(game, origin_index, target_index)
+    players_race = gm.move_selected_units_into_new_index(game, origin_index, target_index)
     gm.log(game, 'Units moved from {0} to {1}'.format(origin_index, target_index))
-    socketio.emit('movementStepComplete', room=game)
+    socketio.emit('movementStepComplete', players_race, room=game)
 
 
 def game_has_entered_an_ending_condition(game):
@@ -234,7 +241,6 @@ def process_move_order(game, race_turn_order):
         active_players_race = race_turn_order[0]
 
     socketio.emit('enableMoves', active_players_race, room=game)
-    active_players_race = gm.get_players_race(game, active_players_race)
     next_active_race_index = race_turn_order.index(active_players_race) + 1 % len(race_turn_order)
     gm.set_active_race(game, race_turn_order[next_active_race_index])
 

@@ -8,10 +8,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         enableMoveActions(data, getPlayersRace());
     });
 
-    game_socket.on('movementStepComplete', function () {
-        GetMap(RenderMap, false);
-    });
-
     game_socket.on('updateHarvestInformation', function (data) {
         updateHarvestInformation(data);
     });
@@ -36,8 +32,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         GetMap(RenderMap, false);
     });
 
-    game_socket.on('battleResolved', function (user) {
-        battleResolved(user);
+    game_socket.on('movementStepComplete', function (race) {
+        movementStepComplete(race);
     });
 
     game_socket.on('updatePhaseInfo', function () {

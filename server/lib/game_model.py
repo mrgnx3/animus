@@ -369,6 +369,8 @@ def set_active_race(game, race):
 
 
 def mark_unit_as_selected(game, unit_type, index):
+    log(game, "mark_unit_as_selected: {0}, {1}".format(unit_type, index), level='debug')
+
     game_doc = get_game_by_name(game)
     for idx, unit in enumerate(game_doc.units):
         if index == unit['index']:
@@ -424,7 +426,7 @@ def clean_up_index_if_empty(game, index):
             if game_doc.units[idx]['infantry'] + game_doc.units[idx]['ranged'] + game_doc.units[idx]['tanks'] == 0:
                 game_doc.units.pop(idx)
                 game_doc.save()
-                return
+            return game_doc.units[idx]['race']
 
 
 def move_selected_units_into_new_index(game, origin_index, target_index):
@@ -462,4 +464,13 @@ def move_selected_units_into_new_index(game, origin_index, target_index):
                 game_doc.units[idx][unit[0]] = unit[1]
     game_doc.save()
 
-    clean_up_index_if_empty(game, origin_index)
+    return clean_up_index_if_empty(game, origin_index)
+
+
+def set_order_for_tile_to(game, origin_index, order_value):
+    game_doc = get_game_by_name(game)
+    for idx, unit in enumerate(game_doc.units):
+        if origin_index == unit['index']:
+            game_doc.units[idx]['order'] = order_value
+            game_doc.save()
+            return

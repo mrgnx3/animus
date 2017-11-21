@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.support import expected_conditions as EC, ui
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class Player:
@@ -40,15 +40,14 @@ class Player:
         return elements
 
     def find_dynamic_element_by_id(self, id_string, timeout=10):
-        time.sleep(0.5)
         self.wait_for_page_complete()
-        wait = ui.WebDriverWait(self.driver, timeout)
+        wait = WebDriverWait(self.driver, timeout)
         wait.until(lambda driver: self.driver.find_element_by_id(id_string))
         return self.WebElement(self.driver.find_element_by_id(id_string))
 
     def find_dynamic_elements(self, locator, timeout=10):
         condition = EC.presence_of_all_elements_located(locator)
-        elements = WebDriverWait(self.driver, timeout).until(condition)
+        elements = WebDriverWait(self.driver, timeout).until(condition) or []
         return self.WebElement(elements)
 
     def login_new_user(self):
@@ -93,14 +92,15 @@ class Player:
 
         for idx, order in enumerate(orders):
             order.click()
-            time.sleep(1)
+            time.sleep(0.3)
             self.find_dynamic_elements(
                 (By.XPATH, "//i[contains(@class, 'fa fa-arrow-right move-action')]"))[idx].click()
-            time.sleep(1)
+            time.sleep(0.3)
 
     def move_all_units(self, origin, target):
-        self.find_dynamic_elements(
-            (By.XPATH, "//i[contains(@class, 'fa rotate action-display fa-arrow-right')]"))[1].click()
-        time.sleep(0.3)
+
+        WebDriverWait(driver=self.driver, timeout=10).until(
+            lambda driver: self.driver.find_elements_by_class_name('action-display'))[1].click()
+
         self.find_dynamic_elements((By.XPATH, '//*[@id="y_3"]//div[@id="x_4"]/*[2]/*[1]/*[2]'))[0].click()
         self.find_dynamic_elements((By.XPATH, '//*[@id="y_4"]//div[@id="x_4"]'))[0].click()

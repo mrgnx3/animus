@@ -144,7 +144,9 @@ function handleMoveAction(index, movementAction, turnOn) {
         this.childNodes[0].classList.add("selected");
         let classList = this.childNodes[0].classList;
         let units_index = getIndexValue(this.childNodes[0].parentElement.parentElement);
-        game_socket.emit('markUnitAsSelected', gameRoom, classList, units_index);
+        if (classList !== null) {
+            game_socket.emit('markUnitAsSelected', gameRoom, classList, units_index);
+        }
     }
 }
 
@@ -177,6 +179,7 @@ function enableMoveActions(raceToEnableMovesFor, playersRace) {
                 this.onclick = function () {
                     handleMoveAction(index, this, false);
                     removeActionMenu(this.parentElement);
+                    game_socket.emit('movementCompleteForTile', gameRoom, index);
                 }
             };
         }
@@ -254,7 +257,7 @@ function defenderWins(arrayOfAttackingUnits, attackingUnitsSvgElement, arrayOfDe
 }
 
 function noUnitsRemaining(svgElement) {
-    return svgElement.childElementCount == 0 && svgElement.parentElement.childElementCount == 2;
+    return svgElement.childElementCount === 0 && svgElement.parentElement.childElementCount === 2;
 }
 
 function deleteChild(parentTile, unitsToKill) {
@@ -283,7 +286,7 @@ function killUnits(unitsToKill, parentTile, killAll, damageTaken) {
         while (damageTaken > valueOfUnitsKilled) {
             let currentUnitValue = parseInt(unitsToKill[0].getElementsByTagName('text')[0].innerHTML) - 1;
             game_socket.emit('minusOneFromUnitValue', gameRoom, tilesIndex, getUnitType(unitsToKill[0]));
-            if (currentUnitValue == 0) {
+            if (currentUnitValue === 0) {
                 deleteChild(parentTile, unitsToKill);
             } else {
                 unitsToKill[0].getElementsByTagName('text')[0].innerHTML = currentUnitValue;
@@ -313,7 +316,7 @@ function getRaceOfUnit(selectedUnitsShapesToMove) {
 
 function resolvePeacefulMovement(targetTile, selectedUnitsShapesToMove) {
     function moveUnit(selectedUnitsShapesToMove) {
-        if (selectedUnitsShapesToMove.length == 0) return;
+        if (selectedUnitsShapesToMove.length === 0) return;
 
         let shapeToMove = selectedUnitsShapesToMove[0];
         removeSelectedState(shapeToMove);
@@ -354,7 +357,7 @@ function moveToNonHostileTarget(target, unit, cb) {
     game_socket.emit('peacefulMove', movementDetails, cb);
 
     target[0].parentElement.getElementsByTagName('svg')[0].appendChild(unit);
-    if (originTile.childElementCount == 0) {
+    if (originTile.childElementCount === 0) {
         removeActionMenu(originTile.parentElement.childNodes[0]);
     }
 }
@@ -411,13 +414,13 @@ function mergeUnits(shapeToMove, targetTile, cb) {
     let anyUnitsLeft = svgElement.childElementCount - 1;
     svgElement.removeChild(shapeToMove.parentElement);
 
-    if (anyUnitsLeft == 0) {
+    if (anyUnitsLeft === 0) {
         removeActionMenu(svgElement.parentElement.childNodes[0]);
     }
 }
 
 function unitMergeRequired(tile, shapeToMove) {
-    return (tile[0].parentElement.getElementsByTagName(shapeToMove.tagName).length == 1);
+    return (tile[0].parentElement.getElementsByTagName(shapeToMove.tagName).length === 1);
 }
 
 function tileHasUnits(tileElement) {
@@ -453,8 +456,8 @@ function deployingUnits(nextPlayer, deploymentInfo) {
     }
 }
 
-function battleResolved(user) {
-    if (user === playerName) {
+function movementStepComplete(race) {
+    if (race === getPlayersRace()) {
         let activeSvgElement = document.getElementsByClassName("menu-open-button ACTIVE")[0]
             .parentElement.parentElement.childNodes[1];
 

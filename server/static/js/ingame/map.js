@@ -302,8 +302,8 @@ function getSvgForUnits(faction, infantry, ranged, tank) {
 function drawUnits(race, cols, unitSet) {
     let hexes = document.getElementsByClassName('hex');
     for (let i = 0; i < hexes.length; i++) {
-        if (((unitSet.posY * cols) + unitSet.posX) == i) {
-            if (race == unitSet.race) {
+        if (((unitSet.posY * cols) + unitSet.posX) === i) {
+            if (race === unitSet.race) {
                 hexes[i].innerHTML = getMenu(i, unitSet.order, true) + getSvgForUnits(unitSet.race, unitSet.infantry, unitSet.ranged, unitSet.tanks);
             } else {
                 hexes[i].innerHTML = getMenu(i, unitSet.order, false) + getSvgForUnits(unitSet.race, unitSet.infantry, unitSet.ranged, unitSet.tanks);

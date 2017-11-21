@@ -1,6 +1,14 @@
 
+
+ State:
+    -> Broken the last step of the test case, which didn't work already
+
  Start Movement cycle
+    -> Player index doesn't rotate until players moves are all exercised
+    -> Waiting on doesn't update
 
  Fix Game information HUD
 
  Add 'enter' key listener for Game and Name entry
+
+ Fix client side state issues on refresh
