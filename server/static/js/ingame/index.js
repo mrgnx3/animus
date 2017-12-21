@@ -28,7 +28,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
         GetMap(RenderMap, false);
     });
 
-    game_socket.on('refreshTileList', function (tilesToRefresh) {
+    game_socket.on('clearTile', function (data) {
+        clearTile(data.index);
+    });
+
+    game_socket.on('refreshTiles', function (tilesToRefresh) {
         refreshTileList(tilesToRefresh);
     });
 

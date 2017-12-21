@@ -11,16 +11,45 @@ function GetMap(callback, isFirstInitializationOfMap) {
     request.send();
 }
 
-function refreshTileList(tilesToRefresh) {
+function refreshTileList(data) {
+    let tilesToRefresh = data.tilesToRefresh;
+
     for (let tileIndex = 0; tileIndex < tilesToRefresh.length; tileIndex++) {
+
         let currentTile = tilesToRefresh[tileIndex];
         let hexWebElement = document.getElementById(`x_${currentTile.posX}_y_${currentTile.posY}`);
         let isActivePlayersRace = currentTile.race === getPlayersRace();
-        hexWebElement.innerHTML = getMenu(currentTile.index, currentTile.order, isActivePlayersRace);
-        hexWebElement.innerHTML += getTileUnitHtml(currentTile.race, 'infantry', currentTile.infantry, currentTile.infantry_selected);
-        hexWebElement.innerHTML += getTileUnitHtml(currentTile.race, 'ranged', currentTile.ranged, currentTile.ranged_selected);
-        hexWebElement.innerHTML += getTileUnitHtml(currentTile.race, 'tank', currentTile.tanks, currentTile.tanks_selected);
+
+        hexWebElement.innerHTML = getMenu(currentTile.index, currentTile.order, isActivePlayersRace)
+            + '<svg height="100" width="100">'
+            + getTileUnitHtml(currentTile.race, 'infantry', currentTile.infantry, currentTile.infantry_selected)
+            + getTileUnitHtml(currentTile.race, 'ranged', currentTile.ranged, currentTile.ranged_selected)
+            + getTileUnitHtml(currentTile.race, 'tank', currentTile.tanks, currentTile.tanks_selected)
+            + '</svg>';
+
+        let totalUnits = currentTile.infantry + currentTile.ranged + currentTile.tanks;
+
+        if (currentTile.token_is_active && totalUnits > 0) {
+            let menuElement = hexWebElement.getElementsByTagName('label')[0];
+            menuElement.classList.add('ACTIVE');
+            menuElement.style.background = 'orange';
+
+            handleMoveAction(currentTile.index, menuElement, true);
+
+            menuElement.onclick = function () {
+                handleMoveAction(currentTile.index, menuElement, false);
+                removeActionMenu(menuElement.parentElement);
+                game_socket.emit('movementCompleteForTile', gameRoom, currentTile.index);
+            }
+        } else if (currentTile.token_is_active){
+            highlightMoveOptions(currentTile.index, turnOn);
+            game_socket.emit('movementCompleteForTile', gameRoom, currentTile.index);
+        }
     }
+}
+
+function clearTile(index) {
+    document.getElementById(getHexIdByIndex(index)).innerHTML = '<svg height="100" width="100"></svg>';
 }
 
 function getGamePhase(room, callback) {
@@ -101,13 +130,13 @@ function updateTilesAfterBattleMovement(cols, units, targetIndex, neighbouringTi
     for (let tileIndex = 0; tileIndex < units.length; tileIndex++) {
         drawUnits(race, cols, units[tileIndex]);
 
-        if( targetIndex === units[tileIndex]["index"]){
+        if (targetIndex === units[tileIndex]["index"]) {
             unitsLeftInTargetIndex = true;
         }
     }
 
     let activeTileInputTag = document.getElementsByClassName('hex')[targetIndex].getElementsByTagName('input')[0];
-    if(unitsLeftInTargetIndex){
+    if (unitsLeftInTargetIndex) {
         activeTileInputTag.parentElement.childNodes[1].classList.add('ACTIVE');
         activeTileInputTag.parentElement.childNodes[1].style.backgroundColor = "orange";
 
@@ -273,9 +302,8 @@ function presetMoveOrder(index, isActivePlayersMenu) {
     }
 }
 
-
 function getTileUnitHtml(race, unitType, unitNumber, isSelected) {
-    if (numberOfUnits === 0) {
+    if (unitNumber === 0) {
         return "";
     }
 
@@ -283,17 +311,17 @@ function getTileUnitHtml(race, unitType, unitNumber, isSelected) {
     let unitTileOffsetX = 0;
     let unitTileOffsetY = 0;
 
-    if (isSelected){
+    if (isSelected) {
         isSelected = 'selected';
     } else {
         isSelected = '';
     }
 
-    if(unitType === 'infantry'){
+    if (unitType === 'infantry') {
         unitShape = `<circle cx="30" cy="60" r="15" class="${race} infantry ${isSelected}"></circle>`;
         unitTileOffsetX = "25";
         unitTileOffsetY = "65";
-    } else if (unitType === 'ranged'){
+    } else if (unitType === 'ranged') {
         unitShape = `<polygon points="60,5 40,40 80,40" class="${race} ranged ${isSelected}"></polygon>`;
         unitTileOffsetX = "55";
         unitTileOffsetY = "35";
@@ -305,8 +333,6 @@ function getTileUnitHtml(race, unitType, unitNumber, isSelected) {
 
     return `<g>${unitShape}<text x=${unitTileOffsetX} y=${unitTileOffsetY} font-family="Verdana" font-size="20" fill="black">${unitNumber}</text></g>`;
 }
-
-
 
 function displayInfantryUnits(race, numberOfUnits) {
     if (numberOfUnits === 0) {

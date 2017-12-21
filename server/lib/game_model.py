@@ -418,6 +418,7 @@ def create_unit_entry(game, index, race):
         "infantry_selected": False,
         "ranged_selected": False,
         "tanks_selected": False,
+        "token_is_active": False,
         "order": "done"
     })
     game_doc.save()
@@ -431,6 +432,14 @@ def clean_up_index_if_empty(game, index):
                 game_doc.units.pop(idx)
                 game_doc.save()
             return game_doc.units[idx]['race']
+
+
+def is_tile_empty(game, index):
+    game_doc = get_game_by_name(game)
+    for unit in game_doc.units:
+        if index == unit['index']:
+            return False
+    return True
 
 
 def move_selected_units_into_new_index(game, origin_index, target_index):

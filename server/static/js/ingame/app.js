@@ -63,7 +63,7 @@ function highlightDeploymentOptions(race, turnOn, infantry, ranged, tank) {
     allRaceEntries.forEach(function (entry) {
         let tile = entry.parentElement.parentElement;
         let tileIndex = getXValue(tile) + (getYValue(tile) * 24);
-        if (raceTilesToCheckForHighLighting.indexOf(tileIndex) == -1) {
+        if (raceTilesToCheckForHighLighting.indexOf(tileIndex) === -1) {
             raceTilesToCheckForHighLighting.push(tileIndex);
         }
     });
@@ -154,7 +154,6 @@ function activateMoveToken(data) {
     let raceToEnableTokenFor = data.raceToEnableTokenFor;
     let tileIndex = data.tileIndex;
 
-    debugger;
     if (raceToEnableTokenFor === getPlayersRace()) {
 
         let tileElement = document.getElementById(getHexIdByIndex(tileIndex));
@@ -550,19 +549,22 @@ function getRequiredInfo(modalBody, requiredInfo, cb) {
 }
 
 function getXValue(element) {
-    return parseInt(element.parentElement.id.replace("x_", ""));
+    return parseInt(element.parentElement.id[2]);
 }
 
 function getYValue(element) {
-    return parseInt(element.parentElement.parentElement.id.replace("y_", ""));
+    return parseInt(element.parentElement.parentElement.id[6]);
 }
 
 function getIndexValue(element) {
-    return getXValue(element) + (getYValue(element) * 24);
+    let x = element.parentElement.id[2];
+    let y = element.parentElement.id[6];
+    return parseInt(x) + (parseInt(y) * 24);
 }
 
 function getHexIdByIndex(index) {
-    return `x_${index % 24}_y_${parseInt(index / 24)}`;
+    let intIndex = parseInt(index);
+    return `x_${intIndex % 24}_y_${parseInt(intIndex / 24)}`;
 }
 
 function getUnitType(element) {
