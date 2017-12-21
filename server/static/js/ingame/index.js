@@ -4,10 +4,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         displayModal(data.message);
     });
 
-    game_socket.on('enableMoves', function (data) {
-        enableMoveActions(data, getPlayersRace());
-    });
-
     game_socket.on('updateHarvestInformation', function (data) {
         updateHarvestInformation(data);
     });
@@ -30,6 +26,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     game_socket.on('refreshMapView', function () {
         GetMap(RenderMap, false);
+    });
+
+    game_socket.on('refreshTileList', function (tilesToRefresh) {
+        refreshTileList(tilesToRefresh);
+    });
+
+    game_socket.on('enableMoves', function (data) {
+        enableMoveActions(data, getPlayersRace());
+    });
+
+    game_socket.on('activateMovementToken', function (data) {
+        activateMoveToken(data);
     });
 
     game_socket.on('movementStepComplete', function (race) {

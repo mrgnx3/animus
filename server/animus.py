@@ -212,6 +212,12 @@ def movement_complete_for_tile(game, origin_index):
     next_movement_action(game)
 
 
+@socketio.on('activateMovementToken')
+def activate_movement_token(game, players_race, tile_index):
+    gm.set_movement_token_as_active(game, tile_index)
+    emit('activateMovementToken', {"raceToEnableTokenFor": players_race, "tileIndex": tile_index}, room=game)
+
+
 def resolve_merging_forces(game, origin_index, target_index):
     pass
 

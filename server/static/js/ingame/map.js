@@ -11,6 +11,18 @@ function GetMap(callback, isFirstInitializationOfMap) {
     request.send();
 }
 
+function refreshTileList(tilesToRefresh) {
+    for (let tileIndex = 0; tileIndex < tilesToRefresh.length; tileIndex++) {
+        let currentTile = tilesToRefresh[tileIndex];
+        let hexWebElement = document.getElementById(`x_${currentTile.posX}_y_${currentTile.posY}`);
+        let isActivePlayersRace = currentTile.race === getPlayersRace();
+        hexWebElement.innerHTML = getMenu(currentTile.index, currentTile.order, isActivePlayersRace);
+        hexWebElement.innerHTML += getTileUnitHtml(currentTile.race, 'infantry', currentTile.infantry, currentTile.infantry_selected);
+        hexWebElement.innerHTML += getTileUnitHtml(currentTile.race, 'ranged', currentTile.ranged, currentTile.ranged_selected);
+        hexWebElement.innerHTML += getTileUnitHtml(currentTile.race, 'tank', currentTile.tanks, currentTile.tanks_selected);
+    }
+}
+
 function getGamePhase(room, callback) {
     let request = new XMLHttpRequest();
     let getPhaseUrl = location.origin + '/getGamesRoundPhaseInfo/' + room;
@@ -261,8 +273,43 @@ function presetMoveOrder(index, isActivePlayersMenu) {
     }
 }
 
+
+function getTileUnitHtml(race, unitType, unitNumber, isSelected) {
+    if (numberOfUnits === 0) {
+        return "";
+    }
+
+    let unitShape = "";
+    let unitTileOffsetX = 0;
+    let unitTileOffsetY = 0;
+
+    if (isSelected){
+        isSelected = 'selected';
+    } else {
+        isSelected = '';
+    }
+
+    if(unitType === 'infantry'){
+        unitShape = `<circle cx="30" cy="60" r="15" class="${race} infantry ${isSelected}"></circle>`;
+        unitTileOffsetX = "25";
+        unitTileOffsetY = "65";
+    } else if (unitType === 'ranged'){
+        unitShape = `<polygon points="60,5 40,40 80,40" class="${race} ranged ${isSelected}"></polygon>`;
+        unitTileOffsetX = "55";
+        unitTileOffsetY = "35";
+    } else {
+        unitShape = `<rect x="50" y="50" width="40" height="40" class="${race} tank ${isSelected}"></rect>`;
+        unitTileOffsetX = "60";
+        unitTileOffsetY = "75";
+    }
+
+    return `<g>${unitShape}<text x=${unitTileOffsetX} y=${unitTileOffsetY} font-family="Verdana" font-size="20" fill="black">${unitNumber}</text></g>`;
+}
+
+
+
 function displayInfantryUnits(race, numberOfUnits) {
-    if (numberOfUnits == 0) {
+    if (numberOfUnits === 0) {
         return "";
     } else {
         let infantrySvgOpen = '<g><circle cx="30" cy="60" r="15" class="';
@@ -272,7 +319,7 @@ function displayInfantryUnits(race, numberOfUnits) {
 }
 
 function displayRangedUnits(race, numberOfUnits) {
-    if (numberOfUnits == 0) {
+    if (numberOfUnits === 0) {
         return "";
     } else {
         let rangedSvgOpen = '<g><polygon points="60,5 40,40 80,40" class="';
@@ -282,7 +329,7 @@ function displayRangedUnits(race, numberOfUnits) {
 }
 
 function displayTankUnits(race, numberOfUnits) {
-    if (numberOfUnits == 0) {
+    if (numberOfUnits === 0) {
         return "";
     } else {
         let svgOpen = '<g><rect x="50" y="50" width="40" height="40" class="';
@@ -333,16 +380,15 @@ function RenderMap(boardBackgroundMap, isFirstInitializationOfMap) {
     }
     let mapHolder = document.getElementById('mapHolder');
 
-    // Generate a row of hexes as html.
-    let rowHtml = "";
-    for (let i = 0; i < cols; i++)
-        rowHtml += '<div class="hex" id="x_' + i + '"><svg height="100" width="100"></svg></div>';
-    rowHtml += "</div>";
-
     // Main map html.
     let mapHtml = "";
-    for (i = 0; i < rows; i++)
-        mapHtml += ('<div id="y_' + i + '">' + rowHtml);
+    for (let y = 0; y < rows; y++) {
+        let rowHtml = "";
+        for (let x = 0; x < cols; x++) {
+            rowHtml += `<div class="hex" id="x_${x}_y_${y}"><svg height="100" width="100"></svg></div>`;
+        }
+        mapHtml += (`<div id="y_${y}">${rowHtml}</div>`);
+    }
 
     // Set map contents.
     mapHolder.innerHTML = mapHtml;

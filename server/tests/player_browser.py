@@ -102,5 +102,8 @@ class Player:
         WebDriverWait(driver=self.driver, timeout=10).until(
             lambda driver: self.driver.find_elements_by_class_name('action-display'))[1].click()
 
-        self.find_dynamic_elements((By.XPATH, '//*[@id="y_3"]//div[@id="x_4"]/*[2]/*[1]/*[2]'))[0].click()
-        self.find_dynamic_elements((By.XPATH, '//*[@id="y_4"]//div[@id="x_4"]'))[0].click()
+        origin_xpath = '//*[@id="x_{0}_y_{1}"]/*[2]/*[1]/*[2]'.format(origin % 24, origin // 24)
+        self.find_dynamic_elements((By.XPATH, origin_xpath))[0].click()
+
+        target_xpath = '//*[@id="x_{0}_y_{1}"]'.format(target % 24, target // 24)
+        self.find_dynamic_elements((By.XPATH, target_xpath))[0].click()

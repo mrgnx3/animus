@@ -154,56 +154,60 @@ def get_base_units(player_count=2):
     if player_count == 2:
         return [
             {
+                "race": "geoengineers",
                 "posX": 4,
                 "posY": 3,
                 "index": 76,
-                "race": "geoengineers",
                 "infantry": 1,
                 "ranged": 1,
                 "tanks": 1,
                 "infantry_selected": False,
                 "ranged_selected": False,
                 "tanks_selected": False,
-                "order": "notSet"
+                "order": "notSet",
+                "token_is_active": False
             },
             {
+                "race": "geoengineers",
                 "posX": 4,
                 "posY": 2,
                 "index": 52,
-                "race": "geoengineers",
                 "infantry": 2,
                 "ranged": 2,
                 "tanks": 4,
                 "infantry_selected": False,
                 "ranged_selected": False,
                 "tanks_selected": False,
-                "order": "notSet"
+                "order": "notSet",
+                "token_is_active": False
             },
             {
+                "race": "settlers",
                 "posX": 5,
                 "posY": 2,
                 "index": 53,
-                "race": "settlers",
                 "infantry": 1,
                 "ranged": 2,
                 "tanks": 1,
                 "infantry_selected": False,
                 "ranged_selected": False,
                 "tanks_selected": False,
-                "order": "notSet"
+                "order": "notSet",
+                "token_is_active": False
             },
             {
+                "race": "settlers",
                 "posX": 5,
                 "posY": 3,
                 "index": 77,
-                "race": "settlers",
                 "infantry": 0,
                 "ranged": 0,
                 "tanks": 1,
                 "infantry_selected": False,
                 "ranged_selected": False,
                 "tanks_selected": False,
-                "order": "notSet"
+                "order": "notSet",
+                "token_is_active": False
             }
         ]
     else:
@@ -472,5 +476,14 @@ def set_order_for_tile_to(game, origin_index, order_value):
     for idx, unit in enumerate(game_doc.units):
         if origin_index == unit['index']:
             game_doc.units[idx]['order'] = order_value
+            game_doc.save()
+            return
+
+
+def set_movement_token_as_active(game, tile_index):
+    game_doc = get_game_by_name(game)
+    for idx, unit in enumerate(game_doc.units):
+        if tile_index == unit['index']:
+            game_doc.units[idx]['token_is_active'] = True
             game_doc.save()
             return

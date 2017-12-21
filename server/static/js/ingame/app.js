@@ -150,6 +150,27 @@ function handleMoveAction(index, movementAction, turnOn) {
     }
 }
 
+function activateMoveToken(data) {
+    let raceToEnableTokenFor = data.raceToEnableTokenFor;
+    let tileIndex = data.tileIndex;
+
+    debugger;
+    if (raceToEnableTokenFor === getPlayersRace()) {
+
+        let tileElement = document.getElementById(getHexIdByIndex(tileIndex));
+        let menuElement = tileElement.childNodes[0].childNodes[1];
+        menuElement.classList.add('ACTIVE');
+
+        handleMoveAction(tileIndex, menuElement, true);
+
+        menuElement.onclick = function () {
+            handleMoveAction(tileIndex, menuElement, false);
+            removeActionMenu(menuElement.parentElement);
+            game_socket.emit('movementCompleteForTile', gameRoom, tileIndex);
+        }
+    }
+}
+
 function enableMoveActions(raceToEnableMovesFor, playersRace) {
 
     if (raceToEnableMovesFor === playersRace) {
@@ -159,32 +180,18 @@ function enableMoveActions(raceToEnableMovesFor, playersRace) {
             movementAction.parentElement.style.background = 'orange';
             movementAction.parentElement.onclick = function () {
 
-                //Mark as active
                 let activeTileInputTag = this.parentElement.getElementsByTagName('input')[0];
                 let index = parseInt(activeTileInputTag.attributes.name.value.replace("menu-open", ""));
-                this.classList.add('ACTIVE');
-
-                // Reset other tiles
+                //Reset tiles
                 for (let i = 0; i < listOfMoves.length; i++) {
-                    let notSelected = !listOfMoves[i].parentElement.classList.contains('ACTIVE');
-                    if (notSelected) {
-                        listOfMoves[i].parentElement.style.background = 'green';
-                        removeOnClickEvent(listOfMoves[i].parentElement);
-                    }
+                    listOfMoves[i].parentElement.style.background = 'green';
+                    removeOnClickEvent(listOfMoves[i].parentElement);
                 }
-                //Handle move
-                handleMoveAction(index, this, true);
-
-                //End move with second click
-                this.onclick = function () {
-                    handleMoveAction(index, this, false);
-                    removeActionMenu(this.parentElement);
-                    game_socket.emit('movementCompleteForTile', gameRoom, index);
-                }
+                game_socket.emit('activateMovementToken', gameRoom, playersRace, index);
             };
         }
     } else {
-        displayModal("<h1>Hold onto your butts</h1><p>Its " + raceToEnableMovesFor + " turn</p>");
+        displayModal("<h1>Movement Tokens to be played</h1><p>Its " + raceToEnableMovesFor + " turn</p>");
     }
 }
 
@@ -552,6 +559,10 @@ function getYValue(element) {
 
 function getIndexValue(element) {
     return getXValue(element) + (getYValue(element) * 24);
+}
+
+function getHexIdByIndex(index) {
+    return `x_${index % 24}_y_${parseInt(index / 24)}`;
 }
 
 function getUnitType(element) {
