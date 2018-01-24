@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
 
     game_socket.on('clearTile', function (data) {
-        clearTile(data.index);
+        clearTile(data.index, data.removeHightlightedOptions);
     });
 
     game_socket.on('refreshTiles', function (tilesToRefresh) {

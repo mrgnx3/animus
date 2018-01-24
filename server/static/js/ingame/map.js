@@ -17,8 +17,9 @@ function refreshTileList(data) {
     for (let tileIndex = 0; tileIndex < tilesToRefresh.length; tileIndex++) {
 
         let currentTile = tilesToRefresh[tileIndex];
-        let hexWebElement = document.getElementById(`x_${currentTile.posX}_y_${currentTile.posY}`);
         let isActivePlayersRace = currentTile.race === getPlayersRace();
+
+        let hexWebElement = document.getElementById(`x_${currentTile.posX}_y_${currentTile.posY}`);
 
         hexWebElement.innerHTML = getMenu(currentTile.index, currentTile.order, isActivePlayersRace)
             + '<svg height="100" width="100">'
@@ -41,15 +42,17 @@ function refreshTileList(data) {
                 removeActionMenu(menuElement.parentElement);
                 game_socket.emit('movementCompleteForTile', gameRoom, currentTile.index);
             }
-        } else if (currentTile.token_is_active){
-            highlightMoveOptions(currentTile.index, turnOn);
-            game_socket.emit('movementCompleteForTile', gameRoom, currentTile.index);
         }
     }
 }
 
-function clearTile(index) {
+function clearTile(index, removeHightlightedOptions) {
+
     document.getElementById(getHexIdByIndex(index)).innerHTML = '<svg height="100" width="100"></svg>';
+
+    if (removeHightlightedOptions) {
+        highlightMoveOptions(index, false);
+    }
 }
 
 function getGamePhase(room, callback) {

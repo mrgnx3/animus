@@ -211,7 +211,7 @@ def movement_complete_for_tile(game, origin_index):
     gm.set_order_for_tile_to(game, origin_index, 'done')
 
     if gm.is_tile_empty(game, origin_index):
-        emit('clearTile', {"index": origin_index}, room=game)
+        emit('clearTile', {"index": origin_index, "removeHightlightedOptions": True}, room=game)
 
     emit('refreshTiles', {"tilesToRefresh": gm.get_game_by_name(game)['units']}, room=game)
     next_movement_action(game)
@@ -234,12 +234,13 @@ def resolve_combat(game, origin_index, target_index):
 def resolve_peaceful_movement(game, origin_index, target_index):
     gm.move_selected_units_into_new_index(game, origin_index, target_index)
     gm.log(game, 'Units moved from {0} to {1}'.format(origin_index, target_index))
-    # socketio.emit('movementStepComplete', players_race, room=game)
 
-    if gm.is_tile_empty(game, origin_index):
-        emit('clearTile', {"index": origin_index}, room=game)
     units = gm.get_game_by_name(game)['units']
     socketio.emit('refreshTiles', {"tilesToRefresh": units}, room=game)
+
+    if gm.is_tile_empty(game, origin_index):
+        emit('clearTile', {"index": origin_index, "removeHightlightedOptions": True}, room=game)
+        next_movement_action(game)
 
 
 def game_has_entered_an_ending_condition(game):
@@ -247,7 +248,7 @@ def game_has_entered_an_ending_condition(game):
 
 
 def move_to_harvest_phase(game):
-    pass
+    gm.log(game, "ENTERING THE HARVEST PHASE")
 
 
 def process_move_order(game, race_turn_order):
@@ -256,9 +257,10 @@ def process_move_order(game, race_turn_order):
         gm.set_active_race(game, race_turn_order[0])
         active_players_race = race_turn_order[0]
 
-    socketio.emit('enableMoves', active_players_race, room=game)
-    next_active_race_index = race_turn_order.index(active_players_race) + 1 % len(race_turn_order)
+    next_active_race_index = (race_turn_order.index(active_players_race) + 1) % len(race_turn_order)
     gm.set_active_race(game, race_turn_order[next_active_race_index])
+
+    socketio.emit('enableMoves', active_players_race, room=game)
 
 
 def next_movement_action(game):

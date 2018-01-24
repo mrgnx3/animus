@@ -43,10 +43,11 @@ function highlightMoveOptions(index, turnOn) {
     for (let i = 0; i < neighbouringTiles.length; i++) {
         let hex = allTileElements[index + neighbouringTiles[i]];
         if (hex.className !== "hex water") {
-            turnOn ? hex.classList.add("highlight") : hex.classList.remove("highlight");
             if (turnOn) {
+                hex.classList.add("highlight");
                 hex.onclick = moveSelectUnits;
             } else {
+                hex.classList.remove("highlight");
                 removeOnClickEvent(hex);
             }
         }
@@ -127,7 +128,10 @@ function deployUnitsToTile(hexes, index, infantry, ranged, tanks) {
 }
 
 function handleMoveAction(index, movementAction, turnOn) {
+
+    //Enable move options
     highlightMoveOptions(index, turnOn);
+
     movementAction.parentElement.parentElement.childNodes[0].disbled = turnOn;
 
     let unitList = movementAction.parentElement.parentElement.getElementsByTagName('g');
@@ -189,8 +193,6 @@ function enableMoveActions(raceToEnableMovesFor, playersRace) {
                 game_socket.emit('activateMovementToken', gameRoom, playersRace, index);
             };
         }
-    } else {
-        displayModal("<h1>Movement Tokens to be played</h1><p>Its " + raceToEnableMovesFor + " turn</p>");
     }
 }
 

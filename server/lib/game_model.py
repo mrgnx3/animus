@@ -367,6 +367,7 @@ def get_active_race(game):
 
 
 def set_active_race(game, race):
+    log(game, "Marking {0} as active race".format(race), level='debug')
     game_doc = get_game_by_name(game)
     game_doc.race_in_play = race
     game_doc.save()

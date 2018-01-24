@@ -73,8 +73,13 @@ class AnimusTest(LiveServerTestCase):
         self.player_one.set_orders_to_movement()
         self.player_two.set_orders_to_movement()
 
-        time.sleep(2)
         self.player_one.move_all_units(origin=76, target=75)
+
+        self.player_two.move_all_units(origin=77, target=76)
+
+        self.player_one.move_all_units(origin=52, target=51)
+
+        self.player_two.move_all_units(origin=53, target=52)
 
         # Post Game Screen
         time.sleep(60)

@@ -98,14 +98,17 @@ class Player:
             time.sleep(0.3)
 
     def move_all_units(self, origin, target):
+        time.sleep(2)
+
+        origin_xpath = '//*[@id="x_{0}_y_{1}"]'.format(origin % 24, origin // 24)
+        hex_element = self.find_dynamic_elements((By.XPATH, origin_xpath))[0]
 
         WebDriverWait(driver=self.driver, timeout=10).until(
-            lambda driver: self.driver.find_elements_by_class_name('action-display'))[1].click()
+            lambda driver: hex_element.find_elements_by_class_name('action-display'))[0].click()
 
-        origin_xpath = '//*[@id="x_{0}_y_{1}"]/*[2]'.format(origin % 24, origin // 24)
-        units = self.find_dynamic_elements((By.XPATH, origin_xpath))[0].find_elements_by_tag_name('g')
-        for unit in units:
+        for unit in hex_element.find_elements_by_tag_name('g'):
             unit.click()
+            time.sleep(0.2)
 
         target_xpath = '//*[@id="x_{0}_y_{1}"]'.format(target % 24, target // 24)
         self.find_dynamic_elements((By.XPATH, target_xpath))[0].click()
