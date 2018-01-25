@@ -1,0 +1,38 @@
+
+# To debug testcase logic you can use ipython with the following steps to get set up and in a game
+
+cd <to project directory>
+export PYTHONPATH=$(pwd)
+source venv/bin/activate
+ipython
+
+# in ipython prompt
+
+import nose
+import time
+from flask_testing import LiveServerTestCase
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
+
+from server.animus import app
+from server.tests.player_browser import Player
+
+game_name = "testGame2"
+
+player_one = Player('player_one')
+player_two = Player('player_two')
+
+player_one.login_new_user()
+player_two.login_new_user()
+
+player_one.create_game(game_name)
+player_two.join_game(game_name)
+
+player_one.sends_lobby_message('Hi are you ready to play?')
+player_one.sends_lobby_message('Sure are you ready to get your ass handed to you?')
+
+player_one.claim_race(race='Geoengineers', hero='attack')
+player_two.claim_race(race='Settlers', hero='defence')
+
+player_one.find_dynamic_element_by_id('gameModalBody').click()
+player_two.find_dynamic_element_by_id('gameModalBody').click()
