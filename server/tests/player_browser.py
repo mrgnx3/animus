@@ -7,6 +7,10 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 
 
+def get_hex_id_from_index(index):
+    return 'x_{0}_y_{1}'.format(index % 24, index // 24)
+
+
 class Player:
     def __init__(self, player_name, server_url='http://127.0.0.1:5000/', timeout=5):
         self.timeout = timeout
@@ -85,6 +89,23 @@ class Player:
                 self.wait_for_page_complete()
                 self.find_dynamic_element_by_id("hero-button-{0}-{1}".format(race, hero)).click()
                 self.wait_for_page_complete()
+
+    def set_order_for_index(self, index, set_order):
+        hex_id = get_hex_id_from_index(index)
+
+        self.driver.find_element_by_id(hex_id).find_element_by_class_name('action-display').click()
+        time.sleep(0.3)
+
+        if set_order == 'harvest':
+            action = 'harvest-action'
+        elif set_order == 'defence':
+            action = 'defence-action'
+        elif set_order == 'recruit':
+            action = 'recruit-action'
+        else:
+            action = 'move-action'
+
+        self.driver.find_element_by_id(hex_id).find_element_by_class_name(action).click()
 
     def set_orders_to_movement(self):
         orders = list(self.find_dynamic_elements(

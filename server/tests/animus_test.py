@@ -70,15 +70,13 @@ class AnimusTest(LiveServerTestCase):
         self.player_one.find_dynamic_element_by_id('gameModalBody').click()
         self.player_two.find_dynamic_element_by_id('gameModalBody').click()
 
-        self.player_one.set_orders_to_movement()
-        self.player_two.set_orders_to_movement()
+        self.player_one.set_order_for_index(index=76, set_order='harvest')
+        self.player_two.set_order_for_index(index=77, set_order='harvest')
 
-        self.player_one.move_all_units(origin=76, target=75)
-
-        self.player_two.move_all_units(origin=77, target=76)
+        self.player_one.set_order_for_index(index=52, set_order='move')
+        self.player_two.set_order_for_index(index=53, set_order='move')
 
         self.player_one.move_all_units(origin=52, target=51)
-
         self.player_two.move_all_units(origin=53, target=52)
 
         # Post Game Screen
