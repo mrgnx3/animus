@@ -161,22 +161,15 @@ function getGameName() {
     return window.location.pathname.replace(/.*\//, '');
 }
 
-function GetHudStatistics(callback) {
-
-    let gameName = getGameName();
-    let playerName = getPlayersName();
-    getRaceByPlayerName(playerName, gameName, sendRequest);
-
-    function sendRequest(race) {
-        let request = new XMLHttpRequest();
-        request.open('GET', location.origin + '/getHudStatistics/' + gameName + '/' + race, true);
-        request.onload = function () {
-            if (request.status >= 200 && request.status < 400) {
-                callback(JSON.parse(request.responseText));
-            }
-        };
-        request.send();
-    }
+function getHudStatistics(callback) {
+    let request = new XMLHttpRequest();
+    request.open('GET', location.origin + '/getHudStatistics/' + getGameName(), true);
+    request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+            callback(JSON.parse(request.responseText));
+        }
+    };
+    request.send();
 }
 
 function getMenu(index, order, isActivePlayersMenu) {

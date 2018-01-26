@@ -25,7 +25,11 @@ def view_game(game_name):
     for race in game_doc['active_races']:
         if game_doc[race]['username'] == user_name:
             gm.log(game_name, '{0} has entered the game'.format(user_name))
-            return render_template('./game/gameView.html', game_name=game_name, user_name=user_name, race_name=race)
+            return render_template('./game/gameView.html',
+                                   game_name=game_name,
+                                   user_name=user_name,
+                                   race_name=race,
+                                   races=game_doc['active_races'])
     return render_template('./404.html')
 
 
@@ -49,17 +53,28 @@ def get_active_races(game_name):
     return json.dumps({'active_races': gm.get_game_by_name(game_name).active_races})
 
 
-@app.route('/getHudStatistics/<game_name>/<race>', methods=['GET'])
-def get_hud_statistics(game_name, race):
-    infantry = 0
-    ranged = 0
-    tank = 0
-    for army in gm.get_game_by_name(game_name).units:
-        if army['race'] == race:
-            infantry += int(army['infantry'])
-            ranged += int(army['ranged'])
-            tank += int(army['tanks'])
-    return json.dumps({'infantry': infantry, 'ranged': ranged, 'tank': tank, 'game': game_name})
+@app.route('/getHudStatistics/<game_name>', methods=['GET'])
+def get_hud_statistics(game_name):
+    hud_stats = {}
+    game_data = gm.get_game_by_name(game_name)
+
+    for race in game_data.active_races:
+        if race not in hud_stats.keys():
+            hud_stats[race] = {
+                'infantry': 0,
+                'ranged': 0,
+                'tanks': 0,
+                'harvestCount': game_data[race].harvest_count,
+                'harvestRate': game_data[race].harvest_collection_rate,
+            }
+
+    for army in game_data.units:
+        race = army['race']
+        hud_stats[race]['infantry'] += int(army['infantry'])
+        hud_stats[race]['ranged'] += int(army['ranged'])
+        hud_stats[race]['tanks'] += int(army['tanks'])
+
+    return json.dumps(hud_stats)
 
 
 @app.route('/getLeaderBio/<race>/<leader_type>', methods=['GET'])
@@ -146,15 +161,6 @@ def join_game(data):
     game_name = data['game_name']
     user = data['user']
     join_room(room=game_name)
-
-    race_info = gm.get_players_race_info(game_name, user)
-
-    emit('updateHarvestInformation',
-         {
-             "harvest_count": race_info["harvest_count"],
-             "harvest_collection_rate": race_info["harvest_collection_rate"]
-         },
-         room=game_name)
 
     if gm.display_opening_modal_check(game_name, user):
         gm.add_user_to_modal_displayed_list(game_name, user)
@@ -252,7 +258,7 @@ def move_to_harvest_phase(game):
 
 
 def process_move_order(game, race_turn_order):
-    active_players_race = gm.get_active_race(game)
+    active_players_race = gm.get_race_in_play(game)
     if active_players_race is None or active_players_race == '':
         gm.set_active_race(game, race_turn_order[0])
         active_players_race = race_turn_order[0]

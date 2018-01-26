@@ -362,7 +362,7 @@ def set_races_with_moves_orders_list(game):
     return game_doc.move_order_list
 
 
-def get_active_race(game):
+def get_race_in_play(game):
     return get_game_by_name(game).race_in_play
 
 

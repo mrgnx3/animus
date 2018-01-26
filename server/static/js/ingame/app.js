@@ -481,11 +481,6 @@ function movementStepComplete(race) {
     }
 }
 
-function updateHarvestInformation(data) {
-    document.getElementById('harvest-count').innerHTML = String(data.harvest_count);
-    document.getElementById('harvest-rate').innerHTML = 'x' + String(data.harvest_collection_rate);
-}
-
 function updateRoundPhaseInfo(data) {
     document.getElementById('round-value').textContent = "#" + data.round;
     document.getElementById('phase-value').textContent = data.phase;

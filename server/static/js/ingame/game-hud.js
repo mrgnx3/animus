@@ -1,47 +1,11 @@
-function changedHUDView(idName, changeViewTo) {
-
-    function DisplayHud() {
-        let hudDisplay = document.getElementById(idName);
-
-        if (hudDisplay.classList.contains('activeHud')) {
-            hudDisplay.classList.remove('activeHud');
-            hudDisplay.classList.add('hudContainer');
-        } else {
-            let activeHud = document.getElementsByClassName('activeHud')[0];
-            if (activeHud) {
-                activeHud.classList.remove('activeHud');
-                activeHud.classList.add('hudContainer');
-            }
-            hudDisplay.classList.remove('hudContainer');
-            hudDisplay.classList.add('activeHud');
-        }
+function updateHudStatistics(stats) {
+    for (let race in stats) {
+        document.getElementById(race + '-harvest-count').innerHTML = String(stats[race].harvestCount);
+        document.getElementById(race + '-harvest-rate').innerHTML = 'x' + String(stats[race].harvestRate);
+        document.getElementById(race + '-infantry').innerHTML = String(stats[race].infantry);
+        document.getElementById(race + '-ranged').innerHTML = String(stats[race].ranged);
+        document.getElementById(race + '-tanks').innerHTML = String(stats[race].tanks);
     }
-
-    function makeHudActiveIfNotAlready(idName) {
-        let hudDisplay = document.getElementById(idName);
-
-        if (!hudDisplay.classList.contains('activeHud')) {
-            let activeHud = document.getElementsByClassName('activeHud')[0];
-            if (activeHud) {
-                activeHud.classList.remove('activeHud');
-                activeHud.classList.add('hudContainer');
-            }
-            hudDisplay.classList.remove('hudContainer');
-            hudDisplay.classList.add('activeHud');
-        }
-    }
-
-    if (changeViewTo) {
-        makeHudActiveIfNotAlready(idName);
-    } else {
-        GetHudStatistics(DisplayHud);
-    }
-}
-
-function updateUnitsStrength(data) {
-    document.getElementById('tank_units_hud').innerHTML = data.tank;
-    document.getElementById('infantry_units_hud').innerHTML = data.infantry;
-    document.getElementById('ranged_units_hud').innerHTML = data.ranged;
 }
 
 function addHudListeners() {
@@ -56,6 +20,7 @@ function addHudListeners() {
             gameHudContainer.style.height = null;
         }
     };
+    getHudStatistics(updateHudStatistics);
 }
 
 function removeFromDeploymentResources(valueToRemove) {

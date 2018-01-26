@@ -1,14 +1,6 @@
 <!doctype html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
-    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
-    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
-    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
-    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
-    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
-    <link rel="stylesheet" type="text/css" href="server/static/css/game_app.css"/>
-    <link rel="stylesheet" type="text/css" href="server/static/css/game_app.css"/>
     <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
     <title>{{ game_name }}</title>
@@ -37,20 +29,22 @@
                 <th>Race</th>
                 <th data-field="count" data-sortable="true"><i class="fa fa-diamond"></i></th>
                 <th><i class="fa fa-times"></i><i class="fa fa-diamond"></i></th>
-                <th><i class="fa fa-truck"></i></th>
                 <th><i class="fa fa-male"></i></th>
                 <th><i class="fa fa-angle-double-right"></i></th>
+                <th><i class="fa fa-truck"></i></th>
             </tr>
             </thead>
             <tbody>
-            <tr id="harvest">
-                <td>{{ race_name }}</td>
-                <td id="harvest-count"></td>
-                <td id="harvest-rate"></td>
-                <td> 0</td>
-                <td> 0</td>
-                <td> 0</td>
-            </tr>
+            {% for race in races %}
+                <tr id="{{ race }}-race-stats">
+                    <td>{{ race }}</td>
+                    <td id="{{ race }}-harvest-count"></td>
+                    <td id="{{ race }}-harvest-rate"></td>
+                    <td id="{{ race }}-infantry"> 0</td>
+                    <td id="{{ race }}-ranged"> 0</td>
+                    <td id="{{ race }}-tanks"> 0</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
