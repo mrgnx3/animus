@@ -32,11 +32,6 @@
     background-color: transparent;
 }
 
-.hudContainer {
-    display: none;
-    height: 170px;
-}
-
 /* Board hexes. */
 .hex {
     float: left;
@@ -420,8 +415,6 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    background-color: #333;
 }
 
 li {
@@ -469,7 +462,73 @@ li.dropdown {
     display: block;
 }
 
-
 #gameModalBody {
     color: black;
+}
+
+#game-hud {
+    z-index: 100;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+}
+
+.hud-tab {
+    color: white;
+    padding: 10px 10px 10px 10px;
+    background-color: #1565C0;
+    border: 1px solid white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-right: 2px;
+}
+
+.hud-tab:hover {
+    background-color: #329dc0;
+}
+
+.container {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    background-color: #9E9E9E;
+    height: 24%;
+    border: 2px solid
+}
+
+
+#game_hud_deployment_commit_tab {
+    display: none;
+}
+
+#game_hud_deployment_deploy_tab {
+    display: none;
+}
+
+.game-hud-nav-tabs {
+    display: flex;
+}
+
+#race-stats {
+    color: black;
+}
+
+td, th {
+    width: 4rem;
+    height: 2rem;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+th {
+    background: lightblue;
+    border-color: white;
+}
+
+tr {
+    background-color: honeydew;
+    border: 1px solid #ccc;
 }

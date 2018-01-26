@@ -1,11 +1,18 @@
 <!doctype html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
+    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
+    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
+    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
+    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
+    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
+    <link rel="stylesheet" type="text/css" href="server/static/css/game_app.css"/>
+    <link rel="stylesheet" type="text/css" href="server/static/css/game_app.css"/>
     <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
     <title>{{ game_name }}</title>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/game_app.css">
     <link rel="stylesheet" href="/static/css/game_style.css">
@@ -16,65 +23,38 @@
     <script src="/static/js/ingame/game-hud.js"></script>
 </head>
 <body>
-<nav role="navigation" class="navbar navbar-default navbar-fixed-bottom">
-    <ul class="nav nav-tabs">
-        <li class="">
-            <a id="game_hud_tab" href="#" data-toggle="tab" aria-expanded="false" style="color: #f6f6f6;
-            background-color: #345498;">Game information</a>
-        </li>
-        <li class="">
-            <a id="game_hud_deployment_commit_tab" href="#" data-toggle="tab" aria-expanded="false" style="color: #f6f6f6;
-            background-color: #98273b; display: none">Deployment</a>
-        </li>
-        <li class="">
-            <a id="game_hud_deployment_deploy_tab" href="#" data-toggle="tab" aria-expanded="false" style="color: #f6f6f6;
-            background-color: #3e9851; display: none">Deployment</a>
-        </li>
+<div id="game-hud">
+    <ul class="game-hud-nav-tabs">
+        <li class="hud-tab" id="game-information-tab">Game information</li>
+        <li class="hud-tab" id="game_hud_deployment_commit_tab">Deployment Commit</li>
+        <li class="hud-tab" id="game_hud_deployment_deploy_tab">Deployment Deploy</li>
     </ul>
-    <div class="container hudContainer" id="game_hud">
-        <div class="panel panel-primary">
-            <div class="panel-body">
-                <div id="race_bio" style="width:150px;margin-right: 20px;float: left">
-                    <div id="player_pic">
-                        <img src="/static/img/leader_profiles/{{ race_name }}.jpg"
-                             style="max-width: 150px;height: 182px;">
-                    </div>
-                </div>
-                <div>
-                    <a href="#" onclick="displayModal('{{ race_name }}', 'history')" class="btn btn-primary">Race
-                        Bio</a>
-                    <a href="#" onclick="displayModal('{{ race_name }}', 'leaderBio')" class="btn btn-primary">Leader
-                        Info</a>
-                </div>
-                <div id="game_stats_scroll" style="overflow: scroll;padding-top: 10px;">
-                    <table style="width: auto;" class="table table-condensed table-bordered" data-sort-name="count"
-                           data-sort-order="desc">
-                        <thead>
-                        <tr>
-                            <th>Race</th>
-                            <th data-field="count" data-sortable="true"><i class="fa fa-diamond"></i></th>
-                            <th><i class="fa fa-times"></i><i class="fa fa-diamond"></i></th>
-                            <th><i class="fa fa-truck"></i></th>
-                            <th><i class="fa fa-male"></i></th>
-                            <th><i class="fa fa-angle-double-right"></i></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr id="harvest">
-                            <td>{{ race_name }}</td>
-                            <td id="harvest-count"></td>
-                            <td id="harvest-rate"></td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div class="container" id="game-information-hud">
+        <img src="/static/img/leader_profiles/{{ race_name }}.jpg">
+        <table id="race-stats">
+            <thead>
+            <tr>
+                <th>Race</th>
+                <th data-field="count" data-sortable="true"><i class="fa fa-diamond"></i></th>
+                <th><i class="fa fa-times"></i><i class="fa fa-diamond"></i></th>
+                <th><i class="fa fa-truck"></i></th>
+                <th><i class="fa fa-male"></i></th>
+                <th><i class="fa fa-angle-double-right"></i></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="harvest">
+                <td>{{ race_name }}</td>
+                <td id="harvest-count"></td>
+                <td id="harvest-rate"></td>
+                <td> 0</td>
+                <td> 0</td>
+                <td> 0</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="container hudContainer" id="game_hud_deploy_commit">
+    <div class="container" id="game_hud_deploy_commit">
         <div class="panel panel-primary">
             <div class="panel-body">
                 <div id="race_bio" style="width:150px;margin-right: 20px;float: left">
@@ -182,7 +162,7 @@
         </div>
 
     </div>
-    <div class="container hudContainer" id="game_hud_deploy_deploy">
+    <div class="container" id="game_hud_deploy_deploy">
         <div class="panel panel-primary">
             <div class="panel-body">
                 <div id="race_bio" style="width:150px;margin-right: 20px;float: left">
@@ -268,7 +248,7 @@
         </div>
 
     </div>
-</nav>
+</div>
 <div id="game-state-display" class="game-state-display-text">
     <table style="width: 100%;">
         <tr>
@@ -284,7 +264,7 @@
             <td>
                 <div id="phase-value"></div>
             </td>
-            <td >
+            <td>
                 <div>
                     <span id="waiting-on-label">Waiting on: </span><span id="waiting-on-value"></span>
                 </div>

@@ -45,14 +45,16 @@ function updateUnitsStrength(data) {
 }
 
 function addHudListeners() {
-    document.getElementById('game_hud_tab').onclick = function () {
-        changedHUDView('game_hud');
-    };
-    document.getElementById('game_hud_deployment_commit_tab').onclick = function () {
-        changedHUDView('game_hud_deploy_commit');
-    };
-    document.getElementById('game_hud_deployment_deploy_tab').onclick = function () {
-        changedHUDView('game_hud_deploy_deploy');
+    document.getElementById('game-information-tab').onclick = function () {
+        let gameInfoHud = document.getElementById('game-information-hud');
+        let gameHudContainer = document.getElementById('game-hud');
+        if (gameInfoHud.style.display === 'none') {
+            gameInfoHud.style.display = 'flex';
+            gameHudContainer.style.height = '30%';
+        } else {
+            gameInfoHud.style.display = 'none';
+            gameHudContainer.style.height = null;
+        }
     };
 }
 
