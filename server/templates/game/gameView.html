@@ -1,6 +1,8 @@
 <!doctype html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
+    <link rel="stylesheet" type="text/css" href="server/static/css/game_style.css"/>
     <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
     <title>{{ game_name }}</title>
@@ -36,14 +38,21 @@
             </thead>
             <tbody>
             {% for race in races %}
-                <tr id="{{ race }}-race-stats">
-                    <td>{{ race }}</td>
-                    <td id="{{ race }}-harvest-count"></td>
-                    <td id="{{ race }}-harvest-rate"></td>
-                    <td id="{{ race }}-infantry"> 0</td>
-                    <td id="{{ race }}-ranged"> 0</td>
-                    <td id="{{ race }}-tanks"> 0</td>
-                </tr>
+                {% if race == race_name %}
+                    <tr id="{{ race }}-race-stats" class="active-race">
+                    <td>{{ race |title }}</td>
+                        {% else %}
+                    <tr id="{{ race }}-race-stats">
+                    <td> {{ race|title  }}</td>
+                {% endif %}
+
+
+            <td id="{{ race }}-harvest-count"></td>
+            <td id="{{ race }}-harvest-rate"></td>
+            <td id="{{ race }}-infantry"> 0</td>
+            <td id="{{ race }}-ranged"> 0</td>
+            <td id="{{ race }}-tanks"> 0</td>
+            </tr>
             {% endfor %}
             </tbody>
         </table>
@@ -244,21 +253,21 @@
     </div>
 </div>
 <div id="game-state-display" class="game-state-display-text">
-    <table style="width: 100%;">
-        <tr>
-            <td>
+    <table>
+        <tr class="game-state-row">
+            <td class="game-state-col">
                 <div id="round-label">R:</div>
             </td>
-            <td>
+            <td class="game-state-col">
                 <div id="round-value"></div>
             </td>
-            <td>
+            <td class="game-state-col">
                 <div id="phase-label">P:</div>
             </td>
-            <td>
+            <td class="game-state-col">
                 <div id="phase-value"></div>
             </td>
-            <td>
+            <td class="game-state-col">
                 <div>
                     <span id="waiting-on-label">Waiting on: </span><span id="waiting-on-value"></span>
                 </div>

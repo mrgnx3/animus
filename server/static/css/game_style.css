@@ -388,17 +388,11 @@ a {
 }
 
 #game-state-display {
-    width: 50%;
-    background-color: #f8f8f8;
-    border-color: #e7e7e7;
     top: 0;
     border-width: 0 0 1px;
     position: fixed;
     right: 0;
-    z-index: 1031;
-    padding-right: 15px;
-    max-height: 50px;
-    min-width: 500px;
+    z-index: 1000;
     font-size: medium;
 }
 
@@ -531,4 +525,19 @@ th {
 tr {
     background-color: honeydew;
     border: 1px solid #ccc;
+}
+
+.active-race {
+    background-color: #fff6d2;
+    font-weight: bolder;
+}
+
+.game-state-col {
+    width : 0rem;
+    border: 0;
+    color: #000000a1;
+}
+
+.game-state-row {
+    background-color: transparent;
 }
