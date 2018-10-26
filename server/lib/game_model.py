@@ -347,6 +347,15 @@ def set_phase(game, phase):
     game_doc.phase = phase
     game_doc.save()
 
+def update_harvest_totals(game):
+    game_doc = get_game_by_name(game)
+
+    for idx, unit in enumerate(game_doc.units):
+        if "harvest" == unit['order']:
+            game_doc.units[idx]['order'] = "done"
+            race = game_doc.units[idx]['race']
+            game_doc[race]["harvest_count"] += 1 * game_doc[race]["harvest_collection_rate"]
+    game_doc.save()
 
 def set_races_with_moves_orders_list(game):
     game_doc = get_game_by_name(game)

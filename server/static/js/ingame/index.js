@@ -1,14 +1,10 @@
 document.addEventListener("DOMContentLoaded", function (event) {
     game_socket.on('displayActionModal', function (data) {
-        console.log(`displayActionModal ${data}`);
         displayModal(data.message);
     });
 
-    game_socket.on('updateHarvestInformation', function (data) {
-        updateHarvestInformation(data);
-    });
-
-    game_socket.on('removeHarvestTokens', function () {
+    game_socket.on('updateHarvestInformation', function () {
+        getHudStatistics(updateHudStatistics);
         removeHarvestTokens();
     });
 
@@ -55,7 +51,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     GetMap(RenderMap, true);
 
     playerName = getPlayersName();
-    console.log(`joinGame ${gameRoom} ${playerName}`);
     game_socket.emit('joinGame', {game_name: gameRoom, user: playerName});
     getGamePhase(gameRoom, updateRoundPhaseInfo);
 });

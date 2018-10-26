@@ -13,7 +13,7 @@
     source venv/bin/activate
     pip install -r requirements.txt
 
-    python animus.py
+    python server/animus.py
 
 ##For Windows
     pip install virtualenv

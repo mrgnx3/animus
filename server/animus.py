@@ -252,10 +252,19 @@ def resolve_peaceful_movement(game, origin_index, target_index):
 def game_has_entered_an_ending_condition(game):
     return False
 
+def move_to_recruiting_phase(game):
+    gm.log(game, "ENTERING THE RECRUITING PHASE")
+    gm.set_phase(game, "recruiting")
+    # todo
 
 def move_to_harvest_phase(game):
     gm.log(game, "ENTERING THE HARVEST PHASE")
-
+    gm.set_phase(game, "harvest")
+    emit('updatePhaseInfo', room=game)
+    emit('refreshMapView', room=game)
+    gm.update_harvest_totals(game) 
+    emit('updateHarvestInformation', room=game) 
+    move_to_recruiting_phase(game)
 
 def process_move_order(game, race_turn_order):
     active_players_race = gm.get_race_in_play(game)
@@ -275,6 +284,7 @@ def next_movement_action(game):
                       {"message": '<h1>Game Over</h1><p>Last Man Standing: {0}</p>'.format('todo')})
     else:
         races_with_movements_left = gm.set_races_with_moves_orders_list(game)
+        gm.log(game, "races_with_movements_left: {0}".format(races_with_movements_left))
         if len(races_with_movements_left) == 0:
             move_to_harvest_phase(game)
         else:

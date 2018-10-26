@@ -12,7 +12,7 @@ function addHudListeners() {
     document.getElementById('game-information-tab').onclick = function () {
         let gameInfoHud = document.getElementById('game-information-hud');
         let gameHudContainer = document.getElementById('game-hud');
-        if (gameInfoHud.style.display === 'none') {
+        if (gameInfoHud.style.display != 'flex') {
             gameInfoHud.style.display = 'flex';
             gameHudContainer.style.height = '30%';
         } else {

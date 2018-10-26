@@ -2,3 +2,4 @@
 venv/
 animus.iml
 *.pyc
+.vscode

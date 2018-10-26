@@ -37,6 +37,9 @@ class AnimusTest(LiveServerTestCase):
         cls.player_two.driver.quit()
 
     def test_two_player_game_start_to_end(self):
+        self.player_one_race = 'Geoengineers'
+        self.player_two_race = 'Settlers'
+        
         # Register / Login
         self.player_one.login_new_user()
         self.player_two.login_new_user()
@@ -55,32 +58,48 @@ class AnimusTest(LiveServerTestCase):
         self.assertIn('Hi are you ready to play?', self.player_two.get_lobby_messages())
         self.assertIn('Sure are you ready to get your ass handed to you?', self.player_one.get_lobby_messages())
 
-        self.player_one.claim_race(race='Geoengineers', hero='attack')
-        self.player_two.claim_race(race='Settlers', hero='defence')
+        self.player_one.claim_race(race=self.player_one_race, hero='attack')
+        self.player_two.claim_race(race=self.player_two_race, hero='defence')
 
         player_one_log = self.player_one.driver.get_log('browser')
         for log_entry in player_one_log:
             self.assertNotIn('err', log_entry)
             self.assertNotIn('fail', log_entry)
 
-        # Game
+        # Game - Setup
         self.assertTrue(self.player_one.wait_for_redirect('game'), msg="game started, player 1 in Game")
         self.assertTrue(self.player_two.wait_for_redirect('game'), msg="game started, player 2 in Game")
 
         self.player_one.find_dynamic_element_by_id('gameModalBody').click()
         self.player_two.find_dynamic_element_by_id('gameModalBody').click()
 
+        # Game - Set orders
         self.player_one.set_order_for_index(index=76, set_order='harvest')
         self.player_two.set_order_for_index(index=77, set_order='harvest')
 
         self.player_one.set_order_for_index(index=52, set_order='move')
         self.player_two.set_order_for_index(index=53, set_order='move')
 
+        # Game - Move attack
         self.player_one.move_all_units(origin=52, target=51)
         self.player_two.move_all_units(origin=53, target=52)
 
+        # Game - Harvest
+        self.assertEqual('1', self.player_one.get_harvest_information(race=self.player_one_race))
+        self.assertEqual('1', self.player_two.get_harvest_information(race=self.player_two_race))
+    
+        # Game - Recruiting / Deployment
+        
+        # Game - Event cards
+
+        # Game - End of round
+
+        # Game - Winning condition
+
         # Post Game Screen
-        time.sleep(60)
+        time.sleep(360)
+
+        # Sucess
 
 
 if __name__ == "__main__":

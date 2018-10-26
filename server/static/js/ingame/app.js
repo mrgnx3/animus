@@ -436,7 +436,6 @@ function tileHasUnits(tileElement) {
 }
 
 function removeHarvestTokens() {
-    displayModal("<h2>The harvest has come!</h2><h3>Time to deploy</h3>");
     let diamonds = document.getElementsByClassName("fa-diamond rotate");
     for (let i = 0; i < diamonds.length; i++) {
         let tile = diamonds[i].parentElement.parentElement.parentElement;

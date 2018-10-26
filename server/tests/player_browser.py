@@ -133,5 +133,10 @@ class Player:
 
         target_xpath = '//*[@id="x_{0}_y_{1}"]'.format(target % 24, target // 24)
         self.find_dynamic_elements((By.XPATH, target_xpath))[0].click()
+    
+    def get_harvest_information(self, race):
+        time.sleep(1)
+        self.driver.find_element_by_id('game-information-tab').click()
 
-
+        time.sleep(1)
+        return self.driver.find_element_by_id("{0}-harvest-count".format(race.lower())).text

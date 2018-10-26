@@ -36,3 +36,14 @@ player_two.claim_race(race='Settlers', hero='defence')
 
 player_one.find_dynamic_element_by_id('gameModalBody').click()
 player_two.find_dynamic_element_by_id('gameModalBody').click()
+
+# Game - Set orders
+player_one.set_order_for_index(index=76, set_order='harvest')
+player_two.set_order_for_index(index=77, set_order='harvest')
+
+player_one.set_order_for_index(index=52, set_order='move')
+player_two.set_order_for_index(index=53, set_order='move')
+
+# Game - Move attack
+player_one.move_all_units(origin=52, target=51)
+player_two.move_all_units(origin=53, target=52)
