@@ -55,8 +55,8 @@ class AnimusTest(LiveServerTestCase):
         # PreGame Lobby
         self.player_one.sends_lobby_message('Hi are you ready to play?')
         self.player_one.sends_lobby_message('Sure are you ready to get your ass handed to you?')
-        self.assertIn('Hi are you ready to play?', self.player_two.get_lobby_messages())
-        self.assertIn('Sure are you ready to get your ass handed to you?', self.player_one.get_lobby_messages())
+        self.assertTrue(self.player_two.check_lobby_messages_for('Hi are you ready to play?'))
+        self.assertTrue(self.player_one.check_lobby_messages_for('Sure are you ready to get your ass handed to you?'))
 
         self.player_one.claim_race(race=self.player_one_race, hero='attack')
         self.player_two.claim_race(race=self.player_two_race, hero='defence')
@@ -70,8 +70,9 @@ class AnimusTest(LiveServerTestCase):
         self.assertTrue(self.player_one.wait_for_redirect('game'), msg="game started, player 1 in Game")
         self.assertTrue(self.player_two.wait_for_redirect('game'), msg="game started, player 2 in Game")
 
-        self.player_one.find_dynamic_element_by_id('gameModalBody').click()
-        self.player_two.find_dynamic_element_by_id('gameModalBody').click()
+        # Game - Dismiss welcome modal
+        self.assertTrue(self.player_one.dismiss_modal())
+        self.assertTrue(self.player_two.dismiss_modal())
 
         # Game - Set orders
         self.player_one.set_order_for_index(index=76, set_order='harvest')
@@ -85,8 +86,8 @@ class AnimusTest(LiveServerTestCase):
         self.player_two.move_all_units(origin=53, target=52)
 
         # Game - Harvest
-        self.assertEqual('1', self.player_one.get_harvest_information(race=self.player_one_race))
-        self.assertEqual('1', self.player_two.get_harvest_information(race=self.player_two_race))
+        self.assertTrue(self.player_one.check_harvest_information(self.player_one_race, '1'))
+        self.assertTrue(self.player_two.check_harvest_information(self.player_two_race, '1'))
     
         # Game - Recruiting / Deployment
         
@@ -97,7 +98,7 @@ class AnimusTest(LiveServerTestCase):
         # Game - Winning condition
 
         # Post Game Screen
-        time.sleep(360)
+        # time.sleep(360)
 
         # Sucess
 

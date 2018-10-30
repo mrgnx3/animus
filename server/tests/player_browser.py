@@ -1,100 +1,71 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.webdriver.chrome.options import Options
 
 def get_hex_id_from_index(index):
     return 'x_{0}_y_{1}'.format(index % 24, index // 24)
 
-
 class Player:
     def __init__(self, player_name, server_url='http://127.0.0.1:5000/', timeout=5):
+        options = Options()
+        options.headless = True
         self.timeout = timeout
         self.player_name = player_name
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Chrome(options=options)
+        self.driver.implicitly_wait(10)
+        self.wait = WebDriverWait(self.driver, self.timeout)
         self.server_url = server_url
 
     def open_page(self, url):
         self.driver.get(url)
-        self.wait_for_page_complete()
 
-    def wait_for_page_complete(self):
-        def document_complete(driver):
-            return driver.execute_script("return (document.readyState == 'complete')")
-
-        WebDriverWait(self.driver, self.timeout).until(document_complete, message='Wait for page load complete')
-
-    def wait_for_redirect(self, url_context, timeout=10):
-        for i in range(timeout):
-            if url_context in self.driver.current_url:
-                self.wait_for_page_complete()
-                return self.driver.current_url
-            time.sleep(1)
-        return False
-
-    def WebElement(self, elements):
-        if isinstance(elements, list):
-            elements = [WebElement(element._parent, element._id) for element in elements if element.is_displayed()]
-        else:
-            elements = WebElement(elements._parent, elements._id)
-        return elements
-
-    def find_dynamic_element_by_id(self, id_string, timeout=10):
-        self.wait_for_page_complete()
-        wait = WebDriverWait(self.driver, timeout)
-        wait.until(lambda driver: self.driver.find_element_by_id(id_string))
-        return self.WebElement(self.driver.find_element_by_id(id_string))
-
-    def find_dynamic_elements(self, locator, timeout=10):
-        condition = EC.presence_of_all_elements_located(locator)
-        elements = WebDriverWait(self.driver, timeout).until(condition) or []
-        return self.WebElement(elements)
+    def wait_for_redirect(self, url_context):
+        self.wait.until(EC.url_contains(url_context))
+        return True
 
     def login_new_user(self):
         self.open_page(self.server_url)
         self.driver.find_element_by_id('newUserTxtInput').send_keys(self.player_name)
         self.driver.find_element_by_id('newUserButton').click()
-        self.wait_for_page_complete()
 
     def login_get_welcome_text(self):
         return self.driver.find_element_by_id('welcomeText').text
 
     def create_game(self, game_name, player_count='2'):
-        self.find_dynamic_element_by_id('gameNameInput').send_keys(game_name)
-        select = Select(self.find_dynamic_element_by_id('playerCountSelector'))
+        self.driver.find_element_by_id('gameNameInput').send_keys(game_name)
+        select = Select(self.driver.find_element_by_id('playerCountSelector'))
         select.select_by_value(player_count)
-        self.find_dynamic_element_by_id('createGameButton').click()
+        self.driver.find_element_by_id('createGameButton').click()
         self.wait_for_redirect('lobby')
 
     def join_game(self, game_name):
-        self.find_dynamic_element_by_id(game_name, timeout=30).click()
-        return self.wait_for_redirect('lobby')
+        self.driver.find_element_by_id(game_name).click()
+        self.wait_for_redirect('lobby')
+        return True
 
     def sends_lobby_message(self, message):
-        self.find_dynamic_element_by_id('chatInputField').send_keys(message)
-        self.find_dynamic_element_by_id('sendMessage').click()
+        self.driver.find_element_by_id('chatInputField').send_keys(message)
+        self.driver.find_element_by_id('sendMessage').click()
 
-    def get_lobby_messages(self):
-        return self.find_dynamic_element_by_id('chatContent').text
+    def check_lobby_messages_for(self, text):
+        self.wait.until(EC.text_to_be_present_in_element((By.ID,'chatContent'),text))
+        return True
 
     def claim_race(self, race, hero):
-        race_buttons = self.find_dynamic_elements((By.CLASS_NAME, 'claimRaceButton'))
+        race_buttons = self.driver.find_elements(By.CLASS_NAME, 'claimRaceButton')
         for race_button in list(race_buttons):
             if race_button.get_attribute('race') == race:
                 race_button.click()
-                self.wait_for_page_complete()
-                self.find_dynamic_element_by_id("hero-button-{0}-{1}".format(race, hero)).click()
-                self.wait_for_page_complete()
+                self.driver.find_element_by_id("hero-button-{0}-{1}".format(race, hero)).click()
 
     def set_order_for_index(self, index, set_order):
         hex_id = get_hex_id_from_index(index)
 
         self.driver.find_element_by_id(hex_id).find_element_by_class_name('action-display').click()
-        time.sleep(0.3)
 
         if set_order == 'harvest':
             action = 'harvest-action'
@@ -105,38 +76,27 @@ class Player:
         else:
             action = 'move-action'
 
+        time.sleep(0.3)
         self.driver.find_element_by_id(hex_id).find_element_by_class_name(action).click()
-
-    def set_orders_to_movement(self):
-        orders = list(self.find_dynamic_elements(
-            (By.XPATH, "//i[contains(@class, 'fa fa-plus rotate action-display')]")))
-
-        for idx, order in enumerate(orders):
-            order.click()
-            time.sleep(0.3)
-            self.find_dynamic_elements(
-                (By.XPATH, "//i[contains(@class, 'fa fa-arrow-right move-action')]"))[idx].click()
-            time.sleep(0.3)
 
     def move_all_units(self, origin, target):
         time.sleep(2)
-
         origin_xpath = '//*[@id="x_{0}_y_{1}"]'.format(origin % 24, origin // 24)
-        hex_element = self.find_dynamic_elements((By.XPATH, origin_xpath))[0]
-
-        WebDriverWait(driver=self.driver, timeout=10).until(
-            lambda driver: hex_element.find_elements_by_class_name('action-display'))[0].click()
+        hex_element = self.driver.find_elements(By.XPATH, origin_xpath)[0]
+        self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME,'action-display'))).click()
 
         for unit in hex_element.find_elements_by_tag_name('g'):
             unit.click()
-            time.sleep(0.2)
+            time.sleep(0.4)
 
         target_xpath = '//*[@id="x_{0}_y_{1}"]'.format(target % 24, target // 24)
-        self.find_dynamic_elements((By.XPATH, target_xpath))[0].click()
-    
-    def get_harvest_information(self, race):
-        time.sleep(1)
-        self.driver.find_element_by_id('game-information-tab').click()
+        self.driver.find_elements(By.XPATH, target_xpath)[0].click()
 
-        time.sleep(1)
-        return self.driver.find_element_by_id("{0}-harvest-count".format(race.lower())).text
+    def check_harvest_information(self, race, expected):
+        self.driver.find_element_by_id('game-information-tab').click()
+        return self.wait.until(EC.text_to_be_present_in_element((By.ID, "{0}-harvest-count".format(race.lower())), expected))
+        # return True
+
+    def dismiss_modal(self):
+        self.wait.until(EC.element_to_be_clickable((By.ID,'gameModalBody'))).click()
+        return True
