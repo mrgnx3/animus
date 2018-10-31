@@ -1,4 +1,4 @@
-function updateHudStatistics(stats) {
+function updateGameInfoHudStatistics(stats) {
     for (let race in stats) {
         document.getElementById(race + '-harvest-count').innerHTML = String(stats[race].harvestCount);
         document.getElementById(race + '-harvest-rate').innerHTML = 'x' + String(stats[race].harvestRate);
@@ -7,20 +7,26 @@ function updateHudStatistics(stats) {
         document.getElementById(race + '-tanks').innerHTML = String(stats[race].tanks);
     }
 }
-
-function addHudListeners() {
-    document.getElementById('game-information-tab').onclick = function () {
-        let gameInfoHud = document.getElementById('game-information-hud');
-        let gameHudContainer = document.getElementById('game-hud');
-        if (gameInfoHud.style.display != 'flex') {
-            gameInfoHud.style.display = 'flex';
-            gameHudContainer.style.height = '30%';
-        } else {
-            gameInfoHud.style.display = 'none';
-            gameHudContainer.style.height = null;
+function presentHudToUser(idName) {
+    let hudDisplay = document.getElementById(idName);
+    if (!hudDisplay.classList.contains('activeHud')) {
+        let activeHud = document.getElementsByClassName('activeHud')[0];
+        if (activeHud) {
+            activeHud.classList.remove('activeHud');
+            activeHud.classList.add('hiddenHudContainer');
         }
+        hudDisplay.classList.remove('hiddenHudContainer');
+        hudDisplay.classList.add('activeHud');
+    } else {
+        hudDisplay.classList.add('hiddenHudContainer');
+        hudDisplay.classList.remove('activeHud');
+    }
+}
+
+function addGameInfoHudListeners() {
+    document.getElementById('game-information-tab').onclick = function () {
+        presentHudToUser('game-information-hud')
     };
-    getHudStatistics(updateHudStatistics);
 }
 
 function removeFromDeploymentResources(valueToRemove) {
@@ -108,17 +114,18 @@ function toggleDeploymentSubPanelButtons(activateButtons) {
 }
 
 function displayDeploymentCommitTab(deployData) {
-    document.getElementById('game_hud_deployment_commit_tab').style.display = 'block';
-    changedHUDView('game_hud_deploy_commit');
+    document.getElementById('game-hud-deployment-commit-tab').style.display = 'block';
+    presentHudToUser('game-hud-deployment-commit-hud');
     toggleDeploymentSubPanelButtons(true);
 
     let playerRace = getPlayersRace();
-    document.getElementById('default-deployment-value').innerHTML = deployData[playerRace].defaultDeployment;
-
+    // document.getElementById('default-deployment-value').innerHTML = deployData[playerRace].defaultDeployment;
+    document.getElementById('default-deployment-value').innerHTML = 1;
+    
     document.getElementById("commit-deploy-button").onclick = function () {
         toggleDeploymentSubPanelButtons(false);
-        document.getElementById('game_hud_deployment_commit_tab').style.display = 'none';
-        changedHUDView('game_hud_deploy_commit');
+        document.getElementById('game-hud-deployment-commit-tab').style.display = 'none';
+        presentHudToUser('game-hud-deployment-commit-hud');
 
         let infantryToDeploy = parseInt(document.getElementById('infantry-value').textContent);
         let rangedToDeploy = parseInt(document.getElementById('ranged-value').textContent);
@@ -140,7 +147,7 @@ function displayDeploymentCommitTab(deployData) {
 function displayDeploymentDeployTab(deploymentInfo) {
     hideModal();
     document.getElementById('game_hud_deployment_deploy_tab').style.display = 'block';
-    changedHUDView('game_hud_deploy_deploy', true);
+    presentHudToUser('game_hud_deploy_deploy', true);
     let race = getPlayersRace();
     document.getElementById('committed-infantry-value').textContent = deploymentInfo[race].infantryToDeploy;
     document.getElementById('committed-ranged-value').textContent = deploymentInfo[race].rangedToDeploy;
@@ -154,7 +161,7 @@ function displayDeploymentDeployTab(deploymentInfo) {
 
 function hideAndResetDeploymentElements() {
     document.getElementById('game_hud_deploy_deploy').classList.remove('activeHud');
-    document.getElementById('game_hud_deploy_deploy').classList.add('hudContainer');
+    document.getElementById('game_hud_deploy_deploy').classList.add('hiddenHudContainer');
     document.getElementById('game_hud_deployment_deploy_tab').style.display = 'none';
     document.getElementById('infantry-deploy-value').textContent = "0";
     document.getElementById('ranged-deploy-value').textContent = "0";

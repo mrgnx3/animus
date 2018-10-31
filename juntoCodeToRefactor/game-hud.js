@@ -1,18 +1,18 @@
-function changedHUDView(idName, changeViewTo) {
+function presentHudToUser(idName, changeViewTo) {
 
     function DisplayHud() {
         var hudDisplay = document.getElementById(idName);
 
         if (hudDisplay.classList.contains('activeHud')) {
             hudDisplay.classList.remove('activeHud');
-            hudDisplay.classList.add('hudContainer');
+            hudDisplay.classList.add('hiddenHudContainer');
         } else {
             var activeHud = document.getElementsByClassName('activeHud')[0];
             if (activeHud) {
                 activeHud.classList.remove('activeHud');
-                activeHud.classList.add('hudContainer');
+                activeHud.classList.add('hiddenHudContainer');
             }
-            hudDisplay.classList.remove('hudContainer');
+            hudDisplay.classList.remove('hiddenHudContainer');
             hudDisplay.classList.add('activeHud');
         }
     }
@@ -24,9 +24,9 @@ function changedHUDView(idName, changeViewTo) {
             var activeHud = document.getElementsByClassName('activeHud')[0];
             if (activeHud) {
                 activeHud.classList.remove('activeHud');
-                activeHud.classList.add('hudContainer');
+                activeHud.classList.add('hiddenHudContainer');
             }
-            hudDisplay.classList.remove('hudContainer');
+            hudDisplay.classList.remove('hiddenHudContainer');
             hudDisplay.classList.add('activeHud');
         }
     }
@@ -46,13 +46,13 @@ function updateUnitsStrength(data) {
 
 function addHudListeners() {
     document.getElementById('game_hud_tab').onclick = function () {
-        changedHUDView('game_hud');
+        presentHudToUser('game_hud');
     };
-    document.getElementById('game_hud_deployment_commit_tab').onclick = function () {
-        changedHUDView('game_hud_deploy_commit');
+    document.getElementById('game-hud-deployment-commit-tab').onclick = function () {
+        presentHudToUser('game-hud-deployment-commit-hud');
     };
     document.getElementById('game_hud_deployment_deploy_tab').onclick = function () {
-        changedHUDView('game_hud_deploy_deploy');
+        presentHudToUser('game_hud_deploy_deploy');
     };
 }
 
@@ -141,8 +141,8 @@ function toggleDeploymentSubPanelButtons(activateButtons) {
 }
 
 function displayDeploymentCommitTab(deployData) {
-    document.getElementById('game_hud_deployment_commit_tab').style.display = 'block';
-    changedHUDView('game_hud_deploy_commit');
+    document.getElementById('game-hud-deployment-commit-tab').style.display = 'block';
+    presentHudToUser('game-hud-deployment-commit-hud');
     toggleDeploymentSubPanelButtons(true);
 
     var playerRace = getPlayersRace();
@@ -150,8 +150,8 @@ function displayDeploymentCommitTab(deployData) {
 
     document.getElementById("commit-deploy-button").onclick = function () {
         toggleDeploymentSubPanelButtons(false);
-        document.getElementById('game_hud_deployment_commit_tab').style.display = 'none';
-        changedHUDView('game_hud_deploy_commit');
+        document.getElementById('game-hud-deployment-commit-tab').style.display = 'none';
+        presentHudToUser('game-hud-deployment-commit-hud');
 
         var infantryToDeploy = parseInt(document.getElementById('infantry-value').textContent);
         var rangedToDeploy = parseInt(document.getElementById('ranged-value').textContent);
@@ -173,7 +173,7 @@ function displayDeploymentCommitTab(deployData) {
 function displayDeploymentDeployTab(deploymentInfo) {
     hideModal();
     document.getElementById('game_hud_deployment_deploy_tab').style.display = 'block';
-    changedHUDView('game_hud_deploy_deploy', true);
+    presentHudToUser('game_hud_deploy_deploy', true);
     let race = getPlayersRace();
     document.getElementById('committed-infantry-value').textContent = deploymentInfo[race].infantryToDeploy;
     document.getElementById('committed-ranged-value').textContent = deploymentInfo[race].rangedToDeploy;
@@ -187,7 +187,7 @@ function displayDeploymentDeployTab(deploymentInfo) {
 
 function hideAndResetDeploymentElements() {
     document.getElementById('game_hud_deploy_deploy').classList.remove('activeHud');
-    document.getElementById('game_hud_deploy_deploy').classList.add('hudContainer');
+    document.getElementById('game_hud_deploy_deploy').classList.add('hiddenHudContainer');
     document.getElementById('game_hud_deployment_deploy_tab').style.display = 'none';
     document.getElementById('infantry-deploy-value').textContent = "0";
     document.getElementById('ranged-deploy-value').textContent = "0";

@@ -9,18 +9,10 @@
     bottom: 10px;
 }
 
-/* Hud Display*/
-.activeHud {
-    display: block;
-    width: 100%;
-    height: 200px;
-    padding: 0;
-    background-color: #C0C0C0;
-}
-
 .panel-body {
     background-color: #C0C0C0;
     border: transparent;
+    display: flex;
 }
 
 .navbar.navbar-default.navbar-fixed-bottom {
@@ -229,11 +221,6 @@ a {
 
 .highlight {
     -webkit-filter: saturate(1.1) brightness(125%);
-    /*other options for highlighting*/
-    /*-webkit-filter: brightness(125%);*/
-    /*-webkit-filter: sepia(70%);*/
-    /*-webkit-filter: hue-rotate(320deg);*/
-    /*-webkit-filter: opacity(.5);*/
 }
 
 .modalDialog {
@@ -295,14 +282,10 @@ a {
 }
 
 .deployment-panel-open {
-    /*position: absolute;*/
-    z-index: 3000;
-    bottom: 10px;
+    display: flex;
     background: #1c456c;
     overflow: hidden;
     transition: all 1s ease-in-out;
-    width: 345px;
-    height: 175px;
 }
 
 .deployment-deploy-panel-open {
@@ -466,6 +449,7 @@ li.dropdown {
     bottom: 10px;
     left: 10px;
     right: 10px;
+    max-height: 40%;
 }
 
 .hud-tab {
@@ -476,6 +460,8 @@ li.dropdown {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     margin-right: 2px;
+    /* width: 10%; */
+    min-width: 160px;
 }
 
 .hud-tab:hover {
@@ -484,17 +470,24 @@ li.dropdown {
 
 .container {
     display: none;
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    background-color: #9E9E9E;
-    height: 24%;
-    border: 2px solid
 }
 
+.hero-image {
+    width: 10%;
+    min-width: 160px;
+    /* height: 10%;
+    max-height: 175px; */
+    height: 4%;
+    max-height: 22%;
+}
 
-#game_hud_deployment_commit_tab {
+/* Hud Display*/
+.activeHud {
+    display: flex;
+    background-color: #C0C0C0;
+}
+
+#game-hud-deployment-commit-tab {
     display: none;
 }
 
@@ -541,3 +534,4 @@ tr {
 .game-state-row {
     background-color: transparent;
 }
+

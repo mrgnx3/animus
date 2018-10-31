@@ -193,7 +193,7 @@ def all_orders_are_set(game, player):
     if len(waiting_on_list) == 0:
         gm.log(game, "All player orders have been set for this round switching to movement phase".format(game))
         gm.set_phase(game, "movement")
-        emit('refreshMapView', room=game)
+        emit('refreshTiles', {"tilesToRefresh": gm.get_game_by_name(game)['units']}, room=game)
         time.sleep(1)
         next_movement_action(game)
 
@@ -255,7 +255,9 @@ def game_has_entered_an_ending_condition(game):
 def move_to_recruiting_phase(game):
     gm.log(game, "ENTERING THE RECRUITING PHASE")
     gm.set_phase(game, "recruiting")
+    emit('updatePhaseInfo', room=game)
     # todo
+    emit('deploymentCommitPhase', room=game)
 
 def move_to_harvest_phase(game):
     gm.log(game, "ENTERING THE HARVEST PHASE")
@@ -264,6 +266,7 @@ def move_to_harvest_phase(game):
     emit('refreshMapView', room=game)
     gm.update_harvest_totals(game) 
     emit('updateHarvestInformation', room=game) 
+    time.sleep(2)
     move_to_recruiting_phase(game)
 
 def process_move_order(game, race_turn_order):

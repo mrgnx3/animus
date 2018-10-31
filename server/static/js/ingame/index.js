@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
 
     game_socket.on('updateHarvestInformation', function () {
-        getHudStatistics(updateHudStatistics);
+        getHudStatistics(updateGameInfoHudStatistics);
         removeHarvestTokens();
     });
 

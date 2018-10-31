@@ -28,8 +28,10 @@ class AnimusTest(LiveServerTestCase):
             print("Mongodb server not available")
             exit(1)
 
-        cls.player_one = Player('player_one')
-        cls.player_two = Player('player_two')
+        headless = True
+        cls.post_test_wait = False
+        cls.player_one = Player('player_one', headless=headless)
+        cls.player_two = Player('player_two', headless=headless)
 
     @classmethod
     def tearDownClass(cls):
@@ -98,7 +100,8 @@ class AnimusTest(LiveServerTestCase):
         # Game - Winning condition
 
         # Post Game Screen
-        # time.sleep(360)
+        if(self.post_test_wait):
+            time.sleep(360)
 
         # Sucess
 

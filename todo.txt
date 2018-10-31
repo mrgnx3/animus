@@ -1,14 +1,43 @@
+Core:
+    # Game - Combat
+        resolve_merging_forces(game, origin_index, target_index):
+        resolve_combat(game, origin_index, target_index):
+    
+    # Game - Recruiting / Deployment
+
+                    -> Recruitment phase:
+
+                            - Emit phase entry event
+                                                        - catch event
+                                                        - Hide active HUD if any
+                                                        - Display recruitment commit HUD and tab
+                                                        - Add listeners for tallying commit totals / commit button
+                                                        - send "all done"   (**HERE**)
+                            -  catch event 
+                            -  send update to all players
+                            -  wait for all players to commit 
+
+    # Game - Event cards
+    # Game - End of round
+    # Game - Winning condition
+    # Game - End 
+
+Major:
+  - Fix client side state issues on refresh
+
+Minor:
+  - Understand and remove "MongoClient opened before fork. Create MongoClient only " error from tests
+  - Add 'enter' key listener for Game and Name entry
+  - remove move unit time.sleeps. . .
+  - refactor ingame js code to play nice
+  - deploy-commit tab isn't being displayed on click 
 
 
- State:
-    -> Broken the last step of the test case, which didn't work already
 
- Start Movement cycle
-    -> Player index doesn't rotate until players moves are all exercised
-    -> Waiting on doesn't update
 
- Fix Game information HUD
 
- Add 'enter' key listener for Game and Name entry
 
- Fix client side state issues on refresh
+
+
+
+

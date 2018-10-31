@@ -5,7 +5,7 @@
             background-color: #345498;">Game information</a>
         </li>
         <li class="">
-            <a id="game_hud_deployment_commit_tab" href="#" data-toggle="tab" aria-expanded="false" style="color: #f6f6f6;
+            <a id="game-hud-deployment-commit-tab" href="#" data-toggle="tab" aria-expanded="false" style="color: #f6f6f6;
             background-color: #98273b; display: none">Deployment</a>
         </li>
         <li class="">
@@ -13,7 +13,7 @@
             background-color: #3e9851; display: none">Deployment</a>
         </li>
     </ul>
-    <div class="container hudContainer" id="game_hud">
+    <div class="container hiddenHudContainer" id="game_hud">
         <div class="panel panel-primary">
     <div class="panel-body">
         <div id="race_bio" style="width:150px;margin-right: 20px;float: left">
@@ -93,10 +93,10 @@
     </div>
 </div>
     </div>
-    <div class="container hudContainer" id="game_hud_deploy_commit">
-        {% include '../hud/game_hud_deploy_commit.html' %}
+    <div class="container hiddenHudContainer" id="game-hud-deployment-commit-hud">
+        {% include '../hud/game-hud-deployment-commit-hud.html' %}
     </div>
-    <div class="container hudContainer" id="game_hud_deploy_deploy">
+    <div class="container hiddenHudContainer" id="game_hud_deploy_deploy">
         {% include '../hud/game_hud_deploy_deploy.html' %}
     </div>
 </nav>

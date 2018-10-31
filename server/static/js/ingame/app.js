@@ -457,7 +457,7 @@ function deployingUnits(nextPlayer, deploymentInfo) {
         document.getElementById('game_hud_deployment_deploy_tab').style.display = 'none';
         if (document.getElementById('game_hud_deploy_deploy').classList.contains('activeHud')) {
             document.getElementById('game_hud_deploy_deploy').classList.remove('activeHud');
-            document.getElementById('game_hud_deploy_deploy').classList.add('hudContainer');
+            document.getElementById('game_hud_deploy_deploy').classList.add('hiddenHudContainer');
             changedHUDView('game_hud', true);
         }
     }

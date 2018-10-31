@@ -438,6 +438,6 @@ function RenderMap(boardBackgroundMap, isFirstInitializationOfMap) {
             hexes[i].className += " desert";
     }
     GetMapUnits(cols, drawAllUnits);
-    addHudListeners();
+    addGameInfoHudListeners();
 }
 

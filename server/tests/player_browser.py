@@ -10,9 +10,9 @@ def get_hex_id_from_index(index):
     return 'x_{0}_y_{1}'.format(index % 24, index // 24)
 
 class Player:
-    def __init__(self, player_name, server_url='http://127.0.0.1:5000/', timeout=5):
+    def __init__(self, player_name, server_url='http://127.0.0.1:5000/', timeout=5, headless=True):
         options = Options()
-        options.headless = True
+        options.headless = headless
         self.timeout = timeout
         self.player_name = player_name
         self.driver = webdriver.Chrome(options=options)
@@ -86,8 +86,8 @@ class Player:
         self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME,'action-display'))).click()
 
         for unit in hex_element.find_elements_by_tag_name('g'):
+            time.sleep(0.5)
             unit.click()
-            time.sleep(0.4)
 
         target_xpath = '//*[@id="x_{0}_y_{1}"]'.format(target % 24, target // 24)
         self.driver.find_elements(By.XPATH, target_xpath)[0].click()
@@ -95,7 +95,6 @@ class Player:
     def check_harvest_information(self, race, expected):
         self.driver.find_element_by_id('game-information-tab').click()
         return self.wait.until(EC.text_to_be_present_in_element((By.ID, "{0}-harvest-count".format(race.lower())), expected))
-        # return True
 
     def dismiss_modal(self):
         self.wait.until(EC.element_to_be_clickable((By.ID,'gameModalBody'))).click()
