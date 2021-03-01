@@ -40,43 +40,34 @@
                     <h1>Select your hero</h1>
                 </div>
                 <div class="card-holder">
-                    <sc-card axis="Y" duration="1200">
-                        <div class="umbra"></div>
-                        <div class="penumbra"></div>
-                        <div class="back" tabindex="-1">
+                    <div class="hero_container">
+                        <div class="hero_card" class="shadow">
+                        <div class="front face {{ race }}-attack"></div>
+                        <div class="back face center">
                             <h1>OFFENSE</h1><br/>
                             <h3>+1 to all attacks</h3>
-                            <button>Flip card</button>
                         </div>
-                        <div class="front {{ race }}-attack" tabindex="-1">
-                            <button>Flip card</button>
                         </div>
-                    </sc-card>
-                    <sc-card axis="Y" duration="1200">
-                        <div class="umbra"></div>
-                        <div class="penumbra"></div>
-                        <div class="back" tabindex="-1">
+                    </div>
+                    <div class="hero_container">
+                        <div class="hero_card" class="shadow">
+                        <div class="front face {{ race }}-defence"></div>
+                        <div class="back face center">
                             <h1>DEFENCE</h1><br/>
                             <h3>+3 to all Defences</h3>
                             <h3>-1 to all Attacks</h3>
-                            <button>Flip card</button>
                         </div>
-                        <div class="front {{ race }}-defence" tabindex="-1">
-                            <button>Flip card</button>
                         </div>
-                    </sc-card>
-                    <sc-card axis="Y" duration="1200">
-                        <div class="umbra"></div>
-                        <div class="penumbra"></div>
-                        <div class="back" tabindex="-1">
+                    </div>
+                    <div class="hero_container">
+                        <div class="hero_card" class="shadow">
+                        <div class="front face {{ race }}-business"></div>
+                        <div class="back face center">
                             <h1>ECONOMY</h1><br/>
                             <h3>+2 to all Harvests</h3>
-                            <button>Flip card</button>
                         </div>
-                        <div class="front {{ race }}-business" tabindex="-1">
-                            <button>Flip card</button>
                         </div>
-                    </sc-card>
+                    </div>
                 </div>
                 <div class='hero-button-select'>
                     <button class='hero-button' id="hero-button-{{ race }}-attack"></button>
@@ -94,6 +85,5 @@
     <script src="https://cdn.socket.io/3.1.1/socket.io.min.js" integrity="sha384-gDaozqUvc4HTgo8iZjwth73C6dDDeOJsAgpxBcMpZYztUfjHXpzrpdrHRdVp8ySO" crossorigin="anonymous"></script>
     <script type="text/javascript" src="/static/js/cookieManager.js"></script>
     <script type="text/javascript" src="/static/js/lobby.js"></script>
-    <script type="text/javascript" src="/static/js/card-flip.js"></script>
 </footer>
 </html>

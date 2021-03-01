@@ -107,4 +107,5 @@ class SCFlipCard extends HTMLElement {
     }
 }
 
-document.registerElement('sc-card', SCFlipCard);
+let customElementRegistry = window.customElements;
+customElements.define('sc-card', SCFlipCard);

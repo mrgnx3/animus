@@ -1,411 +1,374 @@
 body {
-    font-family: 'Open Sans', sans-serif;
-    line-height: 1.75em;
-    font-size: 16px;
-    background-color: #222;
-    color: #aaa;
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.75em;
+  font-size: 16px;
+  background-color: #222;
+  color: #aaa;
 }
 
 .tg {
-    border-collapse: collapse;
-    border-spacing: 0;
-    border-color: #999;
-    min-width: 140px;
-    width: 100%;
-    margin-bottom: 10px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-color: #999;
+  min-width: 140px;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .tg td {
-    font-size: 14px;
-    padding: 4px 20px;
-    border-width: 1px;
-    overflow: hidden;
-    word-break: normal;
-    border-color: #999;
-    color: #444;
-    background-color: #F7FDFA;
+  font-size: 14px;
+  padding: 4px 20px;
+  border-width: 1px;
+  overflow: hidden;
+  word-break: normal;
+  border-color: #999;
+  color: #444;
+  background-color: #f7fdfa;
 }
 
 .tg .ta {
-    padding: 3px 6px;
-    min-width: 200px;
+  padding: 3px 6px;
+  min-width: 200px;
 }
 
 .tg th {
-    font-size: 24px;
-    font-weight: normal;
-    padding-top: 20px;
-    padding-right: 0px;
-    padding-bottom: 20px;
-    padding-left: 5px;
-    overflow: hidden;
-    word-break: normal;
-    border-color: #fff;
-    color: #fff;
-    background-color: #057c80;
+  font-size: 24px;
+  font-weight: normal;
+  padding-top: 20px;
+  padding-right: 0px;
+  padding-bottom: 20px;
+  padding-left: 5px;
+  overflow: hidden;
+  word-break: normal;
+  border-color: #fff;
+  color: #fff;
+  background-color: #057c80;
 }
 
 tbody {
-    display: block;
-    max-height: 379px;
-    overflow-y: scroll;
+  display: block;
+  max-height: 379px;
+  overflow-y: scroll;
 }
 
 #lobbyPlayerTable {
-    display: block;
-    max-height: 379px;
-    overflow-y: scroll;
+  display: block;
+  max-height: 379px;
+  overflow-y: scroll;
 }
 
 .joinGameButton {
-    box-shadow: inset 0px 1px 3px 0px #91b8b3;
-    background: #069927;
-    border-radius: 5px;
-    border: 1px solid #566963;
-    display: inline-block;
-    cursor: pointer;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: bold;
-    padding: 11px 23px;
-    text-decoration: none;
-    text-shadow: 0px -1px 0px #2b665e;
+  box-shadow: inset 0px 1px 3px 0px #91b8b3;
+  background: #069927;
+  border-radius: 5px;
+  border: 1px solid #566963;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 11px 23px;
+  text-decoration: none;
+  text-shadow: 0px -1px 0px #2b665e;
 }
 
 .joinGameButton:hover {
-    background: #52c426;
+  background: #52c426;
 }
 
 .joinGameButton:active {
-    position: relative;
-    top: 1px;
+  position: relative;
+  top: 1px;
 }
 
 .txtInput {
-    width: 100%;
-    resize: none;
-    text-align-last: center;
-    font-size: medium;
+  width: 100%;
+  resize: none;
+  text-align-last: center;
+  font-size: medium;
 }
 
 .mediumtxtInput {
-    width: 100%;
-    min-height: 30px;
-    resize: none;
-    text-align-last: center;
-    font-size: medium;
+  width: 100%;
+  min-height: 30px;
+  resize: none;
+  text-align-last: center;
+  font-size: medium;
 }
 
 #userReg {
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    width: 50%;
-    height: 20%;
-    min-height: 178px;
-    background-color: #057c80;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 50%;
+  height: 20%;
+  min-height: 178px;
+  background-color: #057c80;
 }
 
 #createGameArea {
-    background-color: #057c80;
-    min-width: 500px;
-    min-height: 216px;
+  background-color: #057c80;
+  min-width: 500px;
+  min-height: 216px;
 }
 
 .large {
-    height: 100%;
-    width: 100%
+  height: 100%;
+  width: 100%;
 }
 
-#newUserButton, #clearCookieButton {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%) translateY(10%);
-    box-shadow: inset 0px 1px 3px 0px #91b8b3;
-    background: #00bcd4;
-    border-radius: 5px;
-    border: 1px solid #566963;
-    display: inline-block;
-    cursor: pointer;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: bold;
-    padding: 11px 23px;
-    text-decoration: none;
-    text-shadow: 0px -1px 0px #2b665e;
-    bottom: 10%;
+#newUserButton,
+#clearCookieButton {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(10%);
+  box-shadow: inset 0px 1px 3px 0px #91b8b3;
+  background: #00bcd4;
+  border-radius: 5px;
+  border: 1px solid #566963;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 11px 23px;
+  text-decoration: none;
+  text-shadow: 0px -1px 0px #2b665e;
+  bottom: 10%;
 }
 
 .claimRaceButton {
-    box-shadow: inset 0px 1px 3px 0px #91b8b3;
-    background: #00bcd4;
-    border-radius: 5px;
-    border: 1px solid #566963;
-    display: inline-block;
-    cursor: pointer;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: bold;
-    padding: 5px 5px;
-    text-decoration: none;
-    text-shadow: 0px -1px 0px #2b665e;
+  box-shadow: inset 0px 1px 3px 0px #91b8b3;
+  background: #00bcd4;
+  border-radius: 5px;
+  border: 1px solid #566963;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px 5px;
+  text-decoration: none;
+  text-shadow: 0px -1px 0px #2b665e;
 }
 
 #playerCountSelector {
-    width: 100%;
-    font-size: 18px;
-    text-align-last: center;
+  width: 100%;
+  font-size: 18px;
+  text-align-last: center;
 }
 
 #createGameButton {
-    box-shadow: inset 0px 1px 3px 0px #91b8b3;
-    background: rgb(192, 65, 65);
-    border-radius: 5px;
-    border: 1px solid #566963;
-    display: inline-block;
-    cursor: pointer;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: bold;
-    padding: 11px 23px;
-    text-decoration: none;
-    text-shadow: 0px -1px 0px #2b665e;
-    width: 50%;
-    text-align: center;
-    margin-left: 20%;
-    margin-top: 6%;
+  box-shadow: inset 0px 1px 3px 0px #91b8b3;
+  background: rgb(192, 65, 65);
+  border-radius: 5px;
+  border: 1px solid #566963;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 11px 23px;
+  text-decoration: none;
+  text-shadow: 0px -1px 0px #2b665e;
+  width: 50%;
+  text-align: center;
+  margin-left: 20%;
+  margin-top: 6%;
 }
 
 .gbtg {
-    padding: 0;
+  padding: 0;
 }
 
 #content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }
 
 #chatContent {
-    width: 400px;
-    height: 250px;
-    margin: 0 0 20px 0;
-    border: solid 1px #999;
-    overflow-y: scroll;
+  width: 400px;
+  height: 250px;
+  margin: 0 0 20px 0;
+  border: solid 1px #999;
+  overflow-y: scroll;
 }
 
 #chatInputField {
-    width: 350px;
+  width: 350px;
 }
 
 #playerStatusTable {
-    width: 40%;
-    float: right;
+  width: 40%;
+  float: right;
 }
 
 #lobbyChat {
-    width: 50%;
-    float: left;
+  width: 50%;
+  float: left;
 }
 
 #subWelcomeText {
-    text-align: center;
-    color: rgb(192, 65, 65);
+  text-align: center;
+  color: rgb(192, 65, 65);
 }
 
 /* The Modal (background) */
 .heroSelectModal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0); /* Fallback color */
-    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
 .heroSelectModal-content {
-    background-color: #fefefe;
-    margin: 8% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+  background-color: #fefefe;
+  margin: 8% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .hero-select-title {
-    text-align: center;
-    font-size: x-large;
+  text-align: center;
+  font-size: x-large;
 }
 
 .hero-button-select {
-    padding-top: 2%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  padding-top: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero-button {
-    width: 260px;
-    background-color: #008CBA; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 12px;
-    margin: 0 5%;
+  width: 260px;
+  background-color: #008cba; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  margin: 0 5%;
 }
 
 .hero-button:hover {
-    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(63, 191, 76, 0.7);
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(63, 191, 76, 0.7);
 }
 
 .card-holder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-sc-card {
-    width: 260px;
-    height: 380px;
-    position: relative;
-    perspective: 500px;
-    will-change: transform;
-    margin: 0 5%;
+.Geoengineers-attack {
+  background: url(/static/img/heroes/GeoengineersAttack.jpg) center center
+    no-repeat;
+  background-size: 100% 100%;
 }
 
-sc-card .front,
-sc-card .back {
-    backface-visibility: hidden;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 3px;
-    overflow: hidden;
-    display: block;
-    text-align: center;
+.Geoengineers-business {
+  background: url(/static/img/heroes/geoEngineersbusiness.jpg) center center
+    no-repeat;
+  background-size: 100% 100%;
 }
 
-sc-card button {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: none;
-    border: none;
-    text-indent: -10000px;
+.Geoengineers-defence {
+  background: url(/static/img/heroes/geoEngineersDefence.jpg) center center
+    no-repeat;
+  background-size: 100% 100%;
 }
 
-sc-card .front {
-    color: #FFF;
+.Settlers-attack {
+  background: url(/static/img/heroes/SettlersAttack.jpg) center center no-repeat;
+  background-size: 100% 100%;
 }
 
-sc-card .front h1 {
-    font-size: xx-large;
-    text-align: center;
+.Settlers-business {
+  background: url(/static/img/heroes/Settlersbusiness.jpg) center center
+    no-repeat;
+  background-size: 100% 100%;
 }
 
-sc-card .back {
-    color: #FFF;
-    background: #444;
-    transform: rotateY(180deg);
+.Settlers-defence {
+  background: url(/static/img/heroes/SettlersDefence.jpg) center center
+    no-repeat;
+  background-size: 100% 100%;
 }
 
-sc-card .Geoengineers-attack {
-    background: url(/static/img/heroes/GeoengineersAttack.jpg) center center no-repeat;
-    background-size: 100% 100%;
+.hero_container {
+  position: relative;
+  margin: 10px auto;
+  width: 450px;
+  height: 281px;
+  z-index: 1;
 }
-
-sc-card .Geoengineers-business {
-    background: url(/static/img/heroes/geoEngineersbusiness.jpg) center center no-repeat;
-    background-size: 100% 100%;
+.hero_container {
+  perspective: 1000;
 }
-
-sc-card .Geoengineers-defence {
-    background: url(/static/img/heroes/geoEngineersDefence.jpg) center center no-repeat;
-    background-size: 100% 100%;
+.hero_card {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: all 1s linear;
 }
-
-sc-card .Settlers-attack {
-    background: url(/static/img/heroes/SettlersAttack.jpg) center center no-repeat;
-    background-size: 100% 100%;
+.hero_container:hover .hero_card {
+  transform: rotateY(180deg);
+  box-shadow: -5px 5px 5px #aaa;
 }
-
-sc-card .Settlers-business {
-    background: url(/static/img/heroes/Settlersbusiness.jpg) center center no-repeat;
-    background-size: 100% 100%;
+.face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
 }
-
-sc-card .Settlers-defence {
-    background: url(/static/img/heroes/SettlersDefence.jpg) center center no-repeat;
-    background-size: 100% 100%;
-}
-
-sc-card .umbra,
-sc-card .penumbra {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    backface-visibility: visible;
-}
-
-sc-card .umbra {
-    width: 270px;
-    height: 390px;
-    top: -5px;
-    left: -5px;
-    background: url(/static/img/umbra.svg) center center no-repeat;
-    transform: translateY(2px);
-    opacity: 0.3;
-}
-
-sc-card .penumbra {
-    width: 330px;
-    height: 450px;
-    top: -35px;
-    left: -35px;
-    background: url(/static/img/penumbra.svg) center center no-repeat;
-    transform: translateY(2px);
-    opacity: 0;
+.face.back {
+  display: block;
+  transform: rotateY(180deg);
+  box-sizing: border-box;
+  padding: 10px;
+  color: white;
+  text-align: center;
+  background-color: #aaa;
 }
 
 .largeText {
-    color: #ffffff;
-    font-size: xx-large;
-    padding: 11px 23px;
-    text-align: center;
+  color: #ffffff;
+  font-size: xx-large;
+  padding: 11px 23px;
+  text-align: center;
 }
 
 #gameNameArea {
-    display: inline;
+  display: inline;
 }
