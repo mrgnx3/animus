@@ -6,16 +6,16 @@
 
        $ mongod  --dbpath /var/animus
 
+## Setup Steps
 
-##Setup Steps
-
-    virtualenv venv
+    virtualenv -p python3 venv
     source venv/bin/activate
     pip install -r requirements.txt
 
     python server/animus.py
 
-##For Windows
+## For Windows
+
     pip install virtualenv
     pip install virtualenvwrapper-win
 
@@ -26,7 +26,8 @@
     deactivate (optional)
     workon venv (optional)
 
-##Testing
+## Testing
+
     Note:
     We test with muiltple browsers, so we need to modify flask_testing app run paramerters
     edit site-packages/flask_testing/utils.py
@@ -38,8 +39,6 @@
     source venv/bin/activate
 
     nosetests server/tests/animus_test.py
-
-
 
 ## What I'm looking to build
 
@@ -66,15 +65,15 @@
 
       -> In Game:
           -> Display
-              -> Board
-              -> Units
-              -> HUD
-              -> Game state info
+              -> Board (done)
+              -> Units  (done)
+              -> HUD     (done)
+              -> Game state info (done)
               -> In game chat
 
           Game Phases:
 
-              -> Orders
+              -> Orders  (done)
               -> Movements/Attacks
               -> Harvest/Interact
               -> Recruiting / Deployment

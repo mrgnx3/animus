@@ -6,7 +6,7 @@ import server.lib.game_model as gm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 Game = gm.GameModel()
 

@@ -19,8 +19,8 @@ from server.tests.player_browser import Player
 
 game_name = "testGame2"
 
-player_one = Player('player_one')
-player_two = Player('player_two')
+player_one = Player('player_one', headless=False)
+player_two = Player('player_two', headless=False)
 
 player_one.login_new_user()
 player_two.login_new_user()
@@ -47,3 +47,75 @@ player_two.set_order_for_index(index=53, set_order='move')
 # Game - Move attack
 player_one.move_all_units(origin=52, target=51)
 player_two.move_all_units(origin=53, target=52)
+
+
+
+
+
+
+
+import nose
+import time
+from flask_testing import LiveServerTestCase
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
+
+from server.animus import app
+from server.tests.player_browser import Player
+
+game_name = "testGame2"
+
+player_one = Player('player_one', headless=False)
+player_two = Player('player_two', headless=False)
+
+player_one_race = 'Geoengineers'
+player_two_race = 'Settlers'
+
+# Register / Login
+player_one.login_new_user()
+player_two.login_new_user()
+
+assertIn(player_one.player_name, player_one.login_get_welcome_text(), msg="player 1 login works")
+assertIn(player_two.player_name, player_two.login_get_welcome_text(), msg="player 2 login works")
+
+# Create Game
+player_one.create_game(game_name)
+assertIn('lobby', player_one.driver.current_url, msg="game created, player 1 in lobby")
+assertTrue(player_two.join_game(game_name), msg="player 2 game joined game lobby")
+
+# PreGame Lobby
+player_one.sends_lobby_message('Hi are you ready to play?')
+player_one.sends_lobby_message('Sure are you ready to get your ass handed to you?')
+assertTrue(player_two.check_lobby_messages_for('Hi are you ready to play?'))
+assertTrue(player_one.check_lobby_messages_for('Sure are you ready to get your ass handed to you?'))
+
+player_one.claim_race(race=player_one_race, hero='attack')
+player_two.claim_race(race=player_two_race, hero='defence')
+
+player_one_log = player_one.driver.get_log('browser')
+for log_entry in player_one_log:
+    assertNotIn('err', log_entry)
+    assertNotIn('fail', log_entry)
+
+# Game - Setup
+assertTrue(player_one.wait_for_redirect('game'), msg="game started, player 1 in Game")
+assertTrue(player_two.wait_for_redirect('game'), msg="game started, player 2 in Game")
+
+# Game - Dismiss welcome modal
+assertTrue(player_one.dismiss_modal())
+assertTrue(player_two.dismiss_modal())
+
+# Game - Set orders
+player_one.set_order_for_index(index=76, set_order='harvest')
+player_two.set_order_for_index(index=77, set_order='harvest')
+
+player_one.set_order_for_index(index=52, set_order='move')
+player_two.set_order_for_index(index=53, set_order='move')
+
+# Game - Move attack
+player_one.move_all_units(origin=52, target=51)
+player_two.move_all_units(origin=53, target=52)
+
+# Game - Harvest
+assertTrue(player_one.check_harvest_information(player_one_race, '1'))
+assertTrue(player_two.check_harvest_information(player_two_race, '1'))

@@ -406,7 +406,7 @@ def units_are_friendly(game, origin_index, target_index):
     origin_race = None
     target_race = None
     game_doc = get_game_by_name(game)
-    for idx, unit in enumerate(game_doc.units):
+    for unit in game_doc.units:
         if origin_index == unit['index']:
             origin_race = unit['race']
         elif target_index == unit['index']:
