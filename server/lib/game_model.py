@@ -1,73 +1,73 @@
 from datetime import datetime
-from mongoengine import *
+import mongoengine as meng
 
 
-class LobbyUser(EmbeddedDocument):
-    username = StringField(required=True)
-    is_ready = BooleanField(default=False)
+class LobbyUser(meng.EmbeddedDocument):
+    username = meng.StringField(required=True)
+    is_ready = meng.BooleanField(default=False)
 
 
-class RaceInfo(EmbeddedDocument):
-    race = StringField(required=True)
-    username = StringField(default='')
+class RaceInfo(meng.EmbeddedDocument):
+    race = meng.StringField(required=True)
+    username = meng.StringField(default='')
 
-    hero_name = StringField()
-    hero_defence_modifier = IntField(default=0)
-    hero_attack_modifier = IntField(default=0)
-    hero_harvest_modifier = IntField(default=0)
+    hero_name = meng.StringField()
+    hero_defence_modifier = meng.IntField(default=0)
+    hero_attack_modifier = meng.IntField(default=0)
+    hero_harvest_modifier = meng.IntField(default=0)
 
-    harvest_count = IntField(default=0)
-    harvest_collection_rate = IntField(default=1)
+    harvest_count = meng.IntField(default=0)
+    harvest_collection_rate = meng.IntField(default=1)
 
-    deployment_default = IntField(default=1)
-    deployment_total = IntField(default=0)
-    deployment_infantry_count = IntField(default=0)
-    deployment_ranged_count = IntField(default=0)
-    deployment_tanks_count = IntField(default=0)
+    deployment_default = meng.IntField(default=1)
+    deployment_total = meng.IntField(default=0)
+    deployment_infantry_count = meng.IntField(default=0)
+    deployment_ranged_count = meng.IntField(default=0)
+    deployment_tanks_count = meng.IntField(default=0)
 
-    units = ListField()
+    units = meng.ListField()
 
 
-class Game(Document):
-    name = StringField(max_length=60, required=True, unique=True)
-    player_count = IntField(required=True)
-    active_races = ListField(required=True)
+class Game(meng.Document):
+    name = meng.StringField(max_length=60, required=True, unique=True)
+    player_count = meng.IntField(required=True)
+    active_races = meng.ListField(required=True)
 
-    round = IntField(default=1)
-    phase = StringField(default='orders')
-    phase_waiting_on = ListField(default=[])
-    race_in_play = StringField(default='')
+    round = meng.IntField(default=1)
+    phase = meng.StringField(default='orders')
+    phase_waiting_on = meng.ListField(default=[])
+    race_in_play = meng.StringField(default='')
 
-    action_order = ListField(default=[])
-    move_order_list = ListField(default=[])
+    action_order = meng.ListField(default=[])
+    move_order_list = meng.ListField(default=[])
 
-    units = ListField()
-    rounds_max_number = IntField(default=3)
+    units = meng.ListField()
+    rounds_max_number = meng.IntField(default=3)
 
-    uuids = ListField()
-    geoengineers = EmbeddedDocumentField(RaceInfo)
-    settlers = EmbeddedDocumentField(RaceInfo)
-    kingdomwatchers = EmbeddedDocumentField(RaceInfo)
-    periplaneta = EmbeddedDocumentField(RaceInfo)
-    reduviidae = EmbeddedDocumentField(RaceInfo)
-    guardians = EmbeddedDocumentField(RaceInfo)
+    uuids = meng.ListField()
+    geoengineers = meng.EmbeddedDocumentField(RaceInfo)
+    settlers = meng.EmbeddedDocumentField(RaceInfo)
+    kingdomwatchers = meng.EmbeddedDocumentField(RaceInfo)
+    periplaneta = meng.EmbeddedDocumentField(RaceInfo)
+    reduviidae = meng.EmbeddedDocumentField(RaceInfo)
+    guardians = meng.EmbeddedDocumentField(RaceInfo)
 
-    races_to_commit = ListField()
-    races_to_deploy = ListField()
+    races_to_commit = meng.ListField()
+    races_to_deploy = meng.ListField()
 
-    chat_log = ListField()
-    game_log = ListField()
+    chat_log = meng.ListField()
+    game_log = meng.ListField()
 
-    display_open_modal = ListField()
+    display_open_modal = meng.ListField()
 
-    is_lobby_open = BooleanField(default=True)
-    lobby_status = ListField(EmbeddedDocumentField(LobbyUser))
-    created_at = DateTimeField(default=datetime.now())
+    is_lobby_open = meng.BooleanField(default=True)
+    lobby_status = meng.ListField(meng.EmbeddedDocumentField(LobbyUser))
+    created_at = meng.DateTimeField(default=datetime.now())
 
 
 class GameModel:
     def __init__(self, host='localhost', port=27017, db_name='animus'):
-        connect(db_name, host=host, port=port)
+        meng.connect(db_name, host=host, port=port)
 
     @staticmethod
     def create_game(game_name, player_count=2):
@@ -95,33 +95,47 @@ class GameModel:
             guardians = None
         elif player_count == 4:
             units = get_base_units(player_count=player_count)
-            active_races = ['geoengineers', 'settlers', 'kingdomwatchers', 'periplaneta']
-            action_order = ["geoengineers", "settlers", "kingdomwatchers", "periplaneta"]
+            active_races = [
+                'geoengineers', 'settlers', 'kingdomwatchers', 'periplaneta'
+            ]
+            action_order = [
+                "geoengineers", "settlers", "kingdomwatchers", "periplaneta"
+            ]
             reduviidae = None
             guardians = None
         elif player_count == 5:
             units = get_base_units(player_count=player_count)
-            active_races = ['geoengineers', 'settlers', 'kingdomwatchers', 'periplaneta', 'reduviidae']
-            action_order = ["geoengineers", "settlers", "kingdomwatchers", "periplaneta", "reduviidae"]
+            active_races = [
+                'geoengineers', 'settlers', 'kingdomwatchers', 'periplaneta',
+                'reduviidae'
+            ]
+            action_order = [
+                "geoengineers", "settlers", "kingdomwatchers", "periplaneta",
+                "reduviidae"
+            ]
             guardians = None
         else:
             units = get_base_units(player_count=player_count)
-            active_races = ['geoengineers', 'settlers', 'kingdomwatchers', 'periplaneta', 'reduviidae', 'guardians']
-            action_order = ["geoengineers", "settlers", "kingdomwatchers", "periplaneta", "reduviidae", "guardians"]
+            active_races = [
+                'geoengineers', 'settlers', 'kingdomwatchers', 'periplaneta',
+                'reduviidae', 'guardians'
+            ]
+            action_order = [
+                "geoengineers", "settlers", "kingdomwatchers", "periplaneta",
+                "reduviidae", "guardians"
+            ]
 
-        return Game(
-            name=game_name,
-            player_count=player_count,
-            active_races=active_races,
-            geoengineers=geoengineers,
-            settlers=settlers,
-            kingdomwatchers=kingdomwatchers,
-            periplaneta=periplaneta,
-            reduviidae=reduviidae,
-            guardians=guardians,
-            units=units,
-            action_order=action_order
-        ).save()
+        return Game(name=game_name,
+                    player_count=player_count,
+                    active_races=active_races,
+                    geoengineers=geoengineers,
+                    settlers=settlers,
+                    kingdomwatchers=kingdomwatchers,
+                    periplaneta=periplaneta,
+                    reduviidae=reduviidae,
+                    guardians=guardians,
+                    units=units,
+                    action_order=action_order).save()
 
 
 def get_base_map():
@@ -152,64 +166,59 @@ def get_base_map():
 
 def get_base_units(player_count=2):
     if player_count == 2:
-        return [
-            {
-                "race": "geoengineers",
-                "posX": 4,
-                "posY": 3,
-                "index": 76,
-                "infantry": 1,
-                "ranged": 1,
-                "tanks": 1,
-                "infantry_selected": False,
-                "ranged_selected": False,
-                "tanks_selected": False,
-                "order": "notSet",
-                "token_is_active": False
-            },
-            {
-                "race": "geoengineers",
-                "posX": 4,
-                "posY": 2,
-                "index": 52,
-                "infantry": 2,
-                "ranged": 2,
-                "tanks": 4,
-                "infantry_selected": False,
-                "ranged_selected": False,
-                "tanks_selected": False,
-                "order": "notSet",
-                "token_is_active": False
-            },
-            {
-                "race": "settlers",
-                "posX": 5,
-                "posY": 2,
-                "index": 53,
-                "infantry": 1,
-                "ranged": 2,
-                "tanks": 1,
-                "infantry_selected": False,
-                "ranged_selected": False,
-                "tanks_selected": False,
-                "order": "notSet",
-                "token_is_active": False
-            },
-            {
-                "race": "settlers",
-                "posX": 5,
-                "posY": 3,
-                "index": 77,
-                "infantry": 0,
-                "ranged": 0,
-                "tanks": 1,
-                "infantry_selected": False,
-                "ranged_selected": False,
-                "tanks_selected": False,
-                "order": "notSet",
-                "token_is_active": False
-            }
-        ]
+        return [{
+            "race": "geoengineers",
+            "posX": 4,
+            "posY": 3,
+            "index": 76,
+            "infantry": 1,
+            "ranged": 1,
+            "tanks": 1,
+            "infantry_selected": False,
+            "ranged_selected": False,
+            "tanks_selected": False,
+            "order": "notSet",
+            "token_is_active": False
+        }, {
+            "race": "geoengineers",
+            "posX": 4,
+            "posY": 2,
+            "index": 52,
+            "infantry": 2,
+            "ranged": 2,
+            "tanks": 4,
+            "infantry_selected": False,
+            "ranged_selected": False,
+            "tanks_selected": False,
+            "order": "notSet",
+            "token_is_active": False
+        }, {
+            "race": "settlers",
+            "posX": 5,
+            "posY": 2,
+            "index": 53,
+            "infantry": 1,
+            "ranged": 2,
+            "tanks": 1,
+            "infantry_selected": False,
+            "ranged_selected": False,
+            "tanks_selected": False,
+            "order": "notSet",
+            "token_is_active": False
+        }, {
+            "race": "settlers",
+            "posX": 5,
+            "posY": 3,
+            "index": 77,
+            "infantry": 0,
+            "ranged": 0,
+            "tanks": 1,
+            "infantry_selected": False,
+            "ranged_selected": False,
+            "tanks_selected": False,
+            "order": "notSet",
+            "token_is_active": False
+        }]
     else:
         return None
 
@@ -253,7 +262,10 @@ def hero_selected(race, hero_type, game_name, player_name):
     else:
         game[race]['hero_harvest_modifier'] = 2
     game.save()
-    log(game_name, '{0} has selected a hero of type: \'{1}\' for race {2}'.format(player_name, hero_type, race))
+    log(
+        game_name,
+        f'{player_name} has selected a hero of type: \'{hero_type}\' for race {race}'
+    )
 
 
 def all_races_are_claimed(game_name):
@@ -286,16 +298,24 @@ def get_players_race_info(game_name, player_name):
 def get_lore(race, lore_type='history'):
     lore = {
         "geoengineers": {
-            "history": "<h1>Fear The Many Faced God</h1><img src='http://orig02.deviantart.net/08ea/f/2011/312/2/0/experiments___janus_by_jeffsimpsonkh-d4fkwyl.jpg' style='width:80%; margin-left:9%;margin-right:9%'/><p>Kingdom watchers coming to fuck you up</p>",
-            "attack_leader_bio": "<h1>Tough as nails</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
-            "defence_leader_bio": "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
-            "business_leader_bio": "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>"
+            "history":
+            "<h1>Fear The Many Faced God</h1><img src='http://orig02.deviantart.net/08ea/f/2011/312/2/0/experiments___janus_by_jeffsimpsonkh-d4fkwyl.jpg' style='width:80%; margin-left:9%;margin-right:9%'/><p>Kingdom watchers coming to fuck you up</p>",
+            "attack_leader_bio":
+            "<h1>Tough as nails</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+            "defence_leader_bio":
+            "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+            "business_leader_bio":
+            "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>"
         },
         "settlers": {
-            "history": "<h1>We've been here longer than you</h1><img src='http://orig13.deviantart.net/a1f7/f/2012/094/e/c/ancient_battle_by_wraithdt-d4v1v25.jpg' style='width:80%; margin-left:9%;margin-right:9%'/><p>Periplaneta are old as shit</p>",
-            "attack_leader_bio": "<h1>Tough as nails</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
-            "defence_leader_bio": "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
-            "business_leader_bio": "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>"
+            "history":
+            "<h1>We've been here longer than you</h1><img src='http://orig13.deviantart.net/a1f7/f/2012/094/e/c/ancient_battle_by_wraithdt-d4v1v25.jpg' style='width:80%; margin-left:9%;margin-right:9%'/><p>Periplaneta are old as shit</p>",
+            "attack_leader_bio":
+            "<h1>Tough as nails</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+            "defence_leader_bio":
+            "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+            "business_leader_bio":
+            "<h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>"
         }
     }
 
@@ -304,7 +324,8 @@ def get_lore(race, lore_type='history'):
 
 def set_waiting_on_to_all(game_name):
     game_doc = get_game_by_name(game_name)
-    game_doc['phase_waiting_on'].extend([game_doc[race]['username'] for race in game_doc['active_races']])
+    game_doc['phase_waiting_on'].extend(
+        [game_doc[race]['username'] for race in game_doc['active_races']])
     game_doc.save()
 
 
@@ -316,12 +337,12 @@ def add_user_to_modal_displayed_list(game_name, user):
     game_doc = get_game_by_name(game_name)
     game_doc['display_open_modal'].append(user)
     game_doc.save()
-    log(game_name, "Adding {0} to opening modal display list".format(user))
+    log(game_name, f"Adding {user} to opening modal display list")
 
 
 def log(game_name, msg, level='info', location='game_log'):
     game_doc = get_game_by_name(game_name)
-    game_doc[location].append("{0}: {1}".format(level, msg))
+    game_doc[location].append(f"{level}: {msg}")
     game_doc.save()
 
 
@@ -347,6 +368,7 @@ def set_phase(game, phase):
     game_doc.phase = phase
     game_doc.save()
 
+
 def update_harvest_totals(game):
     game_doc = get_game_by_name(game)
 
@@ -354,8 +376,10 @@ def update_harvest_totals(game):
         if "harvest" == unit['order']:
             game_doc.units[idx]['order'] = "done"
             race = game_doc.units[idx]['race']
-            game_doc[race]["harvest_count"] += 1 * game_doc[race]["harvest_collection_rate"]
+            game_doc[race]["harvest_count"] += 1 * game_doc[race][
+                "harvest_collection_rate"]
     game_doc.save()
+
 
 def set_races_with_moves_orders_list(game):
     game_doc = get_game_by_name(game)
@@ -366,7 +390,8 @@ def set_races_with_moves_orders_list(game):
             if game_doc.units[idx]['race'] not in races_with_moves_left:
                 races_with_moves_left.append(game_doc.units[idx]['race'])
 
-    game_doc.move_order_list = sorted(races_with_moves_left, key=game_doc.action_order.index)
+    game_doc.move_order_list = sorted(races_with_moves_left,
+                                      key=game_doc.action_order.index)
     game_doc.save()
     return game_doc.move_order_list
 
@@ -376,14 +401,14 @@ def get_race_in_play(game):
 
 
 def set_active_race(game, race):
-    log(game, "Marking {0} as active race".format(race), level='debug')
+    log(game, f"Marking {race} as active race", level='debug')
     game_doc = get_game_by_name(game)
     game_doc.race_in_play = race
     game_doc.save()
 
 
 def mark_unit_as_selected(game, unit_type, index):
-    log(game, "mark_unit_as_selected: {0}, {1}".format(unit_type, index), level='debug')
+    log(game, f"mark_unit_as_selected: {unit_type}, {index}", level='debug')
 
     game_doc = get_game_by_name(game)
     for idx, unit in enumerate(game_doc.units):
@@ -391,14 +416,15 @@ def mark_unit_as_selected(game, unit_type, index):
             unit_selected = '{0}_selected'.format(unit_type)
             game_doc.units[idx][unit_selected] = True
             game_doc.save()
-            return
 
 
 def index_has_units(game, target_index):
     game_doc = get_game_by_name(game)
     for idx, unit in enumerate(game_doc.units):
         if target_index == unit['index']:
-            return (game_doc.units[idx]["infantry"] + game_doc.units[idx]["ranged"] + game_doc.units[idx]["tanks"]) > 0
+            return (game_doc.units[idx]["infantry"] +
+                    game_doc.units[idx]["ranged"] +
+                    game_doc.units[idx]["tanks"]) > 0
     return False
 
 
@@ -438,7 +464,8 @@ def clean_up_index_if_empty(game, index):
     game_doc = get_game_by_name(game)
     for idx, unit in enumerate(game_doc.units):
         if index == unit['index']:
-            if game_doc.units[idx]['infantry'] + game_doc.units[idx]['ranged'] + game_doc.units[idx]['tanks'] == 0:
+            if game_doc.units[idx]['infantry'] + game_doc.units[idx][
+                    'ranged'] + game_doc.units[idx]['tanks'] == 0:
                 game_doc.units.pop(idx)
                 game_doc.save()
             return game_doc.units[idx]['race']
@@ -496,7 +523,6 @@ def set_order_for_tile_to(game, origin_index, order_value):
         if origin_index == unit['index']:
             game_doc.units[idx]['order'] = order_value
             game_doc.save()
-            return
 
 
 def set_movement_token_as_active(game, tile_index):
@@ -505,4 +531,3 @@ def set_movement_token_as_active(game, tile_index):
         if tile_index == unit['index']:
             game_doc.units[idx]['token_is_active'] = True
             game_doc.save()
-            return
