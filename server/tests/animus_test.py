@@ -1,12 +1,11 @@
-import nose
+import multiprocessing
 import time
-from flask_testing import LiveServerTestCase
-from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure
 
+import nose
+from flask_testing import LiveServerTestCase
 from server.animus import app
 from server.tests.player_browser import Player
-import multiprocessing
+
 
 class AnimusTest(LiveServerTestCase):
     player_one = None
@@ -14,7 +13,6 @@ class AnimusTest(LiveServerTestCase):
 
     def create_app(self):
         self.app = app.test_client()
-        self.app.testing = True
         return app
 
     @classmethod
@@ -25,16 +23,9 @@ class AnimusTest(LiveServerTestCase):
         # hits python 3.8+
         multiprocessing.set_start_method("fork")
 
-        cls.mongo_client = MongoClient()
         cls.game_name = "testGame"
-        try:
-            cls.mongo_client.admin.command('ismaster')
-            cls.mongo_client.animus.game.remove({"name": "{0}".format(cls.game_name)})
-        except ConnectionFailure:
-            print("Mongodb server not available")
-            exit(1)
 
-        headless = False
+        headless = True
         cls.post_test_wait = False
         cls.player_one = Player('player_one', headless=headless)
         cls.player_two = Player('player_two', headless=headless)

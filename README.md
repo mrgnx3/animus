@@ -1,44 +1,27 @@
-# animus
-
-## Dependencies:
-
-    - An instance of mongod needs to be running
-
-       $ mongod  --dbpath /var/animus
+# Animus
 
 ## Setup Steps
 
+```bash
     virtualenv -p python3 venv
     source venv/bin/activate
     pip install -r requirements.txt
+    ./in_memory_hot_patch.sh
 
+    export PYTHONPATH=$(pwd)
     python server/animus.py
-
-## For Windows
-
-    pip install virtualenv
-    pip install virtualenvwrapper-win
-
-    cd ..\animus
-
-    mkvirtualenv venv
-    setprojectdir .
-    deactivate (optional)
-    workon venv (optional)
+```
 
 ## Testing
 
-    Note:
-    We test with muiltple browsers, so we need to modify flask_testing app run paramerters
-    edit site-packages/flask_testing/utils.py
-    line: 473 app.run(port=port, use_reloader=False, *threaded=True*)
-
+```bash
     export PATH=$PATH:<PATH_TO_SeleniumDrivers>
     export PYTHONPATH=$(pwd)
 
     source venv/bin/activate
 
     nosetests server/tests/animus_test.py
+```
 
 ## What I'm looking to build
 

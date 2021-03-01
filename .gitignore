@@ -3,3 +3,4 @@ venv/
 animus.iml
 *.pyc
 .vscode
+.noseids
