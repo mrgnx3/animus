@@ -10,7 +10,7 @@ def get_hex_id_from_index(index):
     return 'x_{0}_y_{1}'.format(index % 24, index // 24)
 
 class Player:
-    def __init__(self, player_name, server_url='http://127.0.0.1:5000/', timeout=5, headless=True):
+    def __init__(self, player_name, server_url='http://127.0.0.1:5000/', timeout=5, headless=False):
         options = Options()
         options.headless = headless
         self.timeout = timeout

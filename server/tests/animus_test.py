@@ -6,7 +6,7 @@ from pymongo.errors import ConnectionFailure
 
 from server.animus import app
 from server.tests.player_browser import Player
-
+import multiprocessing
 
 class AnimusTest(LiveServerTestCase):
     player_one = None
@@ -19,6 +19,12 @@ class AnimusTest(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
+        # This line is required to avoid
+        # "Can't pickle local object 'LiveServerTestCase._spawn_live_server.<locals>.worker'"
+        # https://github.com/pytest-dev/pytest-flask/issues/104
+        # hits python 3.8+
+        multiprocessing.set_start_method("fork")
+
         cls.mongo_client = MongoClient()
         cls.game_name = "testGame"
         try:
@@ -28,7 +34,7 @@ class AnimusTest(LiveServerTestCase):
             print("Mongodb server not available")
             exit(1)
 
-        headless = True
+        headless = False
         cls.post_test_wait = False
         cls.player_one = Player('player_one', headless=headless)
         cls.player_two = Player('player_two', headless=headless)

@@ -5,4 +5,3 @@ ipython
 nose
 selenium
 mongoengine
-eventlet
