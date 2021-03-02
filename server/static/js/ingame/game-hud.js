@@ -119,9 +119,8 @@ function displayDeploymentCommitTab(deployData) {
     toggleDeploymentSubPanelButtons(true);
 
     let playerRace = getPlayersRace();
-    // document.getElementById('default-deployment-value').innerHTML = deployData[playerRace].defaultDeployment;
-    document.getElementById('default-deployment-value').innerHTML = 1;
-    
+    document.getElementById('default-deployment-value').innerHTML = deployData[playerRace]["deployment_default"];
+    document.getElementById('harvest-value').innerHTML = deployData[playerRace]["harvest_count"];
     document.getElementById("commit-deploy-button").onclick = function () {
         toggleDeploymentSubPanelButtons(false);
         document.getElementById('game-hud-deployment-commit-tab').style.display = 'none';
@@ -135,12 +134,10 @@ function displayDeploymentCommitTab(deployData) {
             infantryToDeploy: infantryToDeploy,
             rangedToDeploy: rangedToDeploy,
             tanksToDeploy: tanksToDeploy,
-            playerRace: playerRace,
-            playerName: playerName,
-            gameRoom: gameRoom
+            playerRace: playerRace
         };
 
-        game_socket.emit('commitDeploymentResources', deploymentInfo);
+        game_socket.emit('commitDeploymentResources', gameRoom, playerName, deploymentInfo);
     };
 }
 

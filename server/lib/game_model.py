@@ -1,6 +1,9 @@
+import json
 from datetime import datetime
+
 import mongoengine as meng
 
+RACES = ["geoengineers", "settlers", "kingdomwatchers", "periplaneta", "reduviidae", "guardians"]
 
 class LobbyUser(meng.EmbeddedDocument):
     username = meng.StringField(required=True)
@@ -82,6 +85,7 @@ class GameModel:
             units = get_base_units(player_count=player_count)
             active_races = ['geoengineers', 'settlers']
             action_order = ["geoengineers", "settlers"]
+            geoengineers.deployment_default = 5
             kingdomwatchers = None
             periplaneta = None
             reduviidae = None
@@ -223,12 +227,10 @@ def get_base_units(player_count=2):
         return None
 
 
-def get_game_by_name(game_name):
+def get_game_by_name(game_name: str) -> Game:
     game = Game.objects.filter(name=game_name)
     if len(game) > 0:
         return game[0]
-    else:
-        return []
 
 
 def get_games_available_to_join():
@@ -531,3 +533,11 @@ def set_movement_token_as_active(game, tile_index):
         if tile_index == unit['index']:
             game_doc.units[idx]['token_is_active'] = True
             game_doc.save()
+
+def get_deployment_data(game: str) -> dict:
+    deployment_data = {}
+    game_doc = get_game_by_name(game)
+    for race in RACES:
+        if game_doc[race]:
+            deployment_data[race] = json.loads(game_doc[race].to_json())
+    return deployment_data

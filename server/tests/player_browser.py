@@ -1,10 +1,10 @@
 import time
+
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select, WebDriverWait
 
 def get_hex_id_from_index(index):
     return 'x_{0}_y_{1}'.format(index % 24, index // 24)
@@ -13,6 +13,7 @@ class Player:
     def __init__(self, player_name, server_url='http://127.0.0.1:5000/', timeout=5, headless=False):
         options = Options()
         options.headless = headless
+        self.headless = headless
         self.timeout = timeout
         self.player_name = player_name
         self.driver = webdriver.Chrome(options=options)
@@ -99,3 +100,12 @@ class Player:
     def dismiss_modal(self):
         self.wait.until(EC.element_to_be_clickable((By.ID,'gameModalBody'))).click()
         return True
+    
+    def commit_resources(self):
+        if not self.headless:
+            time.sleep(2) # just to see it before it clicks
+        self.wait.until(EC.element_to_be_clickable((By.ID,'commit-deploy-button'))).click()
+
+    def get_waiting_on_info(self):
+        time.sleep(2) # we need to wait for socket events and callbacks
+        return self.driver.find_element_by_id('waiting-on-value').text

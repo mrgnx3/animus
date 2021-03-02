@@ -1,11 +1,12 @@
-import multiprocessing
-import time
-
 import nose
+import time
 from flask_testing import LiveServerTestCase
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
+
 from server.animus import app
 from server.tests.player_browser import Player
-
+import multiprocessing
 
 class AnimusTest(LiveServerTestCase):
     player_one = None
@@ -13,6 +14,7 @@ class AnimusTest(LiveServerTestCase):
 
     def create_app(self):
         self.app = app.test_client()
+        self.app.testing = True
         return app
 
     @classmethod
@@ -23,12 +25,30 @@ class AnimusTest(LiveServerTestCase):
         # hits python 3.8+
         multiprocessing.set_start_method("fork")
 
+        cls.mongo_client = MongoClient()
         cls.game_name = "testGame"
+        try:
+            cls.mongo_client.admin.command('ismaster')
+            cls.mongo_client.animus.game.remove({"name": "{0}".format(cls.game_name)})
+        except ConnectionFailure:
+            print("Mongodb server not available")
+            exit(1)
 
-        headless = True
+        headless = False
         cls.post_test_wait = False
+        
         cls.player_one = Player('player_one', headless=headless)
+        cls.player_one.driver.set_window_position(0, 0, windowHandle='current')
+        cls.player_one.driver.maximize_window()
+        cls.dem = cls.player_one.driver.get_window_size()
+        
+        cls.player_one.driver.set_window_position(0, 0, windowHandle='current')
+        cls.player_one.driver.set_window_size(cls.dem['width'] // 2, cls.dem['height'])
+
         cls.player_two = Player('player_two', headless=headless)
+        cls.player_two.driver.set_window_position(0, 0, windowHandle='current')
+        cls.player_two.driver.set_window_size(cls.dem['width'] // 2, cls.dem['height'])
+        cls.player_two.driver.set_window_position(cls.dem['width'] // 2, 0, windowHandle='current')
 
     @classmethod
     def tearDownClass(cls):
@@ -88,7 +108,13 @@ class AnimusTest(LiveServerTestCase):
         self.assertTrue(self.player_one.check_harvest_information(self.player_one_race, '1'))
         self.assertTrue(self.player_two.check_harvest_information(self.player_two_race, '1'))
     
-        # Game - Recruiting / Deployment
+        # Game - Recruit commit
+        self.player_one.commit_resources()
+        self.assertEquals(self.player_one.get_waiting_on_info(), 'player_two')
+        self.player_two.commit_resources()
+        self.assertEquals(self.player_two.get_waiting_on_info(), 'All Players Ready')
+
+        # Game -  Deployment
         
         # Game - Event cards
 

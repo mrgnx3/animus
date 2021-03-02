@@ -2,26 +2,31 @@
 
 ## Setup Steps
 
-```bash
-    virtualenv -p python3 venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    ./in_memory_hot_patch.sh
+    ```bash
+        virtualenv -p python3 venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+        
+        # Run in memory mongo - can't use debugger with this setting
+        ./in_memory_hot_patch.sh
 
-    export PYTHONPATH=$(pwd)
-    python server/animus.py
-```
+        # Or start a mongo instance
+        mongod  --dbpath /tmp/animus
+
+        export PYTHONPATH=$(pwd)
+        python server/animus.py
+    ```
 
 ## Testing
 
-```bash
-    export PATH=$PATH:<PATH_TO_SeleniumDrivers>
-    export PYTHONPATH=$(pwd)
+    ```bash
+        export PATH=$PATH:<PATH_TO_SeleniumDrivers>
+        export PYTHONPATH=$(pwd)
 
-    source venv/bin/activate
+        source venv/bin/activate
 
-    nosetests server/tests/animus_test.py
-```
+        nosetests server/tests/animus_test.py
+    ```
 
 ## What I'm looking to build
 

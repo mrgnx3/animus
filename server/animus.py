@@ -103,7 +103,8 @@ def view_lobby(game_name):
 
 @app.route('/gamecheck/<game_name>', methods=['GET'])
 def game_name_is_available(game_name):
-    return json.dumps({"gameNameIsAvailable": bool(len(gm.get_game_by_name(game_name)) == 0)})
+    return json.dumps(
+        {"gameNameIsAvailable": gm.get_game_by_name(game_name) == None})
 
 
 @app.route('/gamesToJoin/', methods=['GET'])
@@ -229,6 +230,16 @@ def activate_movement_token(game, players_race, tile_index):
     emit('activateMovementToken', {"raceToEnableTokenFor": players_race, "tileIndex": tile_index}, room=game)
 
 
+@socketio.on('commitDeploymentResources')
+def commit_deployment_resources(game, player_name, deployment_info):
+    waiting_on_list = gm.remove_player_from_waiting_on_list(game, player_name)
+    emit('updatePhaseInfo', room=game)
+    if len(waiting_on_list) == 0:
+        gm.log(game, f"All players have commited their deployment resources")
+        gm.set_phase(game, "deployment")
+        emit('updatePhaseInfo', room=game)
+
+
 def resolve_merging_forces(game, origin_index, target_index):
     pass
 
@@ -252,20 +263,20 @@ def resolve_peaceful_movement(game, origin_index, target_index):
 def game_has_entered_an_ending_condition(game):
     return False
 
-def move_to_recruiting_phase(game):
+def move_to_recruiting_phase(game: str):
     gm.log(game, "ENTERING THE RECRUITING PHASE")
     gm.set_phase(game, "recruiting")
+    gm.set_waiting_on_to_all(game)
     emit('updatePhaseInfo', room=game)
-    # todo
-    emit('deploymentCommitPhase', room=game)
+    emit('deploymentCommitPhase', gm.get_deployment_data(game), room=game)
 
 def move_to_harvest_phase(game):
     gm.log(game, "ENTERING THE HARVEST PHASE")
     gm.set_phase(game, "harvest")
     emit('updatePhaseInfo', room=game)
     emit('refreshMapView', room=game)
-    gm.update_harvest_totals(game) 
-    emit('updateHarvestInformation', room=game) 
+    gm.update_harvest_totals(game)
+    emit('updateHarvestInformation', room=game)
     time.sleep(2)
     move_to_recruiting_phase(game)
 
@@ -295,4 +306,4 @@ def next_movement_action(game):
 
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, debug=True)

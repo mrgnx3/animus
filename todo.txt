@@ -1,4 +1,6 @@
 Core:
+
+    # Game - Orders
     # Game - Combat
         resolve_merging_forces(game, origin_index, target_index):
         resolve_combat(game, origin_index, target_index):
@@ -12,13 +14,16 @@ Core:
                                                         - Hide active HUD if any
                                                         - Display recruitment commit HUD and tab
                                                         - Add listeners for tallying commit totals / commit button
-                                                        - send "all done"   (**HERE**)
-                            -  catch event 
+                                                        - send "all done"   
+                            -  catch "commitDeploymentResources" event 
                             -  send update to all players
-                            -  wait for all players to commit 
+                            -  wait for all players to commit  (**HERE**)
 
-    # Game - Event cards
+                    -> Deployment
+
+    # Game - Event/Upgrade/Trade cards
     # Game - End of round
+    
     # Game - Winning condition
     # Game - End 
 
