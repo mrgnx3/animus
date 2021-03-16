@@ -449,11 +449,11 @@ function deploymentCommitPhase(playersDefaultDeployments) {
     displayDeploymentCommitTab(playersDefaultDeployments);
 }
 
-function deployingUnits(nextPlayer, deploymentInfo) {
-    if (nextPlayer === playerName) {
+function deployingUnits(deploymentInfo) {
+    if (deploymentInfo.nextPlayer === playerName) {
         displayDeploymentDeployTab(deploymentInfo);
     } else {
-        displayModal("<h3>Waiting for " + nextPlayer + " to make their deployment</h3>");
+        displayModal("<h3>Waiting for " + deploymentInfo.nextPlayer + " to make their deployment</h3>");
         document.getElementById('game_hud_deployment_deploy_tab').style.display = 'none';
         if (document.getElementById('game_hud_deploy_deploy').classList.contains('activeHud')) {
             document.getElementById('game_hud_deploy_deploy').classList.remove('activeHud');

@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         deploymentCommitPhase(playersDefaultDeployments);
     });
 
-    game_socket.on('deploymentDeployPhase', function (nextPlayer, deploymentInfo) {
-        deployingUnits(nextPlayer, deploymentInfo);
+    game_socket.on('proccessNextDeployment', function (deploymentInfo) {
+        deployingUnits(deploymentInfo);
     });
 
     game_socket.on('deploymentDeployPhaseOver', function () {

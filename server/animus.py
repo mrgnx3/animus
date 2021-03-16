@@ -15,7 +15,8 @@ app.debug = True
 
 @app.route('/')
 def index():
-    return render_template('./site/index.html', games=gm.get_games_available_to_join())
+    return render_template('./site/index.html',
+                           games=gm.get_games_available_to_join())
 
 
 @app.route('/game/<game_name>', methods=['GET'])
@@ -50,7 +51,8 @@ def get_players_race(player_name, game_name):
 
 @app.route('/getActiveRaces/<game_name>', methods=['GET'])
 def get_active_races(game_name):
-    return json.dumps({'active_races': gm.get_game_by_name(game_name).active_races})
+    return json.dumps(
+        {'active_races': gm.get_game_by_name(game_name).active_races})
 
 
 @app.route('/getHudStatistics/<game_name>', methods=['GET'])
@@ -91,14 +93,22 @@ def get_race_history(race):
 def get_games_round_phase_info(game_name):
     game = gm.get_game_by_name(game_name)
     gm.log(game_name, "getGamesRoundPhaseInfo called", level='debug')
-    return json.dumps({'round': game.round, 'phase': game.phase, 'waitingOnPlayer': [game.phase_waiting_on]})
+    return json.dumps({
+        'round': game.round,
+        'phase': game.phase,
+        'waitingOnPlayer': [game.phase_waiting_on]
+    })
 
 
 @app.route('/lobby/<game_name>', methods=['GET'])
 def view_lobby(game_name):
     # todo add 404 game not found clause
-    active_races = [race.title() for race in gm.get_game_by_name(game_name).active_races]
-    return render_template('./site/lobby.html', active_races=active_races, game_name=game_name)
+    active_races = [
+        race.title() for race in gm.get_game_by_name(game_name).active_races
+    ]
+    return render_template('./site/lobby.html',
+                           active_races=active_races,
+                           game_name=game_name)
 
 
 @app.route('/gamecheck/<game_name>', methods=['GET'])
@@ -112,7 +122,8 @@ def games_to_join():
     return json.dumps({"gameList": gm.get_games_available_to_join()})
 
 
-@app.route('/createGame/<game_name>/playerCount/<player_count>', methods=['GET'])
+@app.route('/createGame/<game_name>/playerCount/<player_count>',
+           methods=['GET'])
 def create_game(game_name, player_count):
     if bool(Game.create_game(game_name, int(player_count))):
         socketio.emit('update_game_list', room='home_page')
@@ -120,10 +131,15 @@ def create_game(game_name, player_count):
     return json.dumps({"gameCreated": False})
 
 
-@app.route('/racecheck/<game_name>/race/<race>/player/<player>', methods=['GET'])
+@app.route('/racecheck/<game_name>/race/<race>/player/<player>',
+           methods=['GET'])
 def race_check(game_name, race, player):
     if gm.lock_in_race_if_available(game_name, race, player):
-        socketio.emit('lobby_race_lock', {"race": race, "player": player}, room=game_name)
+        socketio.emit('lobby_race_lock', {
+            "race": race,
+            "player": player
+        },
+                      room=game_name)
         return json.dumps({"raceIsAvailable": True})
     else:
         return json.dumps({"raceIsAvailable": False})
@@ -133,13 +149,21 @@ def race_check(game_name, race, player):
 def on_join_lobby(data):
     join_room(data['game_name'])
     message = "{0} has joined the lobby".format(data['username'])
-    emit('new_message', {"username": '#', "message": message}, room=data['game_name'])
+    emit('new_message', {
+        "username": '#',
+        "message": message
+    },
+         room=data['game_name'])
 
 
 @socketio.on('send_message')
 def send_message(data):
     gm.log(data['game_name'], data['message'], location='chat_log')
-    emit('new_message', {"username": data['username'], "message": data['message']}, room=data['game_name'])
+    emit('new_message', {
+        "username": data['username'],
+        "message": data['message']
+    },
+         room=data['game_name'])
 
 
 @socketio.on('enter_home_page')
@@ -149,11 +173,13 @@ def enter_home_page():
 
 @socketio.on('hero_selected')
 def hero_selected(data):
-    gm.hero_selected(data['race'], data['hero_type'], data['game_name'], data['player_name'])
+    gm.hero_selected(data['race'], data['hero_type'], data['game_name'],
+                     data['player_name'])
     if gm.all_races_are_claimed(data['game_name']):
         gm.close_lobby(data['game_name'])
         gm.set_waiting_on_to_all(data['game_name'])
-        gm.log(data['game_name'], 'All players have selected a race and the game will now begin')
+        gm.log(data['game_name'],
+               'All players have selected a race and the game will now begin')
         emit('start_game', room=data['game_name'])
 
 
@@ -165,7 +191,10 @@ def join_game(data):
 
     if gm.display_opening_modal_check(game_name, user):
         gm.add_user_to_modal_displayed_list(game_name, user)
-        emit('displayActionModal', {"message": "<h1>Welcome to the Game</h1><p>Place your Orders Mother fuckers!</p>"},
+        emit('displayActionModal', {
+            "message":
+            "<h1>Welcome to the Game</h1><p>Place your Orders Mother fuckers!</p>"
+        },
              room=game_name)
 
 
@@ -192,9 +221,14 @@ def all_orders_are_set(game, player):
     waiting_on_list = gm.remove_player_from_waiting_on_list(game, player)
     emit('updatePhaseInfo', room=game)
     if len(waiting_on_list) == 0:
-        gm.log(game, "All player orders have been set for this round switching to movement phase".format(game))
+        gm.log(
+            game,
+            "All player orders have been set for this round switching to movement phase"
+            .format(game))
         gm.set_phase(game, "movement")
-        emit('refreshTiles', {"tilesToRefresh": gm.get_game_by_name(game)['units']}, room=game)
+        emit('refreshTiles',
+             {"tilesToRefresh": gm.get_game_by_name(game)['units']},
+             room=game)
         time.sleep(1)
         next_movement_action(game)
 
@@ -218,26 +252,70 @@ def movement_complete_for_tile(game, origin_index):
     gm.set_order_for_tile_to(game, origin_index, 'done')
 
     if gm.is_tile_empty(game, origin_index):
-        emit('clearTile', {"index": origin_index, "removeHightlightedOptions": True}, room=game)
+        emit('clearTile', {
+            "index": origin_index,
+            "removeHightlightedOptions": True
+        },
+             room=game)
 
-    emit('refreshTiles', {"tilesToRefresh": gm.get_game_by_name(game)['units']}, room=game)
+    emit('refreshTiles',
+         {"tilesToRefresh": gm.get_game_by_name(game)['units']},
+         room=game)
     next_movement_action(game)
 
 
 @socketio.on('activateMovementToken')
 def activate_movement_token(game, players_race, tile_index):
     gm.set_movement_token_as_active(game, tile_index)
-    emit('activateMovementToken', {"raceToEnableTokenFor": players_race, "tileIndex": tile_index}, room=game)
+    emit('activateMovementToken', {
+        "raceToEnableTokenFor": players_race,
+        "tileIndex": tile_index
+    },
+         room=game)
 
 
 @socketio.on('commitDeploymentResources')
 def commit_deployment_resources(game, player_name, deployment_info):
+    gm.log(game, f"commitDeploymentResources: player_name: {player_name},  deployment_info: {deployment_info}")
+    gm.set_committed_deployment_resources(game, deployment_info)
     waiting_on_list = gm.remove_player_from_waiting_on_list(game, player_name)
     emit('updatePhaseInfo', room=game)
     if len(waiting_on_list) == 0:
         gm.log(game, f"All players have commited their deployment resources")
-        gm.set_phase(game, "deployment")
-        emit('updatePhaseInfo', room=game)
+        move_to_deployment_phase(game)
+
+
+def move_to_deployment_phase(game: str):
+    time.sleep(3) # needed for tests
+    gm.set_phase(game, "deployment")
+    gm.set_waiting_on_to_all(game)
+    emit('updatePhaseInfo', room=game)
+    proccess_next_deployment(game)
+
+
+def proccess_next_deployment(game):
+    if gm.deloyments_left_to_process(game):
+        emit('proccessNextDeployment', gm.get_next_deployment_info(game), room=game)
+    else:
+        move_to_purchase_phase(game)
+
+
+def move_to_purchase_phase(game):
+    gm.set_phase(game, "purchase")
+    emit('updatePhaseInfo', room=game)
+    move_to_end_of_round(game)
+
+
+def move_to_end_of_round(game):
+    gm.set_phase(game, "Round End")
+    emit('updatePhaseInfo', room=game)
+    move_to_end_of_game(game)
+
+
+def move_to_end_of_game(game):
+    gm.set_phase(game, "Game End")
+    emit('updatePhaseInfo', room=game)
+    emit('GameOver', {"winner": gm.get_race_in_play(game)}, room=game)
 
 
 def resolve_merging_forces(game, origin_index, target_index):
@@ -250,18 +328,24 @@ def resolve_combat(game, origin_index, target_index):
 
 def resolve_peaceful_movement(game, origin_index, target_index):
     gm.move_selected_units_into_new_index(game, origin_index, target_index)
-    gm.log(game, 'Units moved from {0} to {1}'.format(origin_index, target_index))
+    gm.log(game, 'Units moved from {0} to {1}'.format(origin_index,
+                                                      target_index))
 
     units = gm.get_game_by_name(game)['units']
     socketio.emit('refreshTiles', {"tilesToRefresh": units}, room=game)
 
     if gm.is_tile_empty(game, origin_index):
-        emit('clearTile', {"index": origin_index, "removeHightlightedOptions": True}, room=game)
+        emit('clearTile', {
+            "index": origin_index,
+            "removeHightlightedOptions": True
+        },
+             room=game)
         next_movement_action(game)
 
 
 def game_has_entered_an_ending_condition(game):
     return False
+
 
 def move_to_recruiting_phase(game: str):
     gm.log(game, "ENTERING THE RECRUITING PHASE")
@@ -269,6 +353,7 @@ def move_to_recruiting_phase(game: str):
     gm.set_waiting_on_to_all(game)
     emit('updatePhaseInfo', room=game)
     emit('deploymentCommitPhase', gm.get_deployment_data(game), room=game)
+
 
 def move_to_harvest_phase(game):
     gm.log(game, "ENTERING THE HARVEST PHASE")
@@ -280,13 +365,15 @@ def move_to_harvest_phase(game):
     time.sleep(2)
     move_to_recruiting_phase(game)
 
+
 def process_move_order(game, race_turn_order):
     active_players_race = gm.get_race_in_play(game)
     if active_players_race is None or active_players_race == '':
         gm.set_active_race(game, race_turn_order[0])
         active_players_race = race_turn_order[0]
 
-    next_active_race_index = (race_turn_order.index(active_players_race) + 1) % len(race_turn_order)
+    next_active_race_index = (race_turn_order.index(active_players_race) +
+                              1) % len(race_turn_order)
     gm.set_active_race(game, race_turn_order[next_active_race_index])
 
     socketio.emit('enableMoves', active_players_race, room=game)
@@ -294,11 +381,13 @@ def process_move_order(game, race_turn_order):
 
 def next_movement_action(game):
     if game_has_entered_an_ending_condition(game):
-        socketio.emit('displayActionModal',
-                      {"message": '<h1>Game Over</h1><p>Last Man Standing: {0}</p>'.format('todo')})
+        socketio.emit(
+            'displayActionModal', 
+            {"message": f"<h1>Game Over</h1><p>Last Man Standing: ADD PLAYER DETAILS </p>" }
+        )
     else:
         races_with_movements_left = gm.set_races_with_moves_orders_list(game)
-        gm.log(game, "races_with_movements_left: {0}".format(races_with_movements_left))
+        gm.log(game,f"races_with_movements_left: {races_with_movements_left}")
         if len(races_with_movements_left) == 0:
             move_to_harvest_phase(game)
         else:

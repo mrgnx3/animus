@@ -142,13 +142,13 @@ function displayDeploymentCommitTab(deployData) {
 }
 
 function displayDeploymentDeployTab(deploymentInfo) {
+    console.log("deploymentInfo" + JSON.stringify(deploymentInfo));
     hideModal();
     document.getElementById('game_hud_deployment_deploy_tab').style.display = 'block';
     presentHudToUser('game_hud_deploy_deploy', true);
-    let race = getPlayersRace();
-    document.getElementById('committed-infantry-value').textContent = deploymentInfo[race].infantryToDeploy;
-    document.getElementById('committed-ranged-value').textContent = deploymentInfo[race].rangedToDeploy;
-    document.getElementById('committed-tank-value').textContent = deploymentInfo[race].tanksToDeploy;
+    document.getElementById('committed-infantry-value').textContent = deploymentInfo.infantryToDeploy;
+    document.getElementById('committed-ranged-value').textContent = deploymentInfo.rangedToDeploy;
+    document.getElementById('committed-tank-value').textContent = deploymentInfo.tanksToDeploy;
     document.getElementById('infantry-deploy-value').textContent = "0";
     document.getElementById('ranged-deploy-value').textContent = "0";
     document.getElementById('tank-deploy-value').textContent = "0";

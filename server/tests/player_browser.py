@@ -1,4 +1,5 @@
 import time
+import enum
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -6,8 +7,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
+
 def get_hex_id_from_index(index):
     return 'x_{0}_y_{1}'.format(index % 24, index // 24)
+
+class UnitType(enum.Enum):
+    INFANTRY = 'infantry'
+    RANGED = 'ranged'
+    TANK = 'tank'
 
 class Player:
     def __init__(self, player_name, server_url='http://127.0.0.1:5000/', timeout=5, headless=False):
@@ -109,3 +116,9 @@ class Player:
     def get_waiting_on_info(self):
         time.sleep(2) # we need to wait for socket events and callbacks
         return self.driver.find_element_by_id('waiting-on-value').text
+
+    def click_add_unit(self, unit_type: UnitType, count: int):
+        plus_unit_button = self.driver.find_element_by_id(f"plus-{unit_type.value}")
+        for _ in range(count):
+            plus_unit_button.click()
+            time.sleep(1) # remove sleep and add wait for deployment value before clicking again

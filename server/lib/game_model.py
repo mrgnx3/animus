@@ -3,7 +3,11 @@ from datetime import datetime
 
 import mongoengine as meng
 
-RACES = ["geoengineers", "settlers", "kingdomwatchers", "periplaneta", "reduviidae", "guardians"]
+RACES = [
+    "geoengineers", "settlers", "kingdomwatchers", "periplaneta", "reduviidae",
+    "guardians"
+]
+
 
 class LobbyUser(meng.EmbeddedDocument):
     username = meng.StringField(required=True)
@@ -144,27 +148,78 @@ class GameModel:
 
 def get_base_map():
     return {
-        "map":
-            [
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0],
-                [0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0],
-                [0, 0, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-                [0, 0, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-                [0, 0, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 3, 0],
-                [0, 0, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-                [0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 3, 1, 1, 3, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 3, 1, 1, 1, 1, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 3, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 3, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ]
+        "map": [[
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0
+        ],
+                [
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+                    3, 3, 0, 0
+                ],
+                [
+                    0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+                    3, 3, 3, 0
+                ],
+                [
+                    0, 0, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                    1, 1, 3, 0
+                ],
+                [
+                    0, 0, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1,
+                    1, 1, 3, 0
+                ],
+                [
+                    0, 0, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1,
+                    1, 1, 3, 0
+                ],
+                [
+                    0, 0, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                    1, 1, 3, 0
+                ],
+                [
+                    0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+                    3, 3, 3, 0
+                ],
+                [
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+                    3, 3, 0, 0
+                ],
+                [
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0
+                ],
+                [
+                    0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0
+                ],
+                [
+                    0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0
+                ],
+                [
+                    0, 3, 1, 1, 3, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0
+                ],
+                [
+                    0, 3, 1, 1, 1, 1, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0
+                ],
+                [
+                    0, 3, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0
+                ],
+                [
+                    0, 3, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0
+                ],
+                [
+                    0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0
+                ],
+                [
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0
+                ]]
     }
 
 
@@ -283,10 +338,13 @@ def close_lobby(game_name):
 
 def get_players_race(game_name, player_name):
     game_doc = get_game_by_name(game_name)
+    return get_players_race_from_game_doc(game_doc, player_name)
+
+
+def get_players_race_from_game_doc(game_doc, player_name):
     for race in game_doc['active_races']:
         if game_doc[race]['username'] == player_name:
             return race
-    return None
 
 
 def get_players_race_info(game_name, player_name):
@@ -326,8 +384,9 @@ def get_lore(race, lore_type='history'):
 
 def set_waiting_on_to_all(game_name):
     game_doc = get_game_by_name(game_name)
-    game_doc['phase_waiting_on'].extend(
-        [game_doc[race]['username'] for race in game_doc['active_races']])
+    game_doc['phase_waiting_on'] = [
+        game_doc[race]['username'] for race in game_doc['active_races']
+    ]
     game_doc.save()
 
 
@@ -355,6 +414,22 @@ def set_player_order(action, game_name, index):
             game_doc.units[idx]['order'] = action
             game_doc.save()
             return
+
+
+def deloyments_left_to_process(game_name):
+    return len(get_game_by_name(game_name).phase_waiting_on) > 0
+
+
+def get_next_deployment_info(game_name):
+    game_doc = get_game_by_name(game_name)
+    next_player_name = game_doc.phase_waiting_on.pop(0)
+    next_race = get_players_race_from_game_doc(game_doc, next_player_name)
+    return {
+        "nextPlayer": next_player_name,
+        "infantryToDeploy": game_doc[next_race]['deployment_infantry_count'],
+        "rangedToDeploy": game_doc[next_race]['deployment_ranged_count'],
+        "tanksToDeploy": game_doc[next_race]['deployment_tanks_count']
+    }
 
 
 def remove_player_from_waiting_on_list(game_name, player):
@@ -534,6 +609,7 @@ def set_movement_token_as_active(game, tile_index):
             game_doc.units[idx]['token_is_active'] = True
             game_doc.save()
 
+
 def get_deployment_data(game: str) -> dict:
     deployment_data = {}
     game_doc = get_game_by_name(game)
@@ -541,3 +617,14 @@ def get_deployment_data(game: str) -> dict:
         if game_doc[race]:
             deployment_data[race] = json.loads(game_doc[race].to_json())
     return deployment_data
+
+
+def set_committed_deployment_resources(game: str, deployment_info: dict):
+    game_doc = get_game_by_name(game)
+    game_doc[deployment_info['playerRace']][
+        'deployment_infantry_count'] = deployment_info['infantryToDeploy']
+    game_doc[deployment_info['playerRace']][
+        'deployment_ranged_count'] = deployment_info['rangedToDeploy']
+    game_doc[deployment_info['playerRace']][
+        'deployment_tanks_count'] = deployment_info['tanksToDeploy']
+    game_doc.save()

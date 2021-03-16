@@ -17,9 +17,17 @@ Core:
                                                         - send "all done"   
                             -  catch "commitDeploymentResources" event 
                             -  send update to all players
-                            -  wait for all players to commit  (**HERE**)
+                            -  wait for all players to commit  
 
-                    -> Deployment
+                    -> Deployment 
+                        ->  move_to_deployment_phase
+                        
+                        while has more deployments:
+                          ->  Emit deployingUnits(nextPlayer, deploymentInfo);
+
+                          ->  Client side deployment (**HERE**)
+                              Emit processNextDeployment
+                          
 
     # Game - Event/Upgrade/Trade cards
     # Game - End of round

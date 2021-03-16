@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 
 from server.animus import app
-from server.tests.player_browser import Player
+from server.tests.player_browser import Player, UnitType
 import multiprocessing
 
 class AnimusTest(LiveServerTestCase):
@@ -109,6 +109,8 @@ class AnimusTest(LiveServerTestCase):
         self.assertTrue(self.player_two.check_harvest_information(self.player_two_race, '1'))
     
         # Game - Recruit commit
+        self.player_one.click_add_unit(UnitType.INFANTRY, 4)
+        self.player_one.click_add_unit(UnitType.TANK, 1)
         self.player_one.commit_resources()
         self.assertEquals(self.player_one.get_waiting_on_info(), 'player_two')
         self.player_two.commit_resources()
