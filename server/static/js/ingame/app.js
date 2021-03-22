@@ -62,8 +62,7 @@ function highlightDeploymentOptions(race, turnOn, infantry, ranged, tank) {
     //Convert collection of elements into array
     allRaceEntries = [].slice.call(allRaceEntries);
     allRaceEntries.forEach(function (entry) {
-        let tile = entry.parentElement.parentElement;
-        let tileIndex = getXValue(tile) + (getYValue(tile) * 24);
+        let tileIndex = getIndexValue(entry.parentElement.parentElement);
         if (raceTilesToCheckForHighLighting.indexOf(tileIndex) === -1) {
             raceTilesToCheckForHighLighting.push(tileIndex);
         }
@@ -84,7 +83,14 @@ function highlightDeploymentOptions(race, turnOn, infantry, ranged, tank) {
                 if (turnOn) {
                     hex.classList.add("highlight");
                     hex.onclick = function () {
-                        deployUnitsToTile(allTileElements, neighbouringTilesIndex, infantry, ranged, tank);
+                        targetIndex = getIndexByHex(hex);
+                        game_socket.emit('deploymentOfUnits', gameRoom, {
+                            "index":targetIndex,
+                            "race": getPlayersRace(),
+                            "infantry": infantry,
+                            "ranged": ranged,
+                            "tanks": tank
+                        });
                         highlightDeploymentOptions(race, false);
                     };
                 } else {
@@ -94,37 +100,6 @@ function highlightDeploymentOptions(race, turnOn, infantry, ranged, tank) {
             }
         }
     });
-}
-
-function deployUnitsToTile(hexes, index, infantry, ranged, tanks) {
-    let targetHex = hexes[index];
-    let deploymentValues = {
-        "infantry": infantry,
-        "ranged": ranged,
-        "tanks": tanks
-    };
-
-    if (targetHex.childNodes[0].childElementCount !== 0) {
-        // targetHex has existing units which need updating
-        for (let i = 0; i < targetHex.childNodes[0].childElementCount; i++) {
-            let unitsClassList = targetHex.childNodes[0].childNodes[i].childNodes[0].classList;
-            let unitsTextElement = targetHex.childNodes[0].childNodes[i].childNodes[1];
-            let unitValue = parseInt(unitsTextElement.textContent);
-
-            if (unitsClassList.contains("infantry")) {
-                infantry += unitValue;
-            } else if (unitsClassList.contains("ranged")) {
-                ranged += unitValue;
-            } else {
-                tanks += unitValue;
-            }
-        }
-    }
-
-    let race = getPlayersRace();
-    targetHex.innerHTML = getSvgForUnits(race, infantry, ranged, tanks);
-    game_socket.emit('deploymentOfUnits', gameRoom, index, race, infantry, ranged, tanks, deploymentValues);
-    //todo Update the deployment tab and check if deployment is complete
 }
 
 function handleMoveAction(index, movementAction, turnOn) {
@@ -549,12 +524,18 @@ function getXValue(element) {
 }
 
 function getYValue(element) {
-    return parseInt(element.parentElement.parentElement.id[6]);
+    return parseInt(element.parentElement.id[6]);
 }
 
 function getIndexValue(element) {
     let x = element.parentElement.id[2];
     let y = element.parentElement.id[6];
+    return parseInt(x) + (parseInt(y) * 24);
+}
+
+function getIndexByHex(hexElement) {
+    let x = hexElement.id[2];
+    let y = hexElement.id[6];
     return parseInt(x) + (parseInt(y) * 24);
 }
 

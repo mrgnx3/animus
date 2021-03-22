@@ -4,3 +4,4 @@ animus.iml
 *.pyc
 .vscode
 .noseids
+nosetests.xml

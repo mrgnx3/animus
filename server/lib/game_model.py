@@ -518,16 +518,16 @@ def units_are_friendly(game, origin_index, target_index):
     return origin_race == target_race
 
 
-def create_unit_entry(game, index, race):
+def create_unit_entry(game, index, race, infantry=0, ranged=0, tanks=0):
     game_doc = get_game_by_name(game)
     game_doc.units.append({
         "posX": index % 24,
         "posY": int(index / 24),
         "index": index,
         "race": race,
-        "infantry": 0,
-        "ranged": 0,
-        "tanks": 0,
+        "infantry": infantry,
+        "ranged": ranged,
+        "tanks": tanks,
         "infantry_selected": False,
         "ranged_selected": False,
         "tanks_selected": False,
@@ -628,3 +628,45 @@ def set_committed_deployment_resources(game: str, deployment_info: dict):
     game_doc[deployment_info['playerRace']][
         'deployment_tanks_count'] = deployment_info['tanksToDeploy']
     game_doc.save()
+
+
+def move_units_from_committed_to_tiles(game: str, deployment_info: dict)-> dict:
+    """ Take units from a players committed deployment and place them on the map
+
+    Args:
+        game (str): game name
+        deployment_info (dict): {
+                                    "index": index,
+                                    "race": race,
+                                    "infantry": infantry units to add,
+                                    "ranged": ranged units to add,
+                                    "tanks": tanks units to add
+                                }
+
+    Returns:
+        dict: list of active map units
+    """
+    game_doc = get_game_by_name(game)
+
+    infantry_to_add = deployment_info["infantry"]
+    ranged_to_add = deployment_info["ranged"]
+    tanks_to_add = deployment_info["tanks"]
+    race = deployment_info["race"]
+
+    race_info = game_doc[race]
+    race_info.deployment_infantry_count -= infantry_to_add
+    race_info.deployment_ranged_count -= ranged_to_add
+    race_info.deployment_tanks_count -= tanks_to_add
+    race_info.deployment_total -= (infantry_to_add + ranged_to_add +
+                                   tanks_to_add * 2)
+    game_doc.save()
+
+    #Only handling new tile drops, expand later
+    create_unit_entry(game,
+                      deployment_info["index"],
+                      race,
+                      infantry=infantry_to_add,
+                      ranged=ranged_to_add,
+                      tanks=tanks_to_add)
+
+    return get_game_by_name(game)['units']

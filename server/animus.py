@@ -273,10 +273,32 @@ def activate_movement_token(game, players_race, tile_index):
     },
          room=game)
 
+@socketio.on('deploymentOfUnits')
+def deployment_of_units(game: str, deployment_info: dict):
+    """ Event handler which will take units from a players committed deployment
+        and place them on the map
+
+    Args:
+        game (str): game name
+        deployment_info (dict): {
+                                    "index": index,
+                                    "race": race,
+                                    "infantry": infantry units to add,
+                                    "ranged": ranged units to add,
+                                    "tanks": tanks units to add
+                                }
+    """
+    units = gm.move_units_from_committed_to_tiles(game, deployment_info)
+    socketio.emit('refreshTiles', {"tilesToRefresh": units}, room=game)
+    proccess_next_deployment(game)
+
 
 @socketio.on('commitDeploymentResources')
 def commit_deployment_resources(game, player_name, deployment_info):
-    gm.log(game, f"commitDeploymentResources: player_name: {player_name},  deployment_info: {deployment_info}")
+    gm.log(
+        game,
+        f"commitDeploymentResources: player_name: {player_name},  deployment_info: {deployment_info}"
+    )
     gm.set_committed_deployment_resources(game, deployment_info)
     waiting_on_list = gm.remove_player_from_waiting_on_list(game, player_name)
     emit('updatePhaseInfo', room=game)
@@ -286,7 +308,7 @@ def commit_deployment_resources(game, player_name, deployment_info):
 
 
 def move_to_deployment_phase(game: str):
-    time.sleep(3) # needed for tests
+    time.sleep(3)  # needed for tests
     gm.set_phase(game, "deployment")
     gm.set_waiting_on_to_all(game)
     emit('updatePhaseInfo', room=game)
@@ -295,7 +317,9 @@ def move_to_deployment_phase(game: str):
 
 def proccess_next_deployment(game):
     if gm.deloyments_left_to_process(game):
-        emit('proccessNextDeployment', gm.get_next_deployment_info(game), room=game)
+        emit('proccessNextDeployment',
+             gm.get_next_deployment_info(game),
+             room=game)
     else:
         move_to_purchase_phase(game)
 
@@ -382,12 +406,13 @@ def process_move_order(game, race_turn_order):
 def next_movement_action(game):
     if game_has_entered_an_ending_condition(game):
         socketio.emit(
-            'displayActionModal', 
-            {"message": f"<h1>Game Over</h1><p>Last Man Standing: ADD PLAYER DETAILS </p>" }
-        )
+            'displayActionModal', {
+                "message":
+                f"<h1>Game Over</h1><p>Last Man Standing: ADD PLAYER DETAILS </p>"
+            })
     else:
         races_with_movements_left = gm.set_races_with_moves_orders_list(game)
-        gm.log(game,f"races_with_movements_left: {races_with_movements_left}")
+        gm.log(game, f"races_with_movements_left: {races_with_movements_left}")
         if len(races_with_movements_left) == 0:
             move_to_harvest_phase(game)
         else:

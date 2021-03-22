@@ -113,6 +113,8 @@ class AnimusTest(LiveServerTestCase):
         self.player_one.click_add_unit(UnitType.TANK, 1)
         self.player_one.commit_resources()
         self.assertEquals(self.player_one.get_waiting_on_info(), 'player_two')
+        
+        self.player_two.click_add_unit(UnitType.INFANTRY,1)
         self.player_two.commit_resources()
         self.assertEquals(self.player_two.get_waiting_on_info(), 'All Players Ready')
 
@@ -126,7 +128,7 @@ class AnimusTest(LiveServerTestCase):
 
         # Post Game Screen
         if(self.post_test_wait):
-            time.sleep(360)
+            time.sleep(3600)
 
         # Sucess
 
